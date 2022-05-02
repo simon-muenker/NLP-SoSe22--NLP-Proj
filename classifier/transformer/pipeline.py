@@ -85,7 +85,7 @@ class TransformerPipeline:
         _, sent_embeds, _ = self.encoding(text)
 
         # extract only first embeddings (CLS)
-        cls_embeds: list = [tco[0] for tco in sent_embeds]
+        cls_embeds: list = [tco[0].to(get_device()) for tco in sent_embeds]
 
         # label mapping (refactor to config, or auto generate)
         label_mapping: dict = {
