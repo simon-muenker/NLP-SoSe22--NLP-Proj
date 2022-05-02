@@ -1,0 +1,7 @@
+### Classifier gitignore template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
