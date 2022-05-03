@@ -43,7 +43,7 @@ class TransformerPipeline:
             in_size=self.encoding.dim,
             out_size=2,
             config=self.config['model']
-        )
+        ).to(get_device())
 
         # load trainer
         self.trainer = Trainer(
