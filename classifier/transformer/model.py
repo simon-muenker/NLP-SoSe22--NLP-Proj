@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.utils.rnn as rnn
 
-from .util import unpad
+from .util import unpad, get_device
 
 
 class Model(nn.Module):
@@ -90,3 +90,34 @@ class Model(nn.Module):
     @torch.no_grad()
     def predict(self, embeds: List[torch.Tensor]) -> List[int]:
         return list(torch.argmax(self.forward(embeds), dim=1))
+
+    #  -------- save -----------
+    #
+    def save(self, path: str) -> None:
+        torch.save(
+            {
+                "config": self.config,
+                "state_dict": self.state_dict()
+            },
+            path,
+        )
+
+    #  -------- load -----------
+    #
+    @classmethod
+    def load(cls, path: str) -> nn.Module:
+        data = torch.load(path, map_location=get_device())
+
+        model: nn.Module = cls(
+            data["config"]["in_size"],
+            data["config"]["out_size"],
+            data["config"]
+        ).to(get_device())
+        model.load_state_dict(data["state_dict"])
+
+        return model
+
+    #  -------- __len__ -----------
+    #
+    def __len__(self) -> int:
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
