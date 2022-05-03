@@ -106,7 +106,7 @@ class Trainer:
 
                 # --- ---------------------------------
                 # --- save if is best model
-                if self.state["train_loss"][-1] < min(n for n in self.state["train_loss"] if n > 0):
+                if self.state["train_loss"][-1] <= min(n for n in self.state["train_loss"] if n > 0):
                     saved_model_epoch = self.state["epoch"][-1]
                     self.model.save(self.out_dir + "model.bin")
 
