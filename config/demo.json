@@ -3,7 +3,7 @@
   "debug": false,
   "data": {
     "out_path": "./output/",
-    "train_path": "data/imdb.train.0.100.csv",
+    "train_path": "data/imdb.train.0.010.csv",
     "eval_path": "data/imdb.eval.csv",
     "test_path": "data/imdb.test.csv"
   },
