@@ -2,8 +2,8 @@
   "seed": 1,
   "debug": false,
   "data": {
-    "out_path": "./",
-    "train_path": "data/imdb.train.0.001.csv",
+    "out_path": "./output/",
+    "train_path": "data/imdb.train.0.100.csv",
     "eval_path": "data/imdb.eval.csv",
     "test_path": "data/imdb.test.csv"
   },
@@ -14,13 +14,13 @@
     ]
   },
   "model": {
-      "hid_size": 64,
+      "hid_size": 256,
       "dropout": 0.2
   },
   "trainer": {
-    "epochs": 5,
+    "epochs": 100,
     "shuffle": true,
-    "batch_size": 4,
+    "batch_size": 32,
     "num_workers": 0,
     "report_rate": 1,
     "max_grad_norm": 2.0,
