@@ -103,12 +103,13 @@ class Trainer:
                         desc=f"Eval, epoch: {epoch:03}",
                         disable=epoch % self.config["report_rate"] != 0
                 ):
-                    train_loss = self._eval(batch, idx, eval_loss)
+                    eval_loss = self._eval(batch, idx, eval_loss)
 
                 # --- ---------------------------------
                 # --- update state
                 self.state["epoch"].append(epoch)
                 self.state["train_loss"].append(train_loss)
+                self.state["eval_loss"].append(eval_loss)
                 self.state["duration"].append(datetime.now() - time_begin)
 
                 # --- ---------------------------------
