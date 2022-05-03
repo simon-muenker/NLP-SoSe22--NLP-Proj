@@ -1,7 +1,8 @@
 import csv
 import logging
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Callable
+from typing import Callable, Dict
 
 import torch
 from torch import optim
@@ -10,39 +11,31 @@ from torch.utils.data import Dataset
 from .util import load_iterator
 
 
+@dataclass
 class Trainer:
+    model: torch.nn.Module
+    data: Dict[str, Dataset]
+    collation_fn: Callable
+    logger: logging
+    out_dir: str
+    config: dict = None
 
     #
     #
-    #  -------- __init__ -----------
+    #  -------- __post_init__ -----------
     #
-    def __init__(
-            self,
-            model: torch.nn.Module,
-            data: Dataset,
-            collation_fn: Callable,
-            logger: logging,
-            out_dir: str,
-            config: dict = None):
+    def __post_init__(self):
 
         self.state: dict = {
             'epoch': [],
             'train_loss': [],
+            'eval_loss': [],
             'duration': [],
         }
 
-        self.model = model
-        self.data = data
-        self.collation_fn = collation_fn
-
-        self.logger = logger
-        self.out_dir = out_dir
-
-        # load config file else use default
-        if config is None:
-            config = self.default_config()
-
-        self.config = config
+        # load default config file if is None
+        if self.config is None:
+            self.config = self.default_config
 
         # setup loss_fn, optimizer, scheduler and early stopping
         self.loss_fn = torch.nn.CrossEntropyLoss()
@@ -52,12 +45,12 @@ class Trainer:
     #
     #  -------- default_config -----------
     #
-    @staticmethod
-    def default_config() -> dict:
+    @property
+    def default_config(self) -> dict:
         return {
             "epochs": 25,
             "shuffle": True,
-            "batch_size": 256,
+            "batch_size": 32,
             "num_workers": 0,
             "report_rate": 1,
             "max_grad_norm": 1.0,
@@ -88,7 +81,7 @@ class Trainer:
                 # --- begin train
                 train_loss: float = 0.0
                 for idx, batch in load_iterator(
-                        self.data,
+                        self.data['train'],
                         collate_fn=self.collation_fn,
                         batch_size=self.config["batch_size"],
                         shuffle=self.config["shuffle"],
@@ -99,6 +92,20 @@ class Trainer:
                     train_loss = self._train(batch, idx, train_loss)
 
                 # --- ---------------------------------
+                # --- begin eval
+                eval_loss: float = 0.0
+                for idx, batch in load_iterator(
+                        self.data['eval'],
+                        collate_fn=self.collation_fn,
+                        batch_size=self.config["batch_size"],
+                        shuffle=self.config["shuffle"],
+                        num_workers=self.config["num_workers"],
+                        desc=f"Eval, epoch: {epoch:03}",
+                        disable=epoch % self.config["report_rate"] != 0
+                ):
+                    train_loss = self._eval(batch, idx, eval_loss)
+
+                # --- ---------------------------------
                 # --- update state
                 self.state["epoch"].append(epoch)
                 self.state["train_loss"].append(train_loss)
@@ -106,7 +113,7 @@ class Trainer:
 
                 # --- ---------------------------------
                 # --- save if is best model
-                if self.state["train_loss"][-1] <= min(n for n in self.state["train_loss"] if n > 0):
+                if self.state["eval_loss"][-1] <= min(n for n in self.state["eval_loss"] if n > 0):
                     saved_model_epoch = self.state["epoch"][-1]
                     self.model.save(self.out_dir + "model.bin")
 
@@ -158,12 +165,31 @@ class Trainer:
 
     #
     #
+    #  -------- _eval -----------
+    #
+    def _eval(self, batch: dict, batch_id: int, eval_loss: float) -> float:
+        self.model.eval()
+
+        loss = self.model.train_step(self.loss_fn, batch)
+
+        # save loss, acc for statistics
+        eval_loss += (loss.item() - eval_loss) / (batch_id + 1)
+
+        # reduce memory usage by deleting loss after calculation
+        # https://discuss.pytorch.org/t/calling-loss-backward-reduce-memory-usage/2735
+        del loss
+
+        return eval_loss
+
+    #
+    #
     #  -------- _log -----------
     #
     def _log(self, epoch: int) -> None:
         self.logger.info((
             f"@{epoch:03}: \t"
             f"loss(train)={self.state['train_loss'][epoch - 1]:2.5f} \t"
+            f"loss(eval)={self.state['eval_loss'][epoch - 1]:2.5f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 

@@ -48,7 +48,7 @@ class TransformerPipeline:
         # load trainer
         self.trainer = Trainer(
             self.model,
-            self.data['train'],
+            self.data,
             self.collation_fn,
             logger=self.logger,
             out_dir=self.config['data']['out_path'],
