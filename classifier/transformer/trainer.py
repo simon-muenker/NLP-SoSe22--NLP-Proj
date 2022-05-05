@@ -152,7 +152,7 @@ class Trainer:
         # --- eval
         self.logger.info(f"\n[--- EVAL -> {self.data['eval'].data_path} ---]")
         self.metric.load(saved_eval_metric)
-        self.metric.show(encoding=self.data['train'].map_label)
+        self.metric.show(decoding=self.data['train'].decode_label)
 
         return self.state
 

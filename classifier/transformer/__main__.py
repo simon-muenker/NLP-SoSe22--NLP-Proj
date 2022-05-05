@@ -84,7 +84,7 @@ class Main:
 
         # transform labels
         label_ids: torch.Tensor = torch.tensor(
-            [self.data['train'].map_label(lb) for lb in label],
+            [self.data['train'].encode_label(lb) for lb in label],
             dtype=torch.long, device=get_device()
         )
 

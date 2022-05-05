@@ -113,13 +113,13 @@ class Metric:
     #
     def show(
             self,
-            encoding=None,
+            decoding=None,
     ):
-        def enc(n): return encoding[n] if encoding else n
+        def dec(n): return decoding[n] if decoding else n
 
         for class_name in [None] + self.get_classes():
             self.logger.info((
-                (f"{'AVG' if class_name is None else enc(class_name):14}"
+                (f"{'AVG' if class_name is None else dec(class_name):14}"
                  f"\t tp: {self.get_tp(class_name):8}"
                  f"\t fp: {self.get_fp(class_name):8} "
                  f"\t tn: {self.get_tn(class_name):8}"

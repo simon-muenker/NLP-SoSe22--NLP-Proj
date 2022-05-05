@@ -30,7 +30,12 @@ class Data(Dataset):
     def __len__(self) -> int:
         return len(self.data)
 
-    #  -------- map_label -----------
+    #  -------- encode_label -----------
     #
-    def map_label(self, label: str) -> int:
+    def encode_label(self, label: str) -> int:
         return self.label_mapping.get(label)
+
+    #  -------- decode_label -----------
+    #
+    def decode_label(self, label: int) -> str:
+        return {v: k for k, v in self.label_mapping.items()}.get(label)
