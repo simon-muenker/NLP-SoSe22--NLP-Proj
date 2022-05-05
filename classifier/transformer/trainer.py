@@ -172,7 +172,7 @@ class Trainer:
         # https://discuss.pytorch.org/t/calling-loss-backward-reduce-memory-usage/2735
         del loss
 
-        # make metric
+        # calculate metric
         self._metric(batch, pred_labels)
 
         return loss_train
@@ -181,7 +181,7 @@ class Trainer:
     #
     #  -------- _eval -----------
     #
-    def _eval(self, batch: dict, batch_id: int, loss_eval: float) -> float:
+    def _eval(self, batch: tuple, batch_id: int, loss_eval: float) -> float:
         self.model.eval()
 
         loss, pred_labels = self.model.train_step(self.loss_fn, batch)
@@ -192,6 +192,9 @@ class Trainer:
         # reduce memory usage by deleting loss after calculation
         # https://discuss.pytorch.org/t/calling-loss-backward-reduce-memory-usage/2735
         del loss
+
+        # calculate metric
+        self._metric(batch, pred_labels)
 
         return loss_eval
 
