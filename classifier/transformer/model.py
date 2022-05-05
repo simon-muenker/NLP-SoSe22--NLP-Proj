@@ -78,10 +78,13 @@ class Model(nn.Module):
 
         # predict batch
         embeds, gold_label = batch
-        pred_label = self(embeds)
+        pred_label = torch.stack(self(embeds))
 
         # compute loss, backward
-        return loss_fn(torch.stack(pred_label), torch.cat(gold_label))
+        return (
+            loss_fn(pred_label, gold_label),
+            torch.argmax(pred_label, dim=1)
+        )
 
     #
     #
@@ -89,7 +92,7 @@ class Model(nn.Module):
     #
     @torch.no_grad()
     def predict(self, embeds: List[torch.Tensor]) -> List[int]:
-        return list(torch.argmax(self.forward(embeds), dim=1))
+        return list(torch.argmax(self(embeds), dim=1))
 
     #  -------- save -----------
     #

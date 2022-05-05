@@ -94,10 +94,10 @@ class TransformerPipeline:
         }
 
         # transform labels
-        label_ids: list = [
-            torch.tensor([label_mapping.get(lb)], dtype=torch.long, device=get_device())
-            for lb in label
-        ]
+        label_ids: torch.Tensor = torch.tensor(
+            [label_mapping.get(lb) for lb in label],
+            dtype=torch.long, device=get_device()
+        )
 
         return cls_embeds, label_ids
 

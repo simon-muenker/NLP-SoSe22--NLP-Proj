@@ -2,12 +2,13 @@ import csv
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Callable, Dict
+from typing import Callable, Dict, Tuple
 
 import torch
 from torch import optim
 from torch.utils.data import Dataset
 
+from classifier import Metric
 from .util import load_iterator
 
 
@@ -28,8 +29,10 @@ class Trainer:
 
         self.state: dict = {
             'epoch': [],
-            'train_loss': [],
-            'eval_loss': [],
+            'loss_train': [],
+            'loss_eval': [],
+            'f1_train': [],
+            'f1_eval': [],
             'duration': [],
         }
 
@@ -38,6 +41,7 @@ class Trainer:
             self.config = self.default_config
 
         # setup loss_fn, optimizer, scheduler and early stopping
+        self.metric = Metric(self.logger)
         self.loss_fn = torch.nn.CrossEntropyLoss()
         self.optimizer = optim.AdamW(self.model.parameters(), **self.config["optimizer"])
 
@@ -79,7 +83,8 @@ class Trainer:
 
                 # --- ---------------------------------
                 # --- begin train
-                train_loss: float = 0.0
+                self.metric.reset()
+                loss_train: float = 0.0
                 for idx, batch in load_iterator(
                         self.data['train'],
                         collate_fn=self.collation_fn,
@@ -89,11 +94,13 @@ class Trainer:
                         desc=f"Train, epoch: {epoch:03}",
                         disable=epoch % self.config["report_rate"] != 0
                 ):
-                    train_loss = self._train(batch, idx, train_loss)
+                    loss_train = self._train(batch, idx, loss_train)
+                f1_train: float = self.metric.f_score()
 
                 # --- ---------------------------------
                 # --- begin eval
-                eval_loss: float = 0.0
+                self.metric.reset()
+                loss_eval: float = 0.0
                 for idx, batch in load_iterator(
                         self.data['eval'],
                         collate_fn=self.collation_fn,
@@ -103,18 +110,21 @@ class Trainer:
                         desc=f"Eval, epoch: {epoch:03}",
                         disable=epoch % self.config["report_rate"] != 0
                 ):
-                    eval_loss = self._eval(batch, idx, eval_loss)
+                    loss_eval = self._eval(batch, idx, loss_eval)
+                f1_eval: float = self.metric.f_score()
 
                 # --- ---------------------------------
                 # --- update state
                 self.state["epoch"].append(epoch)
-                self.state["train_loss"].append(train_loss)
-                self.state["eval_loss"].append(eval_loss)
+                self.state["loss_train"].append(loss_train)
+                self.state["loss_eval"].append(loss_eval)
+                self.state["f1_train"].append(f1_train)
+                self.state["f1_eval"].append(f1_eval)
                 self.state["duration"].append(datetime.now() - time_begin)
 
                 # --- ---------------------------------
                 # --- save if is best model
-                if self.state["eval_loss"][-1] <= min(n for n in self.state["eval_loss"] if n > 0):
+                if self.state["loss_eval"][-1] <= min(n for n in self.state["loss_eval"] if n > 0):
                     saved_model_epoch = self.state["epoch"][-1]
                     self.model.save(self.out_dir + "model.bin")
 
@@ -139,13 +149,13 @@ class Trainer:
     #
     #  -------- _train -----------
     #
-    def _train(self, batch: dict, batch_id: int, train_loss: float) -> float:
+    def _train(self, batch: tuple, batch_id: int, loss_train: float) -> float:
         self.model.train()
 
         # zero the parameter gradients
         self.optimizer.zero_grad()
 
-        loss = self.model.train_step(self.loss_fn, batch)
+        loss, pred_labels = self.model.train_step(self.loss_fn, batch)
         loss.backward()
 
         # scaling the gradients down, places a limit on the size of the parameter updates
@@ -156,31 +166,61 @@ class Trainer:
         self.optimizer.step()
 
         # save loss, acc for statistics
-        train_loss += (loss.item() - train_loss) / (batch_id + 1)
+        loss_train += (loss.item() - loss_train) / (batch_id + 1)
 
         # reduce memory usage by deleting loss after calculation
         # https://discuss.pytorch.org/t/calling-loss-backward-reduce-memory-usage/2735
         del loss
 
-        return train_loss
+        # make metric
+        self._metric(batch, pred_labels)
+
+        return loss_train
 
     #
     #
     #  -------- _eval -----------
     #
-    def _eval(self, batch: dict, batch_id: int, eval_loss: float) -> float:
+    def _eval(self, batch: dict, batch_id: int, loss_eval: float) -> float:
         self.model.eval()
 
-        loss = self.model.train_step(self.loss_fn, batch)
+        loss, pred_labels = self.model.train_step(self.loss_fn, batch)
 
         # save loss, acc for statistics
-        eval_loss += (loss.item() - eval_loss) / (batch_id + 1)
+        loss_eval += (loss.item() - loss_eval) / (batch_id + 1)
 
         # reduce memory usage by deleting loss after calculation
         # https://discuss.pytorch.org/t/calling-loss-backward-reduce-memory-usage/2735
         del loss
 
-        return eval_loss
+        return loss_eval
+
+    #
+    #
+    #  -------- _metric -----------
+    #
+    def _metric(self, batch: Tuple[list, torch.Tensor], pred_labels: torch.Tensor) -> None:
+
+        _, gold_labels = batch
+        matches: torch.Tensor = torch.eq(pred_labels, gold_labels)
+
+        categories: set = {0, 1}
+
+        # iterate over each category
+        for cat in categories:
+
+            # create confusing matrix values for each category (omitting true negative)
+            tps: int = sum(torch.where(pred_labels == cat, matches, False)).item()
+            fns: int = sum(torch.eq(gold_labels, cat)).item() - tps
+            fps: int = sum(torch.eq(pred_labels, cat)).item() - tps
+
+            self.metric.add_tp(cat, tps)
+            self.metric.add_fn(cat, fns)
+            self.metric.add_fp(cat, fps)
+
+            # add for every other class category matches to true negative
+            for nc in (categories - {cat}):
+                self.metric.add_tn(nc, tps)
 
     #
     #
@@ -189,8 +229,8 @@ class Trainer:
     def _log(self, epoch: int) -> None:
         self.logger.info((
             f"@{epoch:03}: \t"
-            f"loss(train)={self.state['train_loss'][epoch - 1]:2.5f} \t"
-            f"loss(eval)={self.state['eval_loss'][epoch - 1]:2.5f} \t"
+            f"loss(train)={self.state['loss_train'][epoch - 1]:2.5f} \t"
+            f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.5f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
