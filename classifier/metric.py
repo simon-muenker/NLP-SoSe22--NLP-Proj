@@ -1,5 +1,6 @@
 import itertools
 from collections import defaultdict
+from typing import Tuple
 
 
 class Metric:
@@ -131,11 +132,21 @@ class Metric:
 
     #  -------- reset -----------
     #
-    def reset(self):
+    def reset(self) -> None:
         self._tps = defaultdict(int)
         self._fps = defaultdict(int)
         self._tns = defaultdict(int)
         self._fns = defaultdict(int)
+
+    #  -------- save -----------
+    #
+    def save(self) -> Tuple[dict, dict, dict, dict]:
+        return self._tps, self._fps, self._tns, self._fns
+
+    #  -------- load -----------
+    #
+    def load(self, data: Tuple[dict, dict, dict, dict]) -> None:
+        self._tps, self._fps, self._tns, self._fns = data
 
     #  -------- add_tp -----------
     #

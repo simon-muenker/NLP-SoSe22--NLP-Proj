@@ -63,8 +63,6 @@ class TransformerPipeline:
 
         # --- ---------------------------------
         # --- run trainer
-        self.logger.info("\n[--- TRAINING ---]")
-        self.logger.info(f"Train on: {self.data['train'].data_path}: ")
         self.trainer()
 
     #

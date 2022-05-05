@@ -6,16 +6,15 @@ from typing import Callable, Dict, Tuple
 
 import torch
 from torch import optim
-from torch.utils.data import Dataset
 
-from classifier import Metric
+from classifier import Metric, Data
 from .util import load_iterator
 
 
 @dataclass
 class Trainer:
     model: torch.nn.Module
-    data: Dict[str, Dataset]
+    data: Dict[str, Data]
     collation_fn: Callable
     logger: logging
     out_dir: str
@@ -75,6 +74,10 @@ class Trainer:
     #
     def __call__(self) -> dict:
         saved_model_epoch: int = 0
+        saved_eval_metric: tuple = ()
+
+        # log train file
+        self.logger.info(f"\n[--- TRAIN -> {self.data['train'].data_path} ---]")
 
         # --- epoch loop
         try:
@@ -127,6 +130,7 @@ class Trainer:
                 if self.state["loss_eval"][-1] <= min(n for n in self.state["loss_eval"] if n > 0):
                     saved_model_epoch = self.state["epoch"][-1]
                     self.model.save(self.out_dir + "model.bin")
+                    saved_eval_metric = self.metric.save()
 
                 # --- ---------------------------------
                 # --- log to user
@@ -143,6 +147,13 @@ class Trainer:
 
         # return and write train state to main
         self._write_state()
+
+        # --- ---------------------------------
+        # --- eval
+        self.logger.info(f"\n[--- EVAL -> {self.data['eval'].data_path} ---]")
+        self.metric.load(saved_eval_metric)
+        self.metric.show()
+
         return self.state
 
     #
@@ -232,10 +243,10 @@ class Trainer:
     def _log(self, epoch: int) -> None:
         self.logger.info((
             f"@{epoch:03}: \t"
-            f"loss(train)={self.state['loss_train'][epoch - 1]:2.5f} \t"
-            f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.5f} \t"
-            f"f1(train)={self.state['f1_train'][epoch - 1]:2.5f} \t"
-            f"f1(eval)={self.state['f1_eval'][epoch - 1]:2.5f} \t"
+            f"loss(train)={self.state['loss_train'][epoch - 1]:2.4f} \t"
+            f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.4f} \t"
+            f"f1(train)={self.state['f1_train'][epoch - 1]:2.4f} \t"
+            f"f1(eval)={self.state['f1_eval'][epoch - 1]:2.4f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
