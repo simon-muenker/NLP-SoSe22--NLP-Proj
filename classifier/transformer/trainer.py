@@ -231,6 +231,8 @@ class Trainer:
             f"@{epoch:03}: \t"
             f"loss(train)={self.state['loss_train'][epoch - 1]:2.5f} \t"
             f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.5f} \t"
+            f"f1(train)={self.state['f1_train'][epoch - 1]:2.5f} \t"
+            f"f1(eval)={self.state['f1_eval'][epoch - 1]:2.5f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
