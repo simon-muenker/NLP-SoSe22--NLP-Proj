@@ -60,6 +60,14 @@ class Main:
     #  -------- __call__ -----------
     #
     def __call__(self):
+
+        # --- ---------------------------------
+        # --- init
+        self.logger.info("\n[--- INIT ---]")
+        self.logger.info(f"- Model has {len(self.model)} trainable parameters.")
+
+        # --- ---------------------------------
+        # --- train
         self.trainer()
 
     #
