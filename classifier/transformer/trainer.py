@@ -152,7 +152,7 @@ class Trainer:
         # --- eval
         self.logger.info(f"\n[--- EVAL -> {self.data['eval'].data_path} ---]")
         self.metric.load(saved_eval_metric)
-        self.metric.show()
+        self.metric.show(encoding=self.data['train'].map_label)
 
         return self.state
 
@@ -214,15 +214,13 @@ class Trainer:
     #  -------- _metric -----------
     #
     def _metric(self, batch: Tuple[list, torch.Tensor], pred_labels: torch.Tensor) -> None:
+        labels: set = {*self.data['train'].label_mapping.values()}
 
         _, gold_labels = batch
         matches: torch.Tensor = torch.eq(pred_labels, gold_labels)
 
-        categories: set = {0, 1}
-
         # iterate over each category
-        for cat in categories:
-
+        for cat in labels:
             # create confusing matrix values for each category (omitting true negative)
             tps: int = sum(torch.where(pred_labels == cat, matches, False)).item()
             fns: int = sum(torch.eq(gold_labels, cat)).item() - tps
@@ -233,7 +231,7 @@ class Trainer:
             self.metric.add_fp(cat, fps)
 
             # add for every other class category matches to true negative
-            for nc in (categories - {cat}):
+            for nc in (labels - {cat}):
                 self.metric.add_tn(nc, tps)
 
     #

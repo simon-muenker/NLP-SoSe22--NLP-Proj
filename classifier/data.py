@@ -15,6 +15,10 @@ class Data(Dataset):
     #
     def __post_init__(self):
         self.data = pd.read_csv(self.data_path)
+        self.label_mapping: dict = {
+            "positive": 1,
+            "negative": 0
+        }
 
     #  -------- __getitem__ -----------
     #
@@ -25,3 +29,8 @@ class Data(Dataset):
     #
     def __len__(self) -> int:
         return len(self.data)
+
+    #  -------- map_label -----------
+    #
+    def map_label(self, label: str) -> int:
+        return self.label_mapping.get(label)

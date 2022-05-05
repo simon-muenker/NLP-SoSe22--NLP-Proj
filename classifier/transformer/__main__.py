@@ -7,13 +7,13 @@ import torch
 from classifier import Data
 from classifier.util import dict_merge, load_json
 
-from .encoding import Encoding
-from .model import Model
-from .trainer import Trainer
-from .util import get_device
+from classifier.transformer.encoding import Encoding
+from classifier.transformer.model import Model
+from classifier.transformer.trainer import Trainer
+from classifier.transformer.util import get_device
 
 
-class TransformerPipeline:
+class Main:
 
     #
     #
@@ -60,9 +60,6 @@ class TransformerPipeline:
     #  -------- __call__ -----------
     #
     def __call__(self):
-
-        # --- ---------------------------------
-        # --- run trainer
         self.trainer()
 
     #
@@ -85,15 +82,9 @@ class TransformerPipeline:
         # extract only first embeddings (CLS)
         cls_embeds: list = [tco[0] for tco in sent_embeds]
 
-        # label mapping (refactor to config, or auto generate)
-        label_mapping: dict = {
-            'positive': 0,
-            'negative': 1,
-        }
-
         # transform labels
         label_ids: torch.Tensor = torch.tensor(
-            [label_mapping.get(lb) for lb in label],
+            [self.data['train'].map_label(lb) for lb in label],
             dtype=torch.long, device=get_device()
         )
 
@@ -152,3 +143,10 @@ class TransformerPipeline:
             dict_merge(config_collection, load_json(config))
 
         return config_collection
+
+
+#
+#  -------- __main__ -----------
+#
+if __name__ == "__main__":
+    Main()()
