@@ -113,9 +113,9 @@ class Metric:
     #
     def show(
             self,
-            decoding=None,
+            decoding: callable = None,
     ):
-        def dec(n): return decoding[n] if decoding else n
+        def dec(n): return decoding(n) if decoding else n
 
         for class_name in [None] + self.get_classes():
             self.logger.info((
