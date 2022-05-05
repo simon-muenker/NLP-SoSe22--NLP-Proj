@@ -1,4 +1,4 @@
 module = classifier
 
-run:
-	@python3 -m $(module).transformer -C ./config/demo.json
+transformer:
+	@python3 -m $(module).transformer -C ./config/transformer.json
