@@ -22,7 +22,7 @@
     "shuffle": true,
     "batch_size": 32,
     "num_workers": 0,
-    "report_rate": 2,
+    "report_rate": 1,
     "max_grad_norm": 2.0,
     "optimizer": {
       "lr": 2e-4,
