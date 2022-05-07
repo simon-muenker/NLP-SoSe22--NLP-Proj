@@ -1,11 +1,10 @@
-import argparse
 import logging
 import random
 
 import torch
 
 from classifier import Data
-from classifier.util import dict_merge, load_json
+from classifier.util import load_config, load_logger
 
 from classifier.transformer.encoding import Encoding
 from classifier.transformer.model import Model
@@ -23,8 +22,8 @@ class Main:
 
         # --- ---------------------------------
         # --- base setup
-        self.config: dict = self.load_config()
-        self.logger: logging = self.setup_logging()
+        self.config: dict = load_config()
+        self.logger: logging = load_logger(self.config['data']['out_path'] + "full.log")
         self.setup_pytorch()
 
         # --- ---------------------------------
@@ -110,49 +109,8 @@ class Main:
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
 
-    #
-    #
-    #  -------- setup_logging -----------
-    #
-    def setup_logging(self):
-        filename: str = self.config['data']['out_path'] + "full.log"
 
-        logging.basicConfig(
-            level=logging.INFO if not self.config["debug"] else logging.DEBUG,
-            format="%(message)s",
-            handlers=[
-                logging.FileHandler(filename, mode="w"),
-                logging.StreamHandler()
-            ]
-        )
-
-        return logging.getLogger(__name__)
-
-    #
-    #
-    #  -------- load_config -----------
-    #
-    @staticmethod
-    def load_config() -> dict:
-        # get console arguments, config file
-        parser = argparse.ArgumentParser()
-        parser.add_argument(
-            "-C",
-            dest="config",
-            nargs='+',
-            required=True,
-            help="define multiple config.json files witch are combined during runtime (overwriting is possible)"
-        )
-        args = parser.parse_args()
-
-        config_collection: dict = {}
-
-        for config in args.config:
-            dict_merge(config_collection, load_json(config))
-
-        return config_collection
-
-
+#
 #
 #  -------- __main__ -----------
 #
