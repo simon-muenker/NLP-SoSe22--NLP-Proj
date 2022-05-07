@@ -38,6 +38,9 @@ class Main:
 
         self.model.fit(self.data['train'].data)
 
+        for name, lookup in self.model.polarities.items():
+            lookup.write(self.config['data']['out_path'] + str(name))
+
         # predict train and eval set
         prediction: dict = {
             'train': self.model.predict(self.data['train'].data),

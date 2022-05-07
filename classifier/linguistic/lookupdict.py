@@ -105,3 +105,14 @@ class LookUpDict:
             f'\nname({sentiment}) || len({len(count)}) || sum({sum(count["n"])}) \n {count.head(4)}'
             for sentiment, count in self.data.items()
         )
+
+    #
+    #
+    #
+    # -------- write -----------
+    def write(self, path: str) -> None:
+        writer = pd.ExcelWriter(str(path) + ".xlsx")
+
+        for i, (label, df) in enumerate(self.data.items()):
+            df.to_excel(writer, label)
+        writer.save()

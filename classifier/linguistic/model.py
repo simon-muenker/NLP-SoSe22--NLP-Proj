@@ -16,12 +16,7 @@ class Model:
     ) -> None:
         self.config = config
 
-        self.polarity_words: Dict[str, dict] = {}
-
-        # pd.read_excel(
-        #             self.config['weights']['uni_gram'],
-        #             sheet_name=self.config['polarities']
-        #         )
+        self.polarities: Dict[str, LookUpDict] = {}
 
     #
     #
@@ -30,13 +25,13 @@ class Model:
     def fit(self, data: pd.DataFrame) -> None:
 
         for idx, n in enumerate(self.config['ngrams']):
-            self.polarity_words[n] = LookUpDict({
+            self.polarities[n] = LookUpDict({
                 'data': data,
                 'token_label': 'token' if n == 1 else f'{n}-gram',
                 'group_label': 'sentiment',
                 'pre_selection_num': 1024,
                 'final_selection_num': 64
-            }).data
+            })
 
     #
     #
@@ -48,17 +43,17 @@ class Model:
         predictions: pd.DataFrame = pd.DataFrame()
 
         # calculate a score for each polarity
-        for n, lookup in self.polarity_words.items():
+        for n, lookup in self.polarities.items():
             target_label: str = 'token' if n == 1 else f'{n}-gram'
 
-            for label, count in lookup.items():
+            for label, count in lookup.data.items():
                 predictions[f'{n}-gram_{label}'] = data[target_label].apply(lambda x: Model.calc_score(x, count))
 
         predictions["sum_positive"] = predictions.filter(regex=".*_positive").sum(axis='columns')
         predictions["sum_negative"] = predictions.filter(regex=".*_negative").sum(axis='columns')
 
         predictions['prediction'] = predictions.apply(
-            lambda row: 'positive' if row["sum_positive"]> row["sum_negative"] else 'negative', axis=1
+            lambda row: 'positive' if row["sum_positive"] > row["sum_negative"] else 'negative', axis=1
         )
 
         # add gold labels
