@@ -26,7 +26,7 @@ class Main(Runner):
             in_size=self.encoding.dim,
             out_size=2,
             config=self.config['model']
-        ).get_device()
+        ).to(get_device())
 
         # load trainer
         self.trainer = Trainer(
