@@ -3,9 +3,8 @@ import logging
 import pandas as pd
 
 from classifier import Data
-from classifier.util import load_config, load_logger
-
 from classifier.linguistic.model import Model
+from classifier.util import load_config, load_logger
 
 
 class Main:
@@ -58,4 +57,3 @@ class Main:
 
 if __name__ == "__main__":
     Main()()
-

@@ -4,12 +4,11 @@ import random
 import torch
 
 from classifier import Data
-from classifier.util import load_config, load_logger
-
 from classifier.transformer.encoding import Encoding
 from classifier.transformer.model import Model
 from classifier.transformer.trainer import Trainer
 from classifier.transformer.util import get_device
+from classifier.util import load_config, load_logger
 
 
 class Main:
@@ -19,7 +18,6 @@ class Main:
     #  -------- __init__ -----------
     #
     def __init__(self):
-
         # --- ---------------------------------
         # --- base setup
         self.config: dict = load_config()
@@ -59,7 +57,6 @@ class Main:
     #  -------- __call__ -----------
     #
     def __call__(self):
-
         # --- ---------------------------------
         # --- init
         self.logger.info("\n[--- INIT ---]")
@@ -74,7 +71,6 @@ class Main:
     #  -------- collation_fn -----------
     #
     def collation_fn(self, batch: list) -> tuple:
-
         text: list = []
         label: list = []
 

@@ -52,7 +52,6 @@ def dict_merge(dct, merge_dct):
 #  -------- load_config -----------
 #
 def load_config() -> dict:
-
     # get console arguments, config file
     parser = argparse.ArgumentParser()
     parser.add_argument(

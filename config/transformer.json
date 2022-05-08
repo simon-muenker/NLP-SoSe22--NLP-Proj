@@ -14,8 +14,8 @@
     ]
   },
   "model": {
-      "hid_size": 256,
-      "dropout": 0.3
+    "hid_size": 256,
+    "dropout": 0.3
   },
   "trainer": {
     "epochs": 25,

@@ -1,10 +1,8 @@
-import math
 from typing import Dict
 
+import pandas as pd
 from pandarallel import pandarallel
 from tqdm import tqdm
-
-import pandas as pd
 
 from classifier.linguistic.lookupdict import LookUpDict
 
@@ -53,7 +51,6 @@ class Model:
             target_label: str = 'token' if n == 1 else f'{n}-gram'
 
             for label, count in lookup.data.items():
-
                 predictions[f'{n}-gram_{label}'] = data[target_label].parallel_apply(
                     lambda x: Model.calc_score(x, count))
 

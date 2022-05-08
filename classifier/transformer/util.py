@@ -2,7 +2,6 @@ from typing import Union
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-
 from tqdm import tqdm
 
 

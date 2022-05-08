@@ -1,10 +1,9 @@
-from dataclasses import dataclass
 import re
+from dataclasses import dataclass
 
 import nltk
 import pandas as pd
 from pandarallel import pandarallel
-
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
@@ -76,7 +75,6 @@ class Data(Dataset):
         #  -------- __tokenize -----------
         #
         def __tokenize(sent: str):
-
             # convert to lowercase, trim
             sent: str = sent.lower().strip()
 

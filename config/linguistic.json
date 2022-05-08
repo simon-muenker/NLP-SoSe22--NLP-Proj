@@ -13,13 +13,16 @@
       "positive"
     ],
     "ngrams": [
-      1, 2
+      1,
+      2
     ],
     "pre_selection": [
-      1024, 512
+      1024,
+      512
     ],
     "final_selection": [
-      64, 64
+      64,
+      64
     ]
   }
 }

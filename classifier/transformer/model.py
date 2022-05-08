@@ -24,16 +24,16 @@ class Model(nn.Module):
         self.config["out_size"] = out_size
 
         self.net = nn.Sequential(
-                nn.Linear(
-                    self.config["in_size"],
-                    self.config["hid_size"]),
-                nn.Dropout(
-                    p=self.config["dropout"]),
-                nn.LeakyReLU(),
-                nn.Linear(
-                    self.config["hid_size"],
-                    self.config["out_size"])
-            )
+            nn.Linear(
+                self.config["in_size"],
+                self.config["hid_size"]),
+            nn.Dropout(
+                p=self.config["dropout"]),
+            nn.LeakyReLU(),
+            nn.Linear(
+                self.config["hid_size"],
+                self.config["out_size"])
+        )
 
     #
     #
@@ -51,7 +51,6 @@ class Model(nn.Module):
     #  -------- forward -----------
     #
     def forward(self, embeds: List[torch.Tensor]) -> List[torch.Tensor]:
-
         # pack sentence vectors as a packed sequence
         packed_embeds = rnn.pack_sequence(
             embeds, enforce_sorted=False
@@ -75,7 +74,6 @@ class Model(nn.Module):
             self,
             loss_fn: torch.nn.Module,
             batch: Tuple[torch.Tensor, List[torch.Tensor]]):
-
         # predict batch
         embeds, gold_label = batch
         pred_label = torch.stack(self(embeds))
