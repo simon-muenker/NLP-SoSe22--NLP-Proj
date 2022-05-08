@@ -1,0 +1,39 @@
+{
+  "debug": false,
+  "out_path": "./output/hybrid/",
+  "data": {
+    "polarities": {
+      "negative" : 0,
+      "positive": 1
+    },
+    "train_path": "data/imdb.train.0.010.csv",
+    "eval_path": "data/imdb.eval.csv",
+    "test_path": "data/imdb.test.csv"
+  },
+  "model": {
+    "encoding": {
+      "model": "bert-base-uncased",
+      "layers": [
+        -1
+      ]
+    },
+    "neural": {
+      "hid_size": 256,
+      "dropout": 0.3
+    },
+    "linguistic": {
+      "ngrams": [
+        1,
+        2
+      ],
+      "pre_selection": [
+        1024,
+        512
+      ],
+      "final_selection": [
+        64,
+        64
+      ]
+    }
+  }
+}

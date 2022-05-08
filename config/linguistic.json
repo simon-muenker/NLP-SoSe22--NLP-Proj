@@ -1,6 +1,6 @@
 {
   "debug": false,
-  "out_path": "./output/base_linguistic/",
+  "out_path": "./output/linguistic/",
   "data": {
     "polarities": {
       "negative" : 0,

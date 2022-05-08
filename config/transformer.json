@@ -1,6 +1,6 @@
 {
   "debug": false,
-  "out_path": "./output/base_transformer/",
+  "out_path": "./output/transformer/",
   "data": {
     "polarities": {
       "negative" : 0,
