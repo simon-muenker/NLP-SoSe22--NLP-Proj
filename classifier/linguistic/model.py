@@ -1,5 +1,7 @@
 from typing import Dict
 
+from tqdm import tqdm
+
 import pandas as pd
 
 from classifier.linguistic.lookupdict import LookUpDict
@@ -24,7 +26,7 @@ class Model:
     # -------- fit -----------
     def fit(self, data: pd.DataFrame) -> None:
 
-        for idx, n in enumerate(self.config['ngrams']):
+        for idx, n in enumerate(tqdm(self.config['ngrams'], desc="Fit LookUpDicts")):
             self.polarities[n] = LookUpDict({
                 'data': data,
                 'token_label': 'token' if n == 1 else f'{n}-gram',
@@ -47,7 +49,10 @@ class Model:
             target_label: str = 'token' if n == 1 else f'{n}-gram'
 
             for label, count in lookup.data.items():
-                predictions[f'{n}-gram_{label}'] = data[target_label].apply(lambda x: Model.calc_score(x, count))
+                tqdm.pandas(desc=f'Calculate {n}-gram {label} score')
+
+                predictions[f'{n}-gram_{label}'] = data[target_label].progress_apply(
+                    lambda x: Model.calc_score(x, count))
 
         predictions["sum_positive"] = predictions.filter(regex=".*_positive").sum(axis='columns')
         predictions["sum_negative"] = predictions.filter(regex=".*_negative").sum(axis='columns')

@@ -24,8 +24,8 @@ class Main:
         # --- ---------------------------------
         # --- load components
         self.data: dict = {
-            'train': Data(self.config['data']['train_path'], generate_token=True, generate_ngrams=[]),
-            'eval': Data(self.config['data']['eval_path'], generate_token=True, generate_ngrams=[]),
+            'train': Data(self.config['data']['train_path'], generate_token=True, generate_ngrams=[2, 3]),
+            'eval': Data(self.config['data']['eval_path'], generate_token=True, generate_ngrams=[2, 3]),
         }
 
         self.model = Model(self.config['model'])

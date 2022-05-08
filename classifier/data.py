@@ -1,6 +1,8 @@
-import string
 from dataclasses import dataclass, field
 
+from tqdm import tqdm
+
+import nltk
 import pandas as pd
 
 from torch.utils.data import Dataset
@@ -53,14 +55,16 @@ class Data(Dataset):
     #  -------- tokenize -----------
     #
     def tokenize(self, label: str = 'token') -> None:
+        tqdm.pandas(desc=f'Tokenize: {self.data_path}')
+
         # remove punctuation & html tags, convert to lowercase, tokenize
-        self.data[label] = self.data['review'] \
-            .str.translate(str.maketrans('', '', string.punctuation)) \
-            .str.replace(r'<[^<>]*>', '', regex=True) \
-            .str.lower() \
-            .str.split()
+        self.data[label] = self.data['review'].progress_apply(
+            lambda sent: nltk.tokenize.word_tokenize(sent, language='english')
+        )
 
     def ngrams(self, n: int, label: str = 'token'):
-        self.data[f'{n}-gram'] = self.data[label].apply(
-            lambda sent: [tuple(sent[i:i + n]) for i in range(len(sent) - n + 1)]
+        tqdm.pandas(desc=f'Generate {n}-gram: {self.data_path}')
+
+        self.data[f'{n}-gram'] = self.data[label].progress_apply(
+            lambda sent: nltk.ngrams(sent, n)
         )
