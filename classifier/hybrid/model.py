@@ -5,6 +5,7 @@ import torch.nn as nn
 
 from classifier.lib.neural import Model as AbsModel
 from classifier.transformer import Model as Linear
+from classifier.lib.neural.util import get_device
 
 
 class Model(AbsModel, nn.Module):
@@ -20,13 +21,13 @@ class Model(AbsModel, nn.Module):
             self.config["in_size"][0],
             self.config["in_size"][1],
             self.config.copy()
-        )
+        ).to(get_device())
 
         self.output = nn.Linear(
             self.config["in_size"][1] ** 2,
             self.config["out_size"],
             bias=False
-        )
+        ).to(get_device())
 
     #
     #
