@@ -45,7 +45,7 @@ class Main:
 
         # predict train and eval set
         prediction: dict = {
-            # 'train': self.model.predict(self.data['train'].data),
+            'train': self.model.predict(self.data['train'].data),
             'eval': self.model.predict(self.data['eval'].data),
         }
 
