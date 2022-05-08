@@ -1,3 +1,4 @@
+import pandas as pd
 import torch
 
 from classifier.lib import Runner
@@ -25,13 +26,13 @@ class Main(Runner):
         # tokenize data and generate ngrams
         for _, dataset in self.data.items():
             dataset.tokenize()
-            for n in self.config['model']['ngrams']:
+            for n in self.config['model']['linguistic']['ngrams']:
                 dataset.ngrams(n)
 
         # load encoding, neural, classifier
         self.encoding = Encoding(self.config['model']['encoding'])
         self.net = Network(
-            in_size=tuple([756, 2]),
+            in_size=tuple([self.encoding.dim, len(self.config['model']['linguistic']['ngrams']) * 2]),
             out_size=2,
             config=self.config['model']['neural']
         )
@@ -62,11 +63,8 @@ class Main(Runner):
         self.clss.fit(self.data['train'].data)
         self.clss.save(self.config['out_path'])
 
-        # predict train and eval set
-        prediction: dict = {
-            'train': self.clss.predict(self.data['train'].data),
-            'eval': self.clss.predict(self.data['eval'].data),
-        }
+        self.clss.predict(self.data['train'].data)
+        self.clss.predict(self.data['eval'].data)
 
         # concat predictions and datasets
 
@@ -81,11 +79,18 @@ class Main(Runner):
     def collation_fn(self, batch: list) -> tuple:
         text: list = []
         label: list = []
+        clss_pred: list = []
 
         # collate data
-        for sample in batch:
-            text.append(sample[0])
-            label.append(sample[1])
+        for sample, review, sentiment in batch:
+            text.append(review)
+            label.append(sentiment)
+            clss_pred.append(torch.tensor(sample[[
+                      '1-gram_negative',
+                      '2-gram_positive',
+                      '2-gram_negative',
+                      '2-gram_positive'
+                  ]].values, device=get_device()).squeeze())
 
         # embed text
         _, sent_embeds, _ = self.encoding(text)
@@ -99,7 +104,7 @@ class Main(Runner):
             dtype=torch.long, device=get_device()
         )
 
-        return cls_embeds, label_ids
+        return (cls_embeds, clss_pred), label_ids
 
 
 if __name__ == "__main__":

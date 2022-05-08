@@ -30,14 +30,11 @@ class Main(Runner):
         self.model.fit(self.data['train'].data)
         self.model.save(self.config['out_path'])
 
-        # predict train and eval set
-        prediction: dict = {
-            'train': self.model.predict(self.data['train'].data),
-            'eval': self.model.predict(self.data['eval'].data),
-        }
+        self.model.predict(self.data['train'].data)
+        self.model.predict(self.data['eval'].data)
 
         # print results to console
-        for data_label, data in prediction.items():
+        for data_label, data in self.data.items():
             self.logger.info(f"\n[--- EVAL -> {self.data[data_label].data_path} ---]")
             self.metric.reset()
             self.metric.confusion_matrix(

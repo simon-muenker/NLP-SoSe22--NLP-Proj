@@ -1,7 +1,0 @@
-
-[--- INIT ---]
-- Model has 197378 trainable parameters.
-
-[--- TRAIN -> data/imdb.train.0.010.csv ---]
-Warning: Training interrupted by user!
-Load best model based on evaluation loss.

@@ -41,30 +41,23 @@ class Model:
     #
     #
     # -------- predict -----------
-    def predict(self, data: pd.DataFrame) -> pd.DataFrame:
-
-        # create empty predictions dataframe
-        predictions: pd.DataFrame = pd.DataFrame()
+    def predict(self, data: pd.DataFrame) -> None:
 
         # calculate a score for each polarity
         for n, lookup in self.polarities.items():
             target_label: str = 'token' if n == 1 else f'{n}-gram'
 
             for label, count in lookup.data.items():
-                predictions[f'{n}-gram_{label}'] = data[target_label].parallel_apply(
+                data[f'{n}-gram_{label}'] = data[target_label].parallel_apply(
                     lambda x: Model.calc_score(x, count))
 
-        predictions["sum_positive"] = predictions.filter(regex=".*_positive").sum(axis='columns')
-        predictions["sum_negative"] = predictions.filter(regex=".*_negative").sum(axis='columns')
+        data["sum_positive"] = data.filter(regex=".*_positive").sum(axis='columns')
+        data["sum_negative"] = data.filter(regex=".*_negative").sum(axis='columns')
 
-        predictions['prediction'] = predictions.apply(
+        data['prediction'] = data.apply(
             lambda row: 'positive' if row["sum_positive"] > row["sum_negative"] else 'negative', axis=1
         )
 
-        # add gold labels
-        predictions['gold'] = data['sentiment']
-
-        return predictions
 
     @staticmethod
     def calc_score(token: list, count: pd.DataFrame) -> float:

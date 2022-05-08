@@ -3,11 +3,11 @@
   "out_path": "./output/hybrid/",
   "data": {
     "polarities": {
-      "negative" : 0,
+      "negative": 0,
       "positive": 1
     },
-    "train_path": "data/imdb.train.0.010.csv",
-    "eval_path": "data/imdb.eval.csv",
+    "train_path": "data/imdb.train.0.001.csv",
+    "eval_path": "data/imdb.train.0.001.csv",
     "test_path": "data/imdb.test.csv"
   },
   "model": {
@@ -34,6 +34,24 @@
         64,
         64
       ]
+    }
+  },
+  "trainer": {
+    "seed": 1,
+    "epochs": 25,
+    "shuffle": true,
+    "batch_size": 4,
+    "num_workers": 0,
+    "report_rate": 1,
+    "max_grad_norm": 2.0,
+    "optimizer": {
+      "lr": 2e-4,
+      "weight_decay": 1e-2,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-8
     }
   }
 }

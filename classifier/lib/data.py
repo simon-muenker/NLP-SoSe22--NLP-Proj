@@ -36,7 +36,7 @@ class Data(Dataset):
     #  -------- __getitem__ -----------
     #
     def __getitem__(self, idx) -> T_co:
-        return self.data['review'][idx], self.data['sentiment'][idx]
+        return self.data.iloc[[idx]], self.data['review'][idx], self.data['sentiment'][idx]
 
     #  -------- __len__ -----------
     #

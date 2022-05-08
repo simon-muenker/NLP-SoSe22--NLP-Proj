@@ -61,9 +61,9 @@ class Main(Runner):
         label: list = []
 
         # collate data
-        for sample in batch:
-            text.append(sample[0])
-            label.append(sample[1])
+        for _, review, sentiment in batch:
+            text.append(review)
+            label.append(sentiment)
 
         # embed text
         _, sent_embeds, _ = self.encoding(text)

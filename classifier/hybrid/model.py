@@ -28,9 +28,6 @@ class Model(AbsModel, nn.Module):
             bias=False
         )
 
-        print(self.embeds)
-        print(self.output)
-
     #
     #
     #  -------- default_config -----------
@@ -40,18 +37,14 @@ class Model(AbsModel, nn.Module):
         return {
             "embeds": Linear.default_config(),
             "linguistic": None,
-            "output": Linear.default_config(),
         }
 
     #
     #
     #  -------- forward -----------
     #
-    def forward(self, data: Tuple[List[torch.Tensor], List]) -> List[torch.Tensor]:
-
-        embeds: List[torch.Tensor] = self.embeds(data[0])
-        classes: torch.Tensor = torch.Tensor(data[1])
-
-        output: List[torch.Tensor] = self.output([embeds, classes])
-
-        return output
+    def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
+        return self.output(torch.cat([
+            torch.stack(self.embeds(data[0])),
+            torch.stack(data[1])
+        ], dim=1))
