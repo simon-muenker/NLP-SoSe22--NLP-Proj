@@ -3,7 +3,8 @@ from typing import Tuple, List
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
 
-from .util import get_device, unpad
+from classifier.lib.neural.util import get_device
+from classifier.transformer.util import unpad
 
 
 class Encoding:

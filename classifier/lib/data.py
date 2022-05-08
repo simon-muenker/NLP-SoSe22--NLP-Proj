@@ -1,5 +1,5 @@
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import nltk
 import pandas as pd
@@ -13,40 +13,25 @@ pandarallel.initialize(progress_bar=True, verbose=1)
 @dataclass
 class Data(Dataset):
     data_path: str
+    polarities: dict
     generate_token: bool = False
     generate_ngrams: list = None
     remove_stopwords: bool = True
     data_language: str = 'english'
+    stop_words: list = field(default_factory=list)
 
-    #  -------- __post_init__ -----------
-    #
     def __post_init__(self):
         # read data from csv file
         self.data: pd.DataFrame = pd.read_csv(self.data_path)
 
-        # label mapping -> move to config file
-        self.label_mapping: dict = {
-            "positive": 1,
-            "negative": 0
-        }
-
         # generate token column
         if self.generate_token:
-            self.stop_words: list = []
-
-            # load stopwords from nltk
-            if self.remove_stopwords:
-                self.stop_words = set(nltk.corpus.stopwords.words(self.data_language))
-
             self.tokenize()
 
         # generate ngrams
         if self.generate_ngrams:
             for n in self.generate_ngrams:
-
-                # skip uni gram
-                if n != 1:
-                    self.ngrams(n)
+                self.ngrams(n)
 
     #  -------- __getitem__ -----------
     #
@@ -61,16 +46,30 @@ class Data(Dataset):
     #  -------- encode_label -----------
     #
     def encode_label(self, label: str) -> int:
-        return self.label_mapping.get(label)
+        return self.polarities.get(label)
 
     #  -------- decode_label -----------
     #
     def decode_label(self, label: int) -> str:
-        return {v: k for k, v in self.label_mapping.items()}.get(label)
+        return {v: k for k, v in self.polarities.items()}.get(label)
+
+    #  -------- get_label_keys -----------
+    #
+    def get_label_keys(self) -> set:
+        return set(k for k in self.polarities.keys())
+
+    #  -------- get_label_values -----------
+    #
+    def get_label_values(self) -> set:
+        return set(k for k in self.polarities.values())
 
     #  -------- tokenize -----------
     #
     def tokenize(self, label: str = 'token') -> None:
+
+        # load stopwords from nltk
+        if self.remove_stopwords:
+            self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
 
         #  -------- __tokenize -----------
         #
@@ -97,9 +96,10 @@ class Data(Dataset):
     #  -------- ngrams -----------
     #
     def ngrams(self, n: int, label: str = 'token'):
-        self.data[f'{n}-gram'] = self.data[label].parallel_apply(
-            lambda sent: list(nltk.ngrams(sent, n))
-        )
+        if n != 1:
+            self.data[f'{n}-gram'] = self.data[label].parallel_apply(
+                lambda sent: list(nltk.ngrams(sent, n))
+            )
 
     #  -------- save -----------
     #

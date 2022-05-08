@@ -1,14 +1,17 @@
 import csv
 import logging
+import random
+
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Callable, Dict, Tuple
 
+import pandas as pd
 import torch
 from torch import optim
 
-from classifier import Metric, Data
-from .util import load_iterator
+from classifier.lib import Metric, Data
+from classifier.lib.neural.util import load_iterator
 
 
 @dataclass
@@ -39,6 +42,9 @@ class Trainer:
         if self.config is None:
             self.config = self.default_config
 
+        # prepare pytorch, modify rng
+        self.__setup_pytorch()
+
         # setup loss_fn, optimizer, scheduler and early stopping
         self.metric = Metric(self.logger)
         self.loss_fn = torch.nn.CrossEntropyLoss()
@@ -51,6 +57,7 @@ class Trainer:
     @property
     def default_config(self) -> dict:
         return {
+            "seed": 1,
             "epochs": 25,
             "shuffle": True,
             "batch_size": 32,
@@ -214,25 +221,16 @@ class Trainer:
     #  -------- _metric -----------
     #
     def _metric(self, batch: Tuple[list, torch.Tensor], pred_labels: torch.Tensor) -> None:
-        labels: set = {*self.data['train'].label_mapping.values()}
-
         _, gold_labels = batch
-        matches: torch.Tensor = torch.eq(pred_labels, gold_labels)
 
-        # iterate over each category
-        for cat in labels:
-            # create confusing matrix values for each category (omitting true negative)
-            tps: int = sum(torch.where(pred_labels == cat, matches, False)).item()
-            fns: int = sum(torch.eq(gold_labels, cat)).item() - tps
-            fps: int = sum(torch.eq(pred_labels, cat)).item() - tps
+        data: pd.DataFrame = pd.DataFrame({
+            'prediction': pd.Series(pred_labels.numpy()),
+            'gold': pd.Series(gold_labels.numpy())
+        })
 
-            self.metric.add_tp(cat, tps)
-            self.metric.add_fn(cat, fns)
-            self.metric.add_fp(cat, fps)
-
-            # add for every other class category matches to true negative
-            for nc in (labels - {cat}):
-                self.metric.add_tn(nc, tps)
+        self.metric.confusion_matrix(
+            self.data['train'].get_label_values(),
+            'prediction', 'gold', data)
 
     #
     #
@@ -259,3 +257,15 @@ class Trainer:
             writer = csv.writer(output_file, delimiter=",")
             writer.writerow(cols)
             writer.writerows(zip(*[self.state[c] for c in cols]))
+
+    #
+    #
+    #  -------- __setup_pytorch -----------
+    #
+    def __setup_pytorch(self):
+        # make pytorch computations deterministic
+        # src: https://pytorch.org/docs/stable/notes/randomness.html
+        random.seed(self.config['seed'])
+        torch.manual_seed(self.config['seed'])
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False

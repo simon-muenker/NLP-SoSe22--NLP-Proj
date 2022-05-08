@@ -1,8 +1,11 @@
 {
-  "seed": 1,
   "debug": false,
+  "out_path": "./output/base_transformer/",
   "data": {
-    "out_path": "./output/",
+    "polarities": {
+      "negative" : 0,
+      "positive": 1
+    },
     "train_path": "data/imdb.train.0.010.csv",
     "eval_path": "data/imdb.eval.csv",
     "test_path": "data/imdb.test.csv"
@@ -18,6 +21,7 @@
     "dropout": 0.3
   },
   "trainer": {
+    "seed": 1,
     "epochs": 25,
     "shuffle": true,
     "batch_size": 32,

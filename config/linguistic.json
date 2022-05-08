@@ -1,9 +1,12 @@
 {
-  "seed": 1,
   "debug": false,
+  "out_path": "./output/base_linguistic/",
   "data": {
-    "out_path": "./output/base_linguistic/",
-    "train_path": "data/imdb.train.1.000.csv",
+    "polarities": {
+      "negative" : 0,
+      "positive": 1
+    },
+    "train_path": "data/imdb.train.0.010.csv",
     "eval_path": "data/imdb.eval.csv",
     "test_path": "data/imdb.test.csv"
   },

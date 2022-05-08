@@ -1,38 +1,24 @@
-import logging
-import random
-
 import torch
 
-from classifier import Data
-from classifier.transformer.encoding import Encoding
-from classifier.transformer.model import Model
-from classifier.transformer.trainer import Trainer
-from classifier.transformer.util import get_device
-from classifier.util import load_config, load_logger
+from classifier.lib import Runner
+from classifier.lib.neural import Trainer
+
+from classifier.transformer import Model
+from classifier.transformer import Encoding
+from classifier.lib.neural.util import get_device
 
 
-class Main:
+class Main(Runner):
 
     #
     #
     #  -------- __init__ -----------
     #
     def __init__(self):
-        # --- ---------------------------------
-        # --- base setup
-        self.config: dict = load_config()
-        self.logger: logging = load_logger(self.config['data']['out_path'] + "full.log")
-        self.setup_pytorch()
+        super().__init__()
 
         # --- ---------------------------------
         # --- load components
-
-        # load data
-        self.data: dict = {
-            'train': Data(self.config['data']['train_path']),
-            'eval': Data(self.config['data']['eval_path']),
-            'test': Data(self.config['data']['test_path'])
-        }
 
         # load encoding, model
         self.encoding = Encoding(self.config['encoding'])
@@ -40,7 +26,7 @@ class Main:
             in_size=self.encoding.dim,
             out_size=2,
             config=self.config['model']
-        ).to(get_device())
+        )
 
         # load trainer
         self.trainer = Trainer(
@@ -48,7 +34,7 @@ class Main:
             self.data,
             self.collation_fn,
             logger=self.logger,
-            out_dir=self.config['data']['out_path'],
+            out_dir=self.config['out_path'],
             config=self.config['trainer'],
         )
 
@@ -92,18 +78,6 @@ class Main:
         )
 
         return cls_embeds, label_ids
-
-    #
-    #
-    #  -------- setup_pytorch -----------
-    #
-    def setup_pytorch(self):
-        # make pytorch computations deterministic
-        # src: https://pytorch.org/docs/stable/notes/randomness.html
-        random.seed(self.config['seed'])
-        torch.manual_seed(self.config['seed'])
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
 
 
 #

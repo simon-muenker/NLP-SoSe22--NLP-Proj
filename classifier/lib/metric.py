@@ -1,6 +1,8 @@
 import itertools
 from collections import defaultdict
-from typing import Tuple
+from typing import Tuple, Set
+
+import pandas as pd
 
 
 class Metric:
@@ -24,9 +26,32 @@ class Metric:
 
     #
     #
+    #  -------- confusion_matrix -----------
+    #
+    def confusion_matrix(
+            self, classes: Set[str],
+            pred_label: str, gold_label: str,
+            data: pd.DataFrame
+    ):
+
+        for c in classes:
+            # create confusing matrix values for each category (omitting true negative)
+            tps: int = sum(pd.Series((data[pred_label] == data[gold_label]) & (data[gold_label] == c)))
+
+            self.add(c, tps=tps,
+                     fns=sum(pd.Series(data[gold_label] == c)) - tps,
+                     fps=sum(pd.Series(data[pred_label] == c)) - tps
+                     )
+
+            # add for every other class category matches to true negative
+            for nc in (classes - {c}):
+                self.add(nc, tns=tps)
+
+    #
+    #
     #  -------- precision -----------
     #
-    def precision(self, class_name=None):
+    def precision(self, class_name: str = None):
         if self.get_tp(class_name) + self.get_fp(class_name) > 0:
             return (
                     self.get_tp(class_name)
@@ -38,7 +63,7 @@ class Metric:
     #
     #  -------- recall -----------
     #
-    def recall(self, class_name=None):
+    def recall(self, class_name: str = None):
         if self.get_tp(class_name) + self.get_fn(class_name) > 0:
             return (
                     self.get_tp(class_name)
@@ -50,7 +75,7 @@ class Metric:
     #
     #  -------- f_score -----------
     #
-    def f_score(self, class_name=None):
+    def f_score(self, class_name: str = None):
         if self.precision(class_name) + self.recall(class_name) > 0:
             return (
                     (1 + self.beta * self.beta)
@@ -63,7 +88,7 @@ class Metric:
     #
     #  -------- accuracy -----------
     #
-    def accuracy(self, class_name=None):
+    def accuracy(self, class_name: str = None):
         if (
                 self.get_tp(class_name) + self.get_fp(class_name) + self.get_fn(class_name) + self.get_tn(class_name)
                 > 0
@@ -150,27 +175,41 @@ class Metric:
 
     #  -------- add_tp -----------
     #
-    def add_tp(self, class_name: int, amount: int = 1):
+    def add(self,
+            class_name: str,
+            tps: int = 0,
+            tns: int = 0,
+            fps: int = 0,
+            fns: int = 0
+            ):
+        self.add_tp(class_name, tps)
+        self.add_tn(class_name, tns)
+        self.add_fp(class_name, fps)
+        self.add_fn(class_name, fns)
+
+    #  -------- add_tp -----------
+    #
+    def add_tp(self, class_name: str, amount: int = 1):
         self._tps[class_name] += amount
 
     #  -------- add_tp -----------
     #
-    def add_tn(self, class_name: int, amount: int = 1):
+    def add_tn(self, class_name: str, amount: int = 1):
         self._tns[class_name] += amount
 
     #  -------- add_fp -----------
     #
-    def add_fp(self, class_name: int, amount: int = 1):
+    def add_fp(self, class_name: str, amount: int = 1):
         self._fps[class_name] += amount
 
     #  -------- add_fn -----------
     #
-    def add_fn(self, class_name: int, amount: int = 1):
+    def add_fn(self, class_name: str, amount: int = 1):
         self._fns[class_name] += amount
 
     #  -------- _get -----------
     #
-    def _get(self, cat: dict, class_name=None):
+    def _get(self, cat: dict, class_name: str = None):
         if class_name is None:
             return sum(
                 [cat[class_name] for class_name in self.get_classes()]
@@ -179,30 +218,30 @@ class Metric:
 
     #  -------- get_tp -----------
     #
-    def get_tp(self, class_name=None):
+    def get_tp(self, class_name: str = None):
         return self._get(self._tps, class_name)
 
     #  -------- get_tn -----------
     #
-    def get_tn(self, class_name=None):
+    def get_tn(self, class_name: str = None):
         return self._get(self._tns, class_name)
 
     #  -------- get_fp -----------
     #
-    def get_fp(self, class_name=None):
+    def get_fp(self, class_name: str = None):
         return self._get(self._fps, class_name)
 
     #  -------- get_fn -----------
     #
-    def get_fn(self, class_name=None):
+    def get_fn(self, class_name: str = None):
         return self._get(self._fns, class_name)
 
     #  -------- get_actual -----------
     #
-    def get_actual(self, class_name=None):
+    def get_actual(self, class_name: str = None):
         return self.get_tp(class_name) + self.get_fn(class_name)
 
     #  -------- get_predicted -----------
     #
-    def get_predicted(self, class_name=None):
+    def get_predicted(self, class_name: str = None):
         return self.get_tp(class_name) + self.get_fp(class_name)
