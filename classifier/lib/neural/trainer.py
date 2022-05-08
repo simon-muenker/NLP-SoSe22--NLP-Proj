@@ -224,8 +224,8 @@ class Trainer:
         _, gold_labels = batch
 
         data: pd.DataFrame = pd.DataFrame({
-            'prediction': pd.Series(pred_labels.numpy()),
-            'gold': pd.Series(gold_labels.numpy())
+            'prediction': pd.Series(pred_labels.cpu().numpy()),
+            'gold': pd.Series(gold_labels.cpu().numpy())
         })
 
         self.metric.confusion_matrix(
