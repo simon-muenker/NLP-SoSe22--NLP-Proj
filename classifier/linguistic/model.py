@@ -77,3 +77,7 @@ class Model:
                 score += val.iloc[0]
 
         return score
+
+    def save(self, path: str):
+        for n, lookup in self.polarities.items():
+            lookup.write(f'{path}{n}-gram-weights')

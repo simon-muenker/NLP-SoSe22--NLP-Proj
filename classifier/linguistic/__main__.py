@@ -14,6 +14,7 @@ class Main(Runner):
         self.metric = Metric(self.logger)
         self.model = Model(self.config['model'])
 
+        # tokenize data and generate ngrams
         for _, dataset in self.data.items():
             dataset.tokenize()
 
@@ -27,9 +28,7 @@ class Main(Runner):
     def __call__(self):
 
         self.model.fit(self.data['train'].data)
-
-        for n, lookup in self.model.polarities.items():
-            lookup.write(f'{self.config["data"]["out_path"]}{n}-gram-weights')
+        self.model.save(self.config['out_path'])
 
         # predict train and eval set
         prediction: dict = {
@@ -37,12 +36,13 @@ class Main(Runner):
             'eval': self.model.predict(self.data['eval'].data),
         }
 
-        labels: set = self.data['train'].get_label_keys()
-
         # print results to console
         for data_label, data in prediction.items():
+            self.logger.info(f"\n[--- EVAL -> {data.data_path} ---]")
             self.metric.reset()
-            self.metric.confusion_matrix(labels, 'prediction', 'gold', data)
+            self.metric.confusion_matrix(
+                self.data['train'].get_label_keys(),
+                'prediction', 'gold', data)
             self.metric.show()
 
 

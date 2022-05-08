@@ -1,8 +1,13 @@
+import torch
+
 from classifier.lib import Runner
 
 from classifier.hybrid import Model as Network
 from classifier.linguistic import Model as Classifier
 from classifier.transformer import Encoding
+
+from classifier.lib.neural import Trainer
+from classifier.lib.neural.util import get_device
 
 
 class Main(Runner):
@@ -17,20 +22,30 @@ class Main(Runner):
         # --- ---------------------------------
         # --- load components
 
-        # load encoding, model
-        # self.encoding = Encoding(self.config['model']['encoding'])
-        self.net = Network(
-            in_size=tuple([756, 2]),
-            out_size=2,
-            config=self.config['model']['neural']
-        )
-
+        # tokenize data and generate ngrams
         for _, dataset in self.data.items():
             dataset.tokenize()
             for n in self.config['model']['ngrams']:
                 dataset.ngrams(n)
 
+        # load encoding, neural, classifier
+        self.encoding = Encoding(self.config['model']['encoding'])
+        self.net = Network(
+            in_size=tuple([756, 2]),
+            out_size=2,
+            config=self.config['model']['neural']
+        )
         self.clss = Classifier(self.config['model']['linguistic'])
+
+        # load trainer
+        self.trainer = Trainer(
+            self.net,
+            self.data,
+            self.collation_fn,
+            logger=self.logger,
+            out_dir=self.config['out_path'],
+            config=self.config['trainer'],
+        )
 
     #
     #
@@ -43,11 +58,9 @@ class Main(Runner):
         self.logger.info(f"- Model has {len(self.net)} trainable parameters.")
 
         # --- ---------------------------------
-        # --- fit, predict classifier
+        # --- fit, save, predict classifier
         self.clss.fit(self.data['train'].data)
-
-        for n, lookup in self.clss.polarities.items():
-            lookup.write(f'{self.config["data"]["out_path"]}{n}-gram-weights')
+        self.clss.save(self.config['out_path'])
 
         # predict train and eval set
         prediction: dict = {
@@ -55,8 +68,38 @@ class Main(Runner):
             'eval': self.clss.predict(self.data['eval'].data),
         }
 
+        # concat predictions and datasets
+
         # --- ---------------------------------
-        # --- train, eval neural model
+        # --- train
+        self.trainer()
+
+    #
+    #
+    #  -------- collation_fn -----------
+    #
+    def collation_fn(self, batch: list) -> tuple:
+        text: list = []
+        label: list = []
+
+        # collate data
+        for sample in batch:
+            text.append(sample[0])
+            label.append(sample[1])
+
+        # embed text
+        _, sent_embeds, _ = self.encoding(text)
+
+        # extract only first embeddings (CLS)
+        cls_embeds: list = [tco[0] for tco in sent_embeds]
+
+        # transform labels
+        label_ids: torch.Tensor = torch.tensor(
+            [self.data['train'].encode_label(lb) for lb in label],
+            dtype=torch.long, device=get_device()
+        )
+
+        return cls_embeds, label_ids
 
 
 if __name__ == "__main__":
