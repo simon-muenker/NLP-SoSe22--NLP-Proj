@@ -24,7 +24,7 @@ class Model(AbsModel, nn.Module):
         ).to(get_device())
 
         self.output = nn.Linear(
-            self.config["in_size"][1] ** 2,
+            self.config["in_size"][1] * 2,
             self.config["out_size"],
             bias=False
         ).to(get_device())
