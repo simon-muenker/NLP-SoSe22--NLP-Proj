@@ -38,7 +38,7 @@ class Main(Runner):
 
         # print results to console
         for data_label, data in prediction.items():
-            self.logger.info(f"\n[--- EVAL -> {data.data_path} ---]")
+            self.logger.info(f"\n[--- EVAL -> {self.data[data_label].data_path} ---]")
             self.metric.reset()
             self.metric.confusion_matrix(
                 self.data['train'].get_label_keys(),
