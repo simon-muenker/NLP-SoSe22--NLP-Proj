@@ -57,7 +57,7 @@ class Main:
 
             for cat in labels:
                 # create confusing matrix values for each category (omitting true negative)
-                tps: int = sum(pd.Series(data['prediction'] == data['gold'] == cat))
+                tps: int = sum(pd.Series((data['prediction'] == data['gold']) & (data['gold'] == cat)))
                 fns: int = sum(pd.Series(data['gold'] == cat)) - tps
                 fps: int = sum(pd.Series(data['prediction'] == cat)) - tps
 
