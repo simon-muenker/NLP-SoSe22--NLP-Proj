@@ -2,7 +2,7 @@
   "seed": 1,
   "debug": false,
   "data": {
-    "out_path": "./output/",
+    "out_path": "./output/base_linguistic/",
     "train_path": "data/imdb.train.1.000.csv",
     "eval_path": "data/imdb.eval.csv",
     "test_path": "data/imdb.test.csv"
