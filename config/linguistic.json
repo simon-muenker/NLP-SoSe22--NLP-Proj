@@ -3,7 +3,7 @@
   "debug": false,
   "data": {
     "out_path": "./output/",
-    "train_path": "data/imdb.train.0.100.csv",
+    "train_path": "data/imdb.train.1.000.csv",
     "eval_path": "data/imdb.eval.csv",
     "test_path": "data/imdb.test.csv"
   },
@@ -13,7 +13,13 @@
       "positive"
     ],
     "ngrams": [
-      1
+      1, 2, 3
+    ],
+    "pre_selection": [
+      2048, 1024, 512
+    ],
+    "final_selection": [
+      64, 64, 64
     ],
     "weights": {
       "uni_gram": "data/linguistic_model/custom.classifier.polarity_words.uni_gram.xlsx"

@@ -25,13 +25,11 @@ class LookUpDict:
         abs_freq: dict = LookUpDict.calculate_absolute_frequencies(
             self.config['data'], group_label=self.config['group_label'], token_label=self.config['token_label'])
 
-        pre_most_common: dict = LookUpDict.get_most_common(
-            abs_freq, 'n', self.config['pre_selection_num']
-        )
+        pre_most_common: dict = LookUpDict.get_most_common(abs_freq, 'n', self.config['pre_selection'])
 
         wo_shared: dict = LookUpDict.remove_shared(pre_most_common, token_label='token')
 
-        fin_most_common: dict = LookUpDict.get_most_common(wo_shared, 'n', self.config['final_selection_num'])
+        fin_most_common: dict = LookUpDict.get_most_common(wo_shared, 'n', self.config['final_selection'])
 
         LookUpDict.calculate_relative_frequencies(fin_most_common)
 
@@ -79,7 +77,7 @@ class LookUpDict:
     #
     #
     #
-    #
+    # -------- get_most_common -----------
     @staticmethod
     def get_most_common(data: dict, column: str, num: int = 1024) -> dict:
         return {
@@ -90,7 +88,7 @@ class LookUpDict:
     #
     #
     #
-    #
+    # -------- calculate_relative_frequencies -----------
     @staticmethod
     def calculate_relative_frequencies(data: dict) -> None:
         for sentiment, count in data.items():

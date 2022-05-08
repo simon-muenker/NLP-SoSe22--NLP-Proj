@@ -1,12 +1,14 @@
-from dataclasses import dataclass, field
-
-from tqdm import tqdm
+from dataclasses import dataclass
+import re
 
 import nltk
 import pandas as pd
+from pandarallel import pandarallel
 
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
+
+pandarallel.initialize(progress_bar=True, verbose=1)
 
 
 @dataclass
@@ -14,23 +16,38 @@ class Data(Dataset):
     data_path: str
     generate_token: bool = False
     generate_ngrams: list = None
-    data_frame: pd.DataFrame = field(init=False)
+    remove_stopwords: bool = True
+    data_language: str = 'english'
 
     #  -------- __post_init__ -----------
     #
     def __post_init__(self):
-        self.data = pd.read_csv(self.data_path)
+        # read data from csv file
+        self.data: pd.DataFrame = pd.read_csv(self.data_path)
+
+        # label mapping -> move to config file
         self.label_mapping: dict = {
             "positive": 1,
             "negative": 0
         }
 
+        # generate token column
         if self.generate_token:
+            self.stop_words: list = []
+
+            # load stopwords from nltk
+            if self.remove_stopwords:
+                self.stop_words = set(nltk.corpus.stopwords.words(self.data_language))
+
             self.tokenize()
 
+        # generate ngrams
         if self.generate_ngrams:
             for n in self.generate_ngrams:
-                self.ngrams(n)
+
+                # skip uni gram
+                if n != 1:
+                    self.ngrams(n)
 
     #  -------- __getitem__ -----------
     #
@@ -55,16 +72,38 @@ class Data(Dataset):
     #  -------- tokenize -----------
     #
     def tokenize(self, label: str = 'token') -> None:
-        tqdm.pandas(desc=f'Tokenize: {self.data_path}')
 
-        # remove punctuation & html tags, convert to lowercase, tokenize
-        self.data[label] = self.data['review'].progress_apply(
-            lambda sent: nltk.tokenize.word_tokenize(sent, language='english')
-        )
+        #  -------- __tokenize -----------
+        #
+        def __tokenize(sent: str):
 
+            # convert to lowercase, trim
+            sent: str = sent.lower().strip()
+
+            # remove html tags
+            sent: str = re.sub("(<[^>]+>)", '', sent)
+
+            # remove non-alphabetical characters
+            sent: str = re.sub('[^a-zA-Z]', ' ', sent)
+
+            # tokenize with TreebankWordTokenizer
+            token: list = nltk.tokenize.word_tokenize(sent, language=self.data_language)
+
+            # remove stop words
+            token: list = [t for t in token if t not in self.stop_words]
+
+            return token
+
+        self.data[label] = self.data['review'].parallel_apply(lambda sent: __tokenize(sent))
+
+    #  -------- ngrams -----------
+    #
     def ngrams(self, n: int, label: str = 'token'):
-        tqdm.pandas(desc=f'Generate {n}-gram: {self.data_path}')
-
-        self.data[f'{n}-gram'] = self.data[label].progress_apply(
-            lambda sent: nltk.ngrams(sent, n)
+        self.data[f'{n}-gram'] = self.data[label].parallel_apply(
+            lambda sent: list(nltk.ngrams(sent, n))
         )
+
+    #  -------- save -----------
+    #
+    def save(self, path: str):
+        self.data.to_csv(path + ".csv")

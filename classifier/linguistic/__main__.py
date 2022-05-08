@@ -24,8 +24,10 @@ class Main:
         # --- ---------------------------------
         # --- load components
         self.data: dict = {
-            'train': Data(self.config['data']['train_path'], generate_token=True, generate_ngrams=[2, 3]),
-            'eval': Data(self.config['data']['eval_path'], generate_token=True, generate_ngrams=[2, 3]),
+            'train': Data(self.config['data']['train_path'],
+                          generate_token=True, generate_ngrams=self.config['model']['ngrams']),
+            'eval': Data(self.config['data']['eval_path'],
+                         generate_token=True, generate_ngrams=self.config['model']['ngrams']),
         }
 
         self.model = Model(self.config['model'])
@@ -38,12 +40,12 @@ class Main:
 
         self.model.fit(self.data['train'].data)
 
-        for name, lookup in self.model.polarities.items():
-            lookup.write(self.config['data']['out_path'] + str(name))
+        for n, lookup in self.model.polarities.items():
+            lookup.write(f'{self.config["data"]["out_path"]}{n}-gram-weights')
 
         # predict train and eval set
         prediction: dict = {
-            'train': self.model.predict(self.data['train'].data),
+            # 'train': self.model.predict(self.data['train'].data),
             'eval': self.model.predict(self.data['eval'].data),
         }
 
