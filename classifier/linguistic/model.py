@@ -55,7 +55,7 @@ class Model:
             for label, count in lookup.data.items():
 
                 predictions[f'{n}-gram_{label}'] = data[target_label].parallel_apply(
-                    lambda x: Model.calc_score(x, count) * math.log(int(n)))
+                    lambda x: Model.calc_score(x, count))
 
         predictions["sum_positive"] = predictions.filter(regex=".*_positive").sum(axis='columns')
         predictions["sum_negative"] = predictions.filter(regex=".*_negative").sum(axis='columns')

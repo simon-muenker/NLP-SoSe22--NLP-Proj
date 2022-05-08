@@ -13,16 +13,13 @@
       "positive"
     ],
     "ngrams": [
-      1, 2, 3
+      1, 2
     ],
     "pre_selection": [
-      2048, 1024, 512
+      2048, 1024
     ],
     "final_selection": [
-      64, 64, 64
-    ],
-    "weights": {
-      "uni_gram": "data/linguistic_model/custom.classifier.polarity_words.uni_gram.xlsx"
-    }
+      64, 64
+    ]
   }
 }
