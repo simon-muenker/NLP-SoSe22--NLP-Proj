@@ -134,7 +134,7 @@ class Trainer:
 
                 # --- ---------------------------------
                 # --- save if is best model
-                if self.state["loss_eval"][-1] <= min(n for n in self.state["loss_eval"] if n > 0):
+                if self.state["f1_eval"][-1] <= min(n for n in self.state["f1_eval"] if n > 0):
                     saved_model_epoch = self.state["epoch"][-1]
                     self.model.save(self.out_dir + "model.bin")
                     saved_eval_metric = self.metric.save()
