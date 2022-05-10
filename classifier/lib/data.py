@@ -98,28 +98,30 @@ class Data(Dataset):
     #  -------- tokenize -----------
     #
     def tokenize(self) -> None:
-        def __tokenize(sent: str):
-            # convert to lowercase, trim
-            sent: str = sent.lower().strip()
+        self.data['token'] = self.data['review'].parallel_apply(lambda sent: self.__tokenize(sent))
 
-            # remove html tags
-            sent: str = re.sub("(<[^>]+>)", '', sent)
+    #  -------- __tokenize -----------
+    #
+    def __tokenize(self, sent: str):
+        # convert to lowercase, trim
+        sent: str = sent.lower().strip()
 
-            # remove non-alphabetical characters
-            sent: str = re.sub('[^a-zA-Z]', ' ', sent)
+        # remove html tags
+        sent: str = re.sub("(<[^>]+>)", '', sent)
 
-            # tokenize with TreebankWordTokenizer
-            token: list = nltk.tokenize.word_tokenize(sent, language=self.data_language)
+        # remove non-alphabetical characters
+        sent: str = re.sub('[^a-zA-Z]', ' ', sent)
 
-            if self.config['remove_stopwords']:
-                token: list = [t for t in token if t not in self.stop_words]
+        # tokenize with TreebankWordTokenizer
+        token: list = nltk.tokenize.word_tokenize(sent, language=self.data_language)
 
-            if self.config['use_lemmatizer']:
-                token: list = [self.lemmatizer.lemmatize(t) for t in token]
+        if self.config['remove_stopwords']:
+            token: list = [t for t in token if t not in self.stop_words]
 
-            return token
+        if self.config['use_lemmatizer']:
+            token: list = [self.lemmatizer.lemmatize(t) for t in token]
 
-        self.data['token'] = self.data['review'].parallel_apply(lambda sent: __tokenize(sent))
+        return token
 
     #  -------- ngrams -----------
     #

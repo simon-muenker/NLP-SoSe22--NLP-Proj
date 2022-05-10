@@ -58,7 +58,6 @@ class Model:
             lambda row: 'positive' if row["sum_positive"] > row["sum_negative"] else 'negative', axis=1
         )
 
-
     @staticmethod
     def calc_score(token: list, count: pd.DataFrame) -> float:
         score: float = 0.0
