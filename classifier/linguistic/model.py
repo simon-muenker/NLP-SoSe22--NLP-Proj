@@ -19,7 +19,6 @@ class Model:
             config: dict
     ) -> None:
         self.config = config
-
         self.polarities: Dict[str, LookUpDict] = {}
 
     #
@@ -49,26 +48,17 @@ class Model:
 
             for label, count in lookup.data.items():
                 data[f'{n}-gram_{label}'] = data[target_label].parallel_apply(
-                    lambda x: Model.calc_score(x, count))
+                    lambda row: count.loc[count['token'].isin(row)]['p'].sum())
 
-        data["sum_positive"] = data.filter(regex=".*_positive").sum(axis='columns')
-        data["sum_negative"] = data.filter(regex=".*_negative").sum(axis='columns')
+        # calculate sum for each label
+        for _, lookup in self.polarities.items():
+            for label, _ in lookup.data.items():
+                data[f"sum_{label}"] = data.filter(regex=f".*_{label}").sum(axis='columns')
 
+        # FIXME generic prediction function
         data['prediction'] = data.apply(
             lambda row: 'positive' if row["sum_positive"] > row["sum_negative"] else 'negative', axis=1
         )
-
-    @staticmethod
-    def calc_score(token: list, count: pd.DataFrame) -> float:
-        score: float = 0.0
-
-        for t in token:
-            val = count.loc[count['token'] == t, 'p']
-
-            if not val.empty:
-                score += val.iloc[0]
-
-        return score
 
     def save(self, path: str):
         for n, lookup in self.polarities.items():
