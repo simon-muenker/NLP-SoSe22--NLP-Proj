@@ -229,8 +229,8 @@ class Trainer:
         })
 
         self.metric.confusion_matrix(
-            self.data['train'].get_label_values(),
-            'prediction', 'gold', data)
+            data, self.data['train'].get_label_values(),
+            'prediction', 'gold')
 
     #
     #

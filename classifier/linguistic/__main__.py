@@ -16,9 +16,11 @@ class Main(Runner):
 
         # tokenize data and generate ngrams
         for _, dataset in self.data.items():
+            self.logger.info(f"\n[--- TOKENIZE -> {dataset.data_path} ---]")
             dataset.tokenize()
 
             for n in self.config['model']['ngrams']:
+                self.logger.info(f"[--- {n}-GRAMS -> {dataset.data_path} ---]")
                 dataset.ngrams(n)
 
     #
@@ -30,16 +32,22 @@ class Main(Runner):
         self.model.fit(self.data['train'].data)
         self.model.save(self.config['out_path'])
 
-        self.model.predict(self.data['train'].data)
-        self.model.predict(self.data['eval'].data)
+        # predict train, eval
+        for data_label, dataset in self.data.items():
 
-        # print results to console
-        for data_label, data in self.data.items():
-            self.logger.info(f"\n[--- EVAL -> {self.data[data_label].data_path} ---]")
+            # skip test for now
+            if data_label == 'test':
+                continue
+
+            # predict dataset
+            self.logger.info(f"\n[--- PREDICT -> {dataset.data_path} ---]")
+            self.model.predict(dataset.data)
+
+            self.logger.info(f"[--- EVAL -> {dataset.data_path} ---]")
             self.metric.reset()
             self.metric.confusion_matrix(
-                self.data['train'].get_label_keys(),
-                'prediction', 'gold', data)
+                dataset.data, dataset.get_label_keys(),
+                'prediction', 'sentiment')
             self.metric.show()
 
 

@@ -29,9 +29,8 @@ class Metric:
     #  -------- confusion_matrix -----------
     #
     def confusion_matrix(
-            self, classes: Set[str],
-            pred_label: str, gold_label: str,
-            data: pd.DataFrame
+            self, data: pd.DataFrame, classes: Set[str],
+            pred_label: str, gold_label: str
     ):
 
         for c in classes:
