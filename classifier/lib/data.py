@@ -98,7 +98,7 @@ class Data(Dataset):
     #  -------- tokenize -----------
     #
     def tokenize(self) -> None:
-        self.data['token'] = self.data['review'].parallel_apply(lambda sent: self.__tokenize(sent))
+        self.data['token'] = self.data['review'].parallel_apply(self.__tokenize)
 
     #  -------- __tokenize -----------
     #
