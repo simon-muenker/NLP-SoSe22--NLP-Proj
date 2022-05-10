@@ -45,7 +45,8 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
-        return self.output(torch.cat([
+
+        return [t for t in self.output(torch.cat([
             torch.stack(self.embeds(data[0])),
             torch.stack(data[1])
-        ], dim=1))
+        ], dim=1).float())]

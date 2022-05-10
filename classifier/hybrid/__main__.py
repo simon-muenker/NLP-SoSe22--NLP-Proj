@@ -1,4 +1,3 @@
-import pandas as pd
 import torch
 
 from classifier.lib import Runner
@@ -23,16 +22,10 @@ class Main(Runner):
         # --- ---------------------------------
         # --- load components
 
-        # tokenize data and generate ngrams
-        for _, dataset in self.data.items():
-            dataset.tokenize()
-            for n in self.config['model']['linguistic']['ngrams']:
-                dataset.ngrams(n)
-
         # load encoding, neural, classifier
-        self.encoding = Encoding(self.config['encoding'])
+        self.encoding = Encoding(self.config['model']['encoding'])
         self.net = Network(
-            in_size=tuple([self.encoding.dim, len(self.config['model']['linguistic']['ngrams']) * 2]),
+            in_size=tuple([self.encoding.dim, 4]),
             out_size=2,
             config=self.config['model']['neural']
         )
@@ -56,7 +49,6 @@ class Main(Runner):
         # --- ---------------------------------
         # --- init
         self.logger.info("\n[--- INIT ---]")
-        self.logger.info(f"- Model has {len(self.net)} trainable parameters.")
 
         # --- ---------------------------------
         # --- fit, save, predict classifier
@@ -70,6 +62,7 @@ class Main(Runner):
 
         # --- ---------------------------------
         # --- train
+        self.logger.info(f"- Model has {len(self.net)} trainable parameters.")
         self.trainer()
 
     #
@@ -87,7 +80,7 @@ class Main(Runner):
             label.append(sentiment)
             clss_pred.append(torch.tensor(sample[[
                       '1-gram_negative',
-                      '2-gram_positive',
+                      '1-gram_positive',
                       '2-gram_negative',
                       '2-gram_positive'
                   ]].values, device=get_device()).squeeze())
