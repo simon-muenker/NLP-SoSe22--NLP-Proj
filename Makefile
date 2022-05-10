@@ -1,17 +1,6 @@
 module = classifier
 
-dev_transformer:
-	@python3 -m $(module).transformer -C ./config/transformer.json
-
-
-dev_linguistic:
-	@python3 -m $(module).linguistic -C ./config/linguistic.json
-
-
-dev_hybrid:
-	@python3 -m $(module).hybrid -C ./config/hybrid.json
-
-
-
-exp_transformer:
-	@python3 -m $(module).transformer -C ./experiment/base_transformer/config.json
+exp_train.1.000:
+	@python3 -m $(module).transformer -C ./experiment/train.1.000/linguistic/config.json
+	@python3 -m $(module).transformer -C ./experiment/train.1.000/transformer/config.json
+	@python3 -m $(module).transformer -C ./experiment/train.1.000/hybrid/config.json

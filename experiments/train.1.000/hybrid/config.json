@@ -1,17 +1,20 @@
 {
   "debug": false,
-  "out_path": "./output/transformer/",
+  "out_path": "./experiments/train.1.000/hybrid/",
   "data": {
     "polarities": {
       "negative": 0,
       "positive": 1
     },
-    "train_path": "./data/imdb.train.0.010.csv",
+    "train_path": "./data/imdb.train.1.000.csv",
     "eval_path": "./data/imdb.eval.csv",
     "test_path": "./data/imdb.test.csv",
     "options": {
-      "generate_ngrams": [],
-      "remove_stopwords": false,
+      "generate_ngrams": [
+        1,
+        2
+      ],
+      "remove_stopwords": true,
       "use_lemmatizer": false
     }
   },
@@ -25,13 +28,27 @@
     "neural": {
       "hid_size": 256,
       "dropout": 0.3
+    },
+    "linguistic": {
+      "ngrams": [
+        1,
+        2
+      ],
+      "pre_selection": [
+        1024,
+        512
+      ],
+      "final_selection": [
+        64,
+        64
+      ]
     }
   },
   "trainer": {
     "seed": 1,
     "epochs": 25,
     "shuffle": true,
-    "batch_size": 32,
+    "batch_size": 4,
     "num_workers": 0,
     "report_rate": 1,
     "max_grad_norm": 2.0,
