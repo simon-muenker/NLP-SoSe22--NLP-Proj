@@ -6,8 +6,8 @@
       "negative": 0,
       "positive": 1
     },
-    "train_path": "data/imdb.train.0.001.csv",
-    "eval_path": "data/imdb.train.0.001.csv",
+    "train_path": "data/imdb.train.0.010.csv",
+    "eval_path": "data/imdb.train.eval.csv",
     "test_path": "data/imdb.test.csv",
     "options": {
       "generate_ngrams": [
