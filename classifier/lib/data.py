@@ -14,12 +14,19 @@ pandarallel.initialize(progress_bar=True, verbose=1)
 class Data(Dataset):
     data_path: str
     polarities: dict
+    data_language: str = 'english'
+
     generate_token: bool = False
     generate_ngrams: list = None
-    remove_stopwords: bool = True
-    data_language: str = 'english'
-    stop_words: list = field(default_factory=list)
 
+    remove_stopwords: bool = True
+    use_lemmatizer: bool = True
+
+    stop_words: list = field(default_factory=list)
+    lemmatizer: nltk.stem.WordNetLemmatizer = None
+
+    #  -------- __post_init__ -----------
+    #
     def __post_init__(self):
         # read data from csv file
         self.data: pd.DataFrame = pd.read_csv(self.data_path)
@@ -71,6 +78,9 @@ class Data(Dataset):
         if self.remove_stopwords:
             self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
 
+        if self.use_lemmatizer:
+            self.lemmatizer = nltk.stem.WordNetLemmatizer()
+
         #  -------- __tokenize -----------
         #
         def __tokenize(sent: str):
@@ -88,6 +98,10 @@ class Data(Dataset):
 
             # remove stop words
             token: list = [t for t in token if t not in self.stop_words]
+
+            # apply lemmatizer
+            if self.use_lemmatizer:
+                token: list = [self.lemmatizer.lemmatize(t) for t in token]
 
             return token
 

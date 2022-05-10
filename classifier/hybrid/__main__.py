@@ -30,7 +30,7 @@ class Main(Runner):
                 dataset.ngrams(n)
 
         # load encoding, neural, classifier
-        self.encoding = Encoding(self.config['model']['encoding'])
+        self.encoding = Encoding(self.config['encoding'])
         self.net = Network(
             in_size=tuple([self.encoding.dim, len(self.config['model']['linguistic']['ngrams']) * 2]),
             out_size=2,
