@@ -3,22 +3,29 @@
   "out_path": "./output/transformer/",
   "data": {
     "polarities": {
-      "negative" : 0,
+      "negative": 0,
       "positive": 1
     },
     "train_path": "data/imdb.train.0.010.csv",
     "eval_path": "data/imdb.eval.csv",
-    "test_path": "data/imdb.test.csv"
-  },
-  "encoding": {
-    "model": "bert-base-uncased",
-    "layers": [
-      -1
-    ]
+    "test_path": "data/imdb.test.csv",
+    "options": {
+      "generate_ngrams": [],
+      "remove_stopwords": false,
+      "use_lemmatizer": false
+    }
   },
   "model": {
-    "hid_size": 256,
-    "dropout": 0.3
+    "encoding": {
+      "model": "bert-base-uncased",
+      "layers": [
+        -1
+      ]
+    },
+    "neural": {
+      "hid_size": 256,
+      "dropout": 0.3
+    }
   },
   "trainer": {
     "seed": 1,

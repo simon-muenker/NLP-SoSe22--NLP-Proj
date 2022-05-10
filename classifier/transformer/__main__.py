@@ -21,11 +21,11 @@ class Main(Runner):
         # --- load components
 
         # load encoding, model
-        self.encoding = Encoding(self.config['encoding'])
+        self.encoding = Encoding(self.config['model']['encoding'])
         self.model = Model(
             in_size=self.encoding.dim,
             out_size=2,
-            config=self.config['model']
+            config=self.config['model']['neural']
         ).to(get_device())
 
         # load trainer
