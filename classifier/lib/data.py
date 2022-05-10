@@ -45,6 +45,12 @@ class Data(Dataset):
         if self.config is None:
             self.config = self.default_config
 
+        if self.config['remove_stopwords']:
+            self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
+
+        if self.config['use_lemmatizer']:
+            self.lemmatizer = nltk.stem.WordNetLemmatizer()
+
         self.postprocess()
 
     #  -------- __getitem__ -----------
@@ -80,13 +86,9 @@ class Data(Dataset):
     #  -------- postprocess -----------
     #
     def postprocess(self) -> None:
+
+        # tokenize
         self.tokenize()
-
-        if self.config['remove_stopwords']:
-            self.remove_stopwords()
-
-        if self.config['use_lemmatizer']:
-            self.lemmatize()
 
         # generate ngrams
         if self.config['generate_ngrams']:
@@ -109,27 +111,15 @@ class Data(Dataset):
             # tokenize with TreebankWordTokenizer
             token: list = nltk.tokenize.word_tokenize(sent, language=self.data_language)
 
+            if self.config['remove_stopwords']:
+                token: list = [t for t in token if t not in self.stop_words]
+
+            if self.config['use_lemmatizer']:
+                token: list = [self.lemmatizer.lemmatize(t) for t in token]
+
             return token
 
         self.data['token'] = self.data['review'].parallel_apply(lambda sent: __tokenize(sent))
-
-    #  -------- remove_stopwords -----------
-    #
-    def remove_stopwords(self) -> None:
-        self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
-
-        self.data['token'] = self.data['token'].parallel_apply(
-            lambda sent: [token for token in sent if token not in self.stop_words]
-        )
-
-    #  -------- lemmatize -----------
-    #
-    def lemmatize(self) -> None:
-        self.lemmatizer = nltk.stem.WordNetLemmatizer()
-
-        self.data['token'] = self.data['token'].parallel_apply(
-            lambda sent: [self.lemmatizer.lemmatize(token) for token in sent]
-        )
 
     #  -------- ngrams -----------
     #
