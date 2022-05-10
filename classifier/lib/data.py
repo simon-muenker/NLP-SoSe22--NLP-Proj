@@ -16,14 +16,24 @@ class Data(Dataset):
     polarities: dict
     data_language: str = 'english'
 
-    generate_token: bool = False
-    generate_ngrams: list = None
-
-    remove_stopwords: bool = True
-    use_lemmatizer: bool = True
-
+    config: dict = None
     stop_words: list = field(default_factory=list)
     lemmatizer: nltk.stem.WordNetLemmatizer = None
+
+    #
+    #
+    #  -------- default_config -----------
+    #
+    @property
+    def default_config(self) -> dict:
+        return {
+            "generate_ngrams": [
+                1,
+                2
+            ],
+            "remove_stopwords": True,
+            "use_lemmatizer": True
+        }
 
     #  -------- __post_init__ -----------
     #
@@ -31,14 +41,11 @@ class Data(Dataset):
         # read data from csv file
         self.data: pd.DataFrame = pd.read_csv(self.data_path)
 
-        # generate token column
-        if self.generate_token:
-            self.tokenize()
+        # load default config file if is None
+        if self.config is None:
+            self.config = self.default_config
 
-        # generate ngrams
-        if self.generate_ngrams:
-            for n in self.generate_ngrams:
-                self.ngrams(n)
+        self.postprocess()
 
     #  -------- __getitem__ -----------
     #
@@ -70,19 +77,25 @@ class Data(Dataset):
     def get_label_values(self) -> set:
         return set(k for k in self.polarities.values())
 
+    #  -------- postprocess -----------
+    #
+    def postprocess(self) -> None:
+        self.tokenize()
+
+        if self.config['remove_stopwords']:
+            self.remove_stopwords()
+
+        if self.config['use_lemmatizer']:
+            self.lemmatize()
+
+        # generate ngrams
+        if self.config['generate_ngrams']:
+            for n in self.config['generate_ngrams']:
+                self.ngrams(n)
+
     #  -------- tokenize -----------
     #
-    def tokenize(self, label: str = 'token') -> None:
-
-        # load stopwords from nltk
-        if self.remove_stopwords:
-            self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
-
-        if self.use_lemmatizer:
-            self.lemmatizer = nltk.stem.WordNetLemmatizer()
-
-        #  -------- __tokenize -----------
-        #
+    def tokenize(self) -> None:
         def __tokenize(sent: str):
             # convert to lowercase, trim
             sent: str = sent.lower().strip()
@@ -96,22 +109,33 @@ class Data(Dataset):
             # tokenize with TreebankWordTokenizer
             token: list = nltk.tokenize.word_tokenize(sent, language=self.data_language)
 
-            # remove stop words
-            token: list = [t for t in token if t not in self.stop_words]
-
-            # apply lemmatizer
-            if self.use_lemmatizer:
-                token: list = [self.lemmatizer.lemmatize(t) for t in token]
-
             return token
 
-        self.data[label] = self.data['review'].parallel_apply(lambda sent: __tokenize(sent))
+        self.data['token'] = self.data['review'].parallel_apply(lambda sent: __tokenize(sent))
+
+    #  -------- remove_stopwords -----------
+    #
+    def remove_stopwords(self) -> None:
+        self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
+
+        self.data['token'] = self.data['token'].parallel_apply(
+            lambda sent: [token for token in sent if token not in self.stop_words]
+        )
+
+    #  -------- lemmatize -----------
+    #
+    def lemmatize(self) -> None:
+        self.lemmatizer = nltk.stem.WordNetLemmatizer()
+
+        self.data['token'] = self.data['token'].parallel_apply(
+            lambda sent: [self.lemmatizer.lemmatize(token) for token in sent]
+        )
 
     #  -------- ngrams -----------
     #
-    def ngrams(self, n: int, label: str = 'token'):
-        if n != 1:
-            self.data[f'{n}-gram'] = self.data[label].parallel_apply(
+    def ngrams(self, n: int) -> None:
+        if n > 1:
+            self.data[f'{n}-gram'] = self.data['token'].parallel_apply(
                 lambda sent: list(nltk.ngrams(sent, n))
             )
 

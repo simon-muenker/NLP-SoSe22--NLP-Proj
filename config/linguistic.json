@@ -3,12 +3,20 @@
   "out_path": "./output/linguistic/",
   "data": {
     "polarities": {
-      "negative" : 0,
+      "negative": 0,
       "positive": 1
     },
     "train_path": "data/imdb.train.1.000.csv",
     "eval_path": "data/imdb.eval.csv",
-    "test_path": "data/imdb.test.csv"
+    "test_path": "data/imdb.test.csv",
+    "options": {
+      "generate_ngrams": [
+        1,
+        2
+      ],
+      "remove_stopwords": true,
+      "use_lemmatizer": true
+    }
   },
   "model": {
     "polarities": [
