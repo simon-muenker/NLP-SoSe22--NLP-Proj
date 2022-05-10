@@ -10,18 +10,8 @@ class Main(Runner):
     #  -------- __init__ -----------
     def __init__(self) -> None:
         super().__init__()
-
         self.metric = Metric(self.logger)
         self.model = Model(self.config['model'])
-
-        # tokenize data and generate ngrams
-        for _, dataset in self.data.items():
-            self.logger.info(f"\n[--- TOKENIZE -> {dataset.data_path} ---]")
-            dataset.tokenize()
-
-            for n in self.config['model']['ngrams']:
-                self.logger.info(f"[--- {n}-GRAMS -> {dataset.data_path} ---]")
-                dataset.ngrams(n)
 
     #
     #

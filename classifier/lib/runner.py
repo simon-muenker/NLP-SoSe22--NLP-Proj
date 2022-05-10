@@ -19,10 +19,16 @@ class Runner:
         self.logger: logging = Runner.load_logger(self.config['out_path'] + "full.log")
 
         # --- ---------------------------------
-        # --- load components
+        # --- load data
+        self.logger.info(f"\n[--- LOAD/PREPARE DATA -> (train/eval/test) ---]")
+        self.data: dict = self.load_data()
 
-        # load data
-        self.data: dict = {
+    #
+    #
+    #  -------- load_data -----------
+    #
+    def load_data(self) -> dict:
+        return {
             'train': Data(self.config['data']['train_path'], polarities=self.config['data']['polarities']),
             'eval': Data(self.config['data']['eval_path'], polarities=self.config['data']['polarities']),
             'test': Data(self.config['data']['test_path'], polarities=self.config['data']['polarities'])
