@@ -29,9 +29,12 @@ class Runner:
     #
     def load_data(self) -> dict:
         return {
-            'train': Data(self.config['data']['train_path'], polarities=self.config['data']['polarities']),
-            'eval': Data(self.config['data']['eval_path'], polarities=self.config['data']['polarities']),
-            'test': Data(self.config['data']['test_path'], polarities=self.config['data']['polarities'])
+            'train': Data(self.config['data']['train_path'], polarities=self.config['data']['polarities'],
+                          config=self.config['data']['options']),
+            'eval': Data(self.config['data']['eval_path'], polarities=self.config['data']['polarities'],
+                         config=self.config['data']['options']),
+            'test': Data(self.config['data']['test_path'], polarities=self.config['data']['polarities'],
+                         config=self.config['data']['options'])
         }
 
     #
