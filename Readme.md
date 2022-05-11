@@ -24,3 +24,7 @@ AVG           	 tp:     4631	 fp:      369 	 tn:     4631	 fn:      369	 prec=0.
 negative      	 tp:     2363	 fp:      217 	 tn:     2268	 fn:      152	 prec=0.9159	 rec=0.9396	 f1=0.9276	 acc=0.9262
 positive      	 tp:     2268	 fp:      152 	 tn:     2363	 fn:      217	 prec=0.9372	 rec=0.9127	 f1=0.9248	 acc=0.9262
 ```
+
+## Credits:
+
+* NLP-Progress Sentiment Analysis (IMDb): <http://nlpprogress.com/english/sentiment_analysis.html#imdb>
