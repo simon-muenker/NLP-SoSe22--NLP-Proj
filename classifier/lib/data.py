@@ -49,7 +49,7 @@ class Data(Dataset):
             self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
 
         if self.config['use_lemmatizer']:
-             self.lemmatizer = nltk.stem.WordNetLemmatizer()
+            self.lemmatizer = nltk.stem.WordNetLemmatizer()
 
         self.postprocess()
 

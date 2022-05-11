@@ -174,7 +174,7 @@ class Metric:
                  f"\t fp: {self.get_fp(class_name):8} "
                  f"\t tn: {self.get_tn(class_name):8}"
                  f"\t fn: {self.get_fn(class_name):8}"
-                 f"\t prec={self.precision(class_name):2.4f}"
+                 f"\t pre={self.precision(class_name):2.4f}"
                  f"\t rec={self.recall(class_name):2.4f}"
                  f"\t f1={self.f_score(class_name):2.4f}"
                  f"\t acc={self.accuracy(class_name):2.4f}")
