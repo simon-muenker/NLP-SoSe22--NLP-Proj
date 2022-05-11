@@ -1,9 +1,0 @@
-
-[--- TRAINING ---]
-Train on: data/imdb.train.0.001.csv: 
-@001: 	loss(train)=0.69290 	duration(epoch)=0:00:15.622164
-@002: 	loss(train)=0.65946 	duration(epoch)=0:00:20.283051
-@003: 	loss(train)=0.64410 	duration(epoch)=0:00:17.559255
-@004: 	loss(train)=0.60631 	duration(epoch)=0:00:18.032782
-@005: 	loss(train)=0.57543 	duration(epoch)=0:00:18.564968
-Load best model based on evaluation loss.
