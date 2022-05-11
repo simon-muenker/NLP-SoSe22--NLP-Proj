@@ -1,3 +1,26 @@
+# FrozenBERT+SentiDict
+
+## Install
+```bash
+### Install dependencies
+pip install -r requirements.txt
+
+### TODO document nltk stop word downloader
+```
+
+## Usage
+
+### Predefined Experiments:
+```bash
+### 
+### Use following make calls to run predefined experiments (only OSX/LINUX):
+
+# run train/eval all model types on 100% train data
+make exp_train.1.000
+
+# TODO 10%, 1%, 0.1% train data calls
+```
+
 ## Results (TBC)
 
 #### Transformer v. Hybrid on Train/Eval F1-Score
