@@ -23,8 +23,8 @@
       ]
     },
     "neural": {
-      "hid_size": 126,
-      "dropout": 0.5
+      "hid_size": 256,
+      "dropout": 0.3
     }
   },
   "trainer": {
