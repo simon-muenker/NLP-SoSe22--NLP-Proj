@@ -35,22 +35,22 @@ class Metric:
     #  -------- confusion_matrix -----------
     #
     def confusion_matrix(
-            self, data: pd.DataFrame, classes: Set[str],
-            pred_label: str, gold_label: str
+            self, classes: Set[str],
+            golds: pd.Series, preds: pd.Series,
     ):
 
-        for c in classes:
+        for cls in classes:
             # create confusing matrix values for each category (omitting true negative)
-            tp: int = sum(pd.Series((data[pred_label] == data[gold_label]) & (data[gold_label] == c)))
+            tp: int = sum(pd.Series((preds == golds) & (golds == cls)))
 
-            self.add(c,
-                     tps=tp,
-                     fns=sum(pd.Series(data[gold_label] == c)) - tp,
-                     fps=sum(pd.Series(data[pred_label] == c)) - tp
-                     )
+            self.add(
+                cls, tps=tp,
+                fns=sum(pd.Series(golds == cls)) - tp,
+                fps=sum(pd.Series(preds == cls)) - tp
+            )
 
             # add for every other class category matches to true negative
-            for nc in (classes - {c}):
+            for nc in (classes - {cls}):
                 self.add(nc, tns=tp)
 
     #

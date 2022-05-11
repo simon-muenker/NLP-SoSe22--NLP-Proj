@@ -218,14 +218,10 @@ class Trainer:
     def _metric(self, batch: Tuple[list, torch.Tensor], pred_labels: torch.Tensor) -> None:
         _, gold_labels = batch
 
-        data: pd.DataFrame = pd.DataFrame({
-            'prediction': pd.Series(pred_labels.cpu().numpy()),
-            'gold': pd.Series(gold_labels.cpu().numpy())
-        })
-
         self.metric.confusion_matrix(
-            data, self.data['train'].get_label_values(),
-            'prediction', 'gold')
+            self.data['train'].get_label_values(),
+            pd.Series(gold_labels.cpu().numpy()), pd.Series(pred_labels.cpu().numpy())
+        )
 
     #  -------- _log -----------
     #

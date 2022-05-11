@@ -33,7 +33,11 @@ class Main(Runner):
 
             self.logger.info(f"[--- EVAL -> {dataset.data_path} ---]")
             self.metric.reset()
-            self.metric.confusion_matrix(dataset.data, dataset.get_label_keys(), 'prediction', 'sentiment')
+            self.metric.confusion_matrix(
+                dataset.get_label_keys(),
+                dataset.data['sentiment'],
+                dataset.data['prediction']
+            )
             self.metric.show()
 
 
