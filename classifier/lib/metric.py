@@ -1,28 +1,38 @@
 import itertools
+import logging
 from collections import defaultdict
+from dataclasses import dataclass, field
 from typing import Tuple, Set
 
 import pandas as pd
 
 
+@dataclass
 class Metric:
+    logger: logging
+
+    beta: float = 1.0
+    _tps: defaultdict = field(default_factory=defaultdict)
+    _fps: defaultdict = field(default_factory=defaultdict)
+    _tns: defaultdict = field(default_factory=defaultdict)
+    _fns: defaultdict = field(default_factory=defaultdict)
 
     #
     #
-    #  -------- __init__ -----------
+    #  -------- __post_init__ -----------
     #
-    def __init__(self, logger) -> None:
-        """
-        src: (flairNLP) https://github.com/flairNLP/flair/blob/master/flair/training_utils.py
-        """
-        self.beta: float = 1.0
-        self.logger = logger
-
-        self._tps = None
-        self._fps = None
-        self._tns = None
-        self._fns = None
+    def __post_init__(self) -> None:
         self.reset()
+
+    #
+    #
+    #  -------- reset -----------
+    #
+    def reset(self) -> None:
+        self._tps = defaultdict(int)
+        self._fps = defaultdict(int)
+        self._tns = defaultdict(int)
+        self._fns = defaultdict(int)
 
     #
     #
@@ -35,27 +45,33 @@ class Metric:
 
         for c in classes:
             # create confusing matrix values for each category (omitting true negative)
-            tps: int = sum(pd.Series((data[pred_label] == data[gold_label]) & (data[gold_label] == c)))
+            tp: int = sum(pd.Series((data[pred_label] == data[gold_label]) & (data[gold_label] == c)))
 
-            self.add(c, tps=tps,
-                     fns=sum(pd.Series(data[gold_label] == c)) - tps,
-                     fps=sum(pd.Series(data[pred_label] == c)) - tps
+            self.add(c,
+                     tps=tp,
+                     fns=sum(pd.Series(data[gold_label] == c)) - tp,
+                     fps=sum(pd.Series(data[pred_label] == c)) - tp
                      )
 
             # add for every other class category matches to true negative
             for nc in (classes - {c}):
-                self.add(nc, tns=tps)
+                self.add(nc, tns=tp)
 
     #
     #
     #  -------- precision -----------
     #
     def precision(self, class_name: str = None):
-        if self.get_tp(class_name) + self.get_fp(class_name) > 0:
+
+        # get tp, fn
+        tp: float = self.get_tp(class_name)
+        fp: float = self.get_fp(class_name)
+
+        if sum([tp, fp]) > 0:
             return (
-                    self.get_tp(class_name)
-                    / (self.get_tp(class_name) + self.get_fp(class_name))
+                    tp / (tp + fp)
             )
+
         return 0.0
 
     #
@@ -63,11 +79,16 @@ class Metric:
     #  -------- recall -----------
     #
     def recall(self, class_name: str = None):
-        if self.get_tp(class_name) + self.get_fn(class_name) > 0:
+
+        # get tps, fns
+        tp: float = self.get_tp(class_name)
+        fn: float = self.get_fn(class_name)
+
+        if sum([tp, fn]) > 0:
             return (
-                    self.get_tp(class_name)
-                    / (self.get_tp(class_name) + self.get_fn(class_name))
+                    tp / (tp + fn)
             )
+
         return 0.0
 
     #
@@ -75,12 +96,17 @@ class Metric:
     #  -------- f_score -----------
     #
     def f_score(self, class_name: str = None):
-        if self.precision(class_name) + self.recall(class_name) > 0:
+
+        # get precision, recall, beta squared
+        pre: float = self.precision(class_name)
+        rec: float = self.recall(class_name)
+        b2: float = self.beta ** 2
+
+        if sum([pre, rec]) > 0:
             return (
-                    (1 + self.beta * self.beta)
-                    * (self.precision(class_name) * self.recall(class_name))
-                    / (self.precision(class_name) * self.beta * self.beta + self.recall(class_name))
+                    (1 + b2) * ((pre * rec) / ((pre * b2) + rec))
             )
+
         return 0.0
 
     #
@@ -88,19 +114,18 @@ class Metric:
     #  -------- accuracy -----------
     #
     def accuracy(self, class_name: str = None):
-        if (
-                self.get_tp(class_name) + self.get_fp(class_name) + self.get_fn(class_name) + self.get_tn(class_name)
-                > 0
-        ):
+
+        # get tp, fp, fn, tn
+        tp: float = self.get_tp(class_name)
+        fp: float = self.get_fp(class_name)
+        fn: float = self.get_fn(class_name)
+        tn: float = self.get_tn(class_name)
+
+        if sum([tp, fp, fn, tn]) > 0:
             return (
-                    (self.get_tp(class_name) + self.get_tn(class_name))
-                    / (
-                            self.get_tp(class_name)
-                            + self.get_fp(class_name)
-                            + self.get_fn(class_name)
-                            + self.get_tn(class_name)
-                    )
+                    (tp + tn) / sum([tp, fp, fn, tn])
             )
+
         return 0.0
 
     #
@@ -116,6 +141,7 @@ class Metric:
                     for keys in [
                         self._tps.keys(),
                         self._fps.keys(),
+                        self._fns.keys(),
                         self._fns.keys(),
                     ]
                 ]
@@ -153,14 +179,6 @@ class Metric:
                  f"\t f1={self.f_score(class_name):2.4f}"
                  f"\t acc={self.accuracy(class_name):2.4f}")
             ))
-
-    #  -------- reset -----------
-    #
-    def reset(self) -> None:
-        self._tps = defaultdict(int)
-        self._fps = defaultdict(int)
-        self._tns = defaultdict(int)
-        self._fns = defaultdict(int)
 
     #  -------- save -----------
     #
