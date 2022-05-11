@@ -4,10 +4,8 @@ from classifier.linguistic import Model
 
 class Main(Runner):
 
-    #
-    #
-    #
     #  -------- __init__ -----------
+    #
     def __init__(self) -> None:
         super().__init__()
         self.metric = Metric(self.logger)
@@ -15,8 +13,8 @@ class Main(Runner):
 
     #
     #
-    #
     #  -------- __call__ -----------
+    #
     def __call__(self):
 
         self.model.fit(self.data['train'].data)
@@ -35,11 +33,13 @@ class Main(Runner):
 
             self.logger.info(f"[--- EVAL -> {dataset.data_path} ---]")
             self.metric.reset()
-            self.metric.confusion_matrix(
-                dataset.data, dataset.get_label_keys(),
-                'prediction', 'sentiment')
+            self.metric.confusion_matrix(dataset.data, dataset.get_label_keys(), 'prediction', 'sentiment')
             self.metric.show()
 
 
+#
+#
+#  -------- __main__ -----------
+#
 if __name__ == "__main__":
     Main()()

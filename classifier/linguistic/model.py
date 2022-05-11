@@ -11,9 +11,8 @@ pandarallel.initialize(progress_bar=True, verbose=1)
 
 class Model:
 
-    #
-    #
     #  -------- __init__ -----------
+    #
     def __init__(
             self,
             config: dict
@@ -21,10 +20,8 @@ class Model:
         self.config = config
         self.polarities: Dict[str, LookUpDict] = {}
 
+    #  -------- fit -----------
     #
-    #
-    #
-    # -------- fit -----------
     def fit(self, data: pd.DataFrame) -> None:
 
         for idx, n in enumerate(tqdm(self.config['ngrams'], desc="Fit LookUpDicts")):
@@ -38,8 +35,8 @@ class Model:
 
     #
     #
+    #  -------- predict -----------
     #
-    # -------- predict -----------
     def predict(self, data: pd.DataFrame) -> None:
 
         # calculate a score for each polarity
@@ -60,6 +57,8 @@ class Model:
             lambda row: 'positive' if row["sum_positive"] > row["sum_negative"] else 'negative', axis=1
         )
 
+    #  -------- save -----------
+    #
     def save(self, path: str):
         for n, lookup in self.polarities.items():
             lookup.write(f'{path}{n}-gram-weights')

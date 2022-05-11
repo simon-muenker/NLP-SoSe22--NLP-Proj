@@ -12,8 +12,6 @@ from classifier.lib.neural.util import get_device
 
 class Main(Runner):
 
-    #
-    #
     #  -------- __init__ -----------
     #
     def __init__(self):
@@ -41,8 +39,6 @@ class Main(Runner):
             config=self.config['trainer'],
         )
 
-    #
-    #
     #  -------- __call__ -----------
     #
     def __call__(self):
@@ -100,5 +96,9 @@ class Main(Runner):
         return (cls_embeds, clss_pred), label_ids
 
 
+#
+#
+#  -------- __main__ -----------
+#
 if __name__ == "__main__":
     Main()()

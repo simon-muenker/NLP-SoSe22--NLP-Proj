@@ -8,8 +8,6 @@ from classifier.lib.util import dict_merge, load_json
 
 class Runner:
 
-    #
-    #
     #  -------- __init__ -----------
     #
     def __init__(self):
@@ -22,6 +20,12 @@ class Runner:
         # --- load data
         self.logger.info(f"\n[--- LOAD/PREPARE DATA -> (train/eval/test) ---]")
         self.data: dict = self.load_data()
+
+    #  -------- __call__ -----------
+    #
+    @abstractmethod
+    def __call__(self):
+        pass
 
     #
     #
@@ -36,14 +40,6 @@ class Runner:
             'test': Data(self.config['data']['test_path'], polarities=self.config['data']['polarities'],
                          config=self.config['data']['options'])
         }
-
-    #
-    #
-    #  -------- __call__ -----------
-    #
-    @abstractmethod
-    def __call__(self):
-        pass
 
     #
     #

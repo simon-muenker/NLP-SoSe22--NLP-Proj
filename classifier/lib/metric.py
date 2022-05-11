@@ -17,15 +17,11 @@ class Metric:
     _tns: defaultdict = field(default_factory=defaultdict)
     _fns: defaultdict = field(default_factory=defaultdict)
 
-    #
-    #
     #  -------- __post_init__ -----------
     #
     def __post_init__(self) -> None:
         self.reset()
 
-    #
-    #
     #  -------- reset -----------
     #
     def reset(self) -> None:

@@ -10,9 +10,7 @@ from classifier.transformer.util import unpad
 
 class Model(AbsModel, nn.Module):
 
-    #
-    #
-    #  -------- init -----------
+    #  -------- __init__ -----------
     #
     def __init__(self, in_size: int, out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
@@ -29,8 +27,6 @@ class Model(AbsModel, nn.Module):
                 self.config["out_size"])
         )
 
-    #
-    #
     #  -------- default_config -----------
     #
     @staticmethod

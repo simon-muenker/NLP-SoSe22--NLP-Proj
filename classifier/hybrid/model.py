@@ -10,8 +10,6 @@ from classifier.lib.neural.util import get_device
 
 class Model(AbsModel, nn.Module):
 
-    #
-    #
     #  -------- init -----------
     #
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
@@ -29,8 +27,6 @@ class Model(AbsModel, nn.Module):
             bias=False
         ).to(get_device())
 
-    #
-    #
     #  -------- default_config -----------
     #
     @staticmethod
@@ -40,12 +36,9 @@ class Model(AbsModel, nn.Module):
             "linguistic": None,
         }
 
-    #
-    #
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
-
         return [t for t in self.output(torch.cat([
             torch.stack(self.embeds(data[0])),
             torch.stack(data[1])

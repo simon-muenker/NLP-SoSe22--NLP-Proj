@@ -10,8 +10,6 @@ from classifier.lib.neural.util import get_device
 
 class Main(Runner):
 
-    #
-    #
     #  -------- __init__ -----------
     #
     def __init__(self):
@@ -20,7 +18,7 @@ class Main(Runner):
         # --- ---------------------------------
         # --- load components
 
-        # load encoding, model
+        # encoding, model
         self.encoding = Encoding(self.config['model']['encoding'])
         self.model = Model(
             in_size=self.encoding.dim,
@@ -28,7 +26,7 @@ class Main(Runner):
             config=self.config['model']['neural']
         ).to(get_device())
 
-        # load trainer
+        # trainer
         self.trainer = Trainer(
             self.model,
             self.data,
@@ -38,8 +36,6 @@ class Main(Runner):
             config=self.config['trainer'],
         )
 
-    #
-    #
     #  -------- __call__ -----------
     #
     def __call__(self):

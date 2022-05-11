@@ -5,9 +5,8 @@ import pandas as pd
 
 class LookUpDict:
 
-    #
-    #
     #  -------- __init__ -----------
+    #
     def __init__(
             self,
             config: dict
@@ -18,8 +17,8 @@ class LookUpDict:
 
     #
     #
+    #  -------- fit -----------
     #
-    # -------- fit -----------
     def fit(self):
 
         abs_freq: dict = LookUpDict.calculate_absolute_frequencies(
@@ -37,8 +36,8 @@ class LookUpDict:
 
     #
     #
+    #  -------- calculate_absolute_frequencies -----------
     #
-    # -------- calculate_absolute_frequencies -----------
     @staticmethod
     def calculate_absolute_frequencies(data: pd.DataFrame, group_label: str, token_label: str) -> dict:
         return {
@@ -50,7 +49,7 @@ class LookUpDict:
 
     #
     #
-    #
+    #  -------- remove_shared -----------
     #
     @staticmethod
     def remove_shared(data: dict, token_label: str):
@@ -65,8 +64,8 @@ class LookUpDict:
 
     #
     #
+    #  -------- _calc_abs -----------
     #
-    # -------- _calc_abs -----------
     @staticmethod
     def _calc_abs(data: pd.Series, key_label: str = 'token', value_label: str = 'n') -> pd.DataFrame:
         return pd.DataFrame.from_records(
@@ -76,8 +75,8 @@ class LookUpDict:
 
     #
     #
+    #  -------- get_most_common -----------
     #
-    # -------- get_most_common -----------
     @staticmethod
     def get_most_common(data: dict, column: str, num: int = 1024) -> dict:
         return {
@@ -87,27 +86,23 @@ class LookUpDict:
 
     #
     #
+    #  -------- calculate_relative_frequencies -----------
     #
-    # -------- calculate_relative_frequencies -----------
     @staticmethod
     def calculate_relative_frequencies(data: dict) -> None:
         for sentiment, count in data.items():
             count['p'] = count['n'] / sum(count["n"])
 
+    #  -------- __repr__ -----------
     #
-    #
-    #
-    # -------- __repr__ -----------
     def __repr__(self) -> str:
         return "".join(
             f'\nname({sentiment}) || len({len(count)}) || sum({sum(count["n"])}) \n {count.head(4)}'
             for sentiment, count in self.data.items()
         )
 
+    #  -------- write -----------
     #
-    #
-    #
-    # -------- write -----------
     def write(self, path: str) -> None:
         writer = pd.ExcelWriter(str(path) + ".xlsx")
 

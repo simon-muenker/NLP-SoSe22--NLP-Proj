@@ -8,8 +8,8 @@ from tqdm import tqdm
 #
 #  -------- get_device -----------
 #
-def get_device() -> str:
-    return "cuda" if torch.cuda.is_available() else "cpu"
+def get_device(i: int = 0) -> str:
+    return f'cuda:{i}' if torch.cuda.is_available() else 'cpu'
 
 
 #

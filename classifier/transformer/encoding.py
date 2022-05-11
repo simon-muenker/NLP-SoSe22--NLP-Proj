@@ -21,8 +21,6 @@ class Encoding:
         self.tokenizer = AutoTokenizer.from_pretrained(self.config["model"])
         self.model = AutoModel.from_pretrained(self.config["model"], output_hidden_states=True).to(get_device())
 
-    #
-    #
     #  -------- default_config -----------
     #
     @staticmethod

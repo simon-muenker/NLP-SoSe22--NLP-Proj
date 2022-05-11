@@ -15,13 +15,11 @@ class Data(Dataset):
     data_path: str
     polarities: dict
     data_language: str = 'english'
-
     config: dict = None
+
     stop_words: list = field(default_factory=list)
     lemmatizer: nltk.stem.WordNetLemmatizer = None
 
-    #
-    #
     #  -------- default_config -----------
     #
     @property
@@ -100,6 +98,8 @@ class Data(Dataset):
     def tokenize(self) -> None:
         self.data['token'] = self.data['review'].parallel_apply(self.__tokenize)
 
+    #
+    #
     #  -------- __tokenize -----------
     #
     def __tokenize(self, sent: str):

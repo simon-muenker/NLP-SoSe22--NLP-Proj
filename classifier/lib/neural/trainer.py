@@ -1,7 +1,6 @@
 import csv
 import logging
 import random
-
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Callable, Dict, Tuple
@@ -23,8 +22,6 @@ class Trainer:
     out_dir: str
     config: dict = None
 
-    #
-    #
     #  -------- __post_init__ -----------
     #
     def __post_init__(self):
@@ -50,8 +47,6 @@ class Trainer:
         self.loss_fn = torch.nn.CrossEntropyLoss()
         self.optimizer = optim.AdamW(self.model.parameters(), **self.config["optimizer"])
 
-    #
-    #
     #  -------- default_config -----------
     #
     @property
@@ -232,8 +227,6 @@ class Trainer:
             data, self.data['train'].get_label_values(),
             'prediction', 'gold')
 
-    #
-    #
     #  -------- _log -----------
     #
     def _log(self, epoch: int) -> None:
@@ -246,8 +239,6 @@ class Trainer:
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
-    #
-    #
     #  -------- _write_state -----------
     #
     def _write_state(self) -> None:
@@ -258,8 +249,6 @@ class Trainer:
             writer.writerow(cols)
             writer.writerows(zip(*[self.state[c] for c in cols]))
 
-    #
-    #
     #  -------- __setup_pytorch -----------
     #
     def __setup_pytorch(self):

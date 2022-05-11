@@ -9,8 +9,6 @@ from classifier.lib.neural.util import get_device
 
 class Model(nn.Module):
 
-    #
-    #
     #  -------- init -----------
     #
     def __init__(self, in_size: Union[Tuple, int], out_size: int, config: dict):
@@ -25,8 +23,6 @@ class Model(nn.Module):
 
         self.to(get_device())
 
-    #
-    #
     #  -------- default_config -----------
     #
     @staticmethod
@@ -34,8 +30,6 @@ class Model(nn.Module):
     def default_config() -> dict:
         pass
 
-    #
-    #
     #  -------- forward -----------
     #
     @abstractmethod
@@ -60,8 +54,6 @@ class Model(nn.Module):
             torch.argmax(pred_label, dim=1)
         )
 
-    #
-    #
     #  -------- predict -----------
     #
     @torch.no_grad()
