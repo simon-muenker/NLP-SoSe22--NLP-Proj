@@ -1,0 +1,28 @@
+{
+  "data": {
+    "config": {
+      "ngrams": [
+        1,
+        2
+      ],
+      "remove_stopwords": true
+    }
+  },
+  "model": {
+    "group_label": "sentiment",
+    "polarities": [
+      "negative",
+      "positive"
+    ],
+    "ngrams": {
+      "1": {
+        "most_common": 512,
+        "shared": "subtract"
+      },
+      "2": {
+        "most_common": 64,
+        "shared": "subtract"
+      }
+    }
+  }
+}

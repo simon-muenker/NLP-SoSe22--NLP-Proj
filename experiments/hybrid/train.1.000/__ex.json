@@ -1,0 +1,8 @@
+{
+  "out_path": "./experiments/hybrid/train.1.000/",
+  "data": {
+    "paths": {
+      "train": "./data/imdb.train.1.000.csv"
+    }
+  }
+}

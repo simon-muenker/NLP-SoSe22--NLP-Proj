@@ -1,0 +1,19 @@
+{
+  "debug": false,
+  "out_path": null,
+  "data": {
+    "paths": {
+      "train": null,
+      "eval": "./data/imdb.eval.csv",
+      "test": "./data/imdb.test.csv"
+    },
+    "polarities": {
+      "negative": 0,
+      "positive": 1
+    },
+    "data_label": "review",
+    "target_label": "sentiment",
+    "config": null
+  },
+  "model": null
+}

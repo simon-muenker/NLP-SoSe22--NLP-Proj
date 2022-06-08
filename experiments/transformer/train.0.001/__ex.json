@@ -1,0 +1,8 @@
+{
+  "out_path": "./experiments/transformer/train.0.001/",
+  "data": {
+    "paths": {
+      "train": "./data/imdb.train.0.001.csv"
+    }
+  }
+}
