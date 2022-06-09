@@ -40,8 +40,9 @@ class GroupCounter:
     @property
     def default_config(self) -> dict:
         return {
-            'most_common': 1024,
-            'shared': None
+            "pre_selection": 1024,
+            "shared": "remove",
+            "post_selection": 512
         }
 
     #
@@ -57,17 +58,24 @@ class GroupCounter:
             value_label=LABEL['abs_freq']
         )
 
+        if self.config.get('pre_selection', self.default_config['pre_selection']) != -1:
+            analysis: dict = GroupCounter.get_most_common(
+                analysis,
+                LABEL['abs_freq'],
+                self.config.get('pre_selection', self.default_config['pre_selection'])
+            )
+
         if self.config.get('shared', self.default_config['shared']) == "subtract":
             GroupCounter.subtract_shared(analysis)
 
         elif self.config.get('shared', self.default_config['shared']) == "remove":
             analysis: dict = GroupCounter.remove_shared(analysis)
 
-        if self.config.get('most_common', self.default_config['most_common']) != -1:
+        if self.config.get('post_selection', self.default_config['post_selection']) != -1:
             analysis: dict = GroupCounter.get_most_common(
                 analysis,
                 LABEL['abs_freq'],
-                self.config.get('most_common', self.default_config['most_common'])
+                self.config.get('post_selection', self.default_config['post_selection'])
             )
 
         GroupCounter.calculate_relative_frequencies(analysis, LABEL['abs_freq'], LABEL['rel_freq'])

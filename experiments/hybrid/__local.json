@@ -27,12 +27,14 @@
       ],
       "ngrams": {
         "1": {
-          "most_common": 512,
-          "shared": "subtract"
+          "pre_selection": 1024,
+          "shared": "remove",
+          "post_selection": 512
         },
         "2": {
-          "most_common": 64,
-          "shared": "subtract"
+          "pre_selection": 128,
+          "shared": "remove",
+          "post_selection": 64
         }
       }
     }
