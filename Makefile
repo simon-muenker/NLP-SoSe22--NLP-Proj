@@ -60,7 +60,7 @@ ex_transformer_train.1.000:
 # linguistic experiment calls
 hybrid_path = ./experiments/hybrid
 
-ex_hybrid: ex_linguistic_train.0.001 ex_linguistic_train.0.010 ex_linguistic_train.0.100 ex_linguistic_train.1.000
+ex_hybrid: ex_hybrid_train.0.001 ex_hybrid_train.0.010 ex_hybrid_train.0.100 ex_hybrid_train.1.000
 
 ex_hybrid_train.0.001:
 	@python3 -m $(module).hybrid -C $(global_cfg) $(hybrid_path)/__local.json $(hybrid_path)/train.0.001/__ex.json
