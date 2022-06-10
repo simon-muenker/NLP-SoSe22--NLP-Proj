@@ -1,0 +1,39 @@
+
+[--- LOAD/PREPARE DATA -> (train/eval/test) ---]
+
+[--- INIT ---]
+- Model has 197908 trainable parameters.
+
+[--- TRAIN -> ./data/imdb.train.0.010.csv ---]
+@001: 	loss(train)=0.6518 	loss(eval)=0.6009 	f1(train)=0.6550 	f1(eval)=0.7966 	duration(epoch)=0:02:38.804871
+@002: 	loss(train)=0.5591 	loss(eval)=0.5014 	f1(train)=0.7700 	f1(eval)=0.8046 	duration(epoch)=0:02:40.114613
+@003: 	loss(train)=0.4732 	loss(eval)=0.5520 	f1(train)=0.8000 	f1(eval)=0.6940 	duration(epoch)=0:02:41.104904
+@004: 	loss(train)=0.4199 	loss(eval)=0.4485 	f1(train)=0.8175 	f1(eval)=0.7876 	duration(epoch)=0:02:40.488529
+@005: 	loss(train)=0.3834 	loss(eval)=0.3875 	f1(train)=0.8500 	f1(eval)=0.8316 	duration(epoch)=0:02:40.229394
+@006: 	loss(train)=0.3664 	loss(eval)=0.3849 	f1(train)=0.8275 	f1(eval)=0.8312 	duration(epoch)=0:02:39.601298
+@007: 	loss(train)=0.3447 	loss(eval)=0.4225 	f1(train)=0.8550 	f1(eval)=0.8052 	duration(epoch)=0:02:39.370840
+@008: 	loss(train)=0.3175 	loss(eval)=0.3922 	f1(train)=0.8625 	f1(eval)=0.8282 	duration(epoch)=0:02:38.729297
+@009: 	loss(train)=0.2904 	loss(eval)=0.3763 	f1(train)=0.8750 	f1(eval)=0.8392 	duration(epoch)=0:02:39.895537
+@010: 	loss(train)=0.2911 	loss(eval)=0.3789 	f1(train)=0.8700 	f1(eval)=0.8434 	duration(epoch)=0:02:40.165938
+@011: 	loss(train)=0.2935 	loss(eval)=0.4512 	f1(train)=0.8775 	f1(eval)=0.8110 	duration(epoch)=0:02:40.634747
+@012: 	loss(train)=0.2779 	loss(eval)=0.3923 	f1(train)=0.8825 	f1(eval)=0.8366 	duration(epoch)=0:02:38.777863
+@013: 	loss(train)=0.2678 	loss(eval)=0.4001 	f1(train)=0.8950 	f1(eval)=0.8346 	duration(epoch)=0:02:39.674176
+@014: 	loss(train)=0.2623 	loss(eval)=0.3910 	f1(train)=0.9125 	f1(eval)=0.8396 	duration(epoch)=0:02:38.642279
+@015: 	loss(train)=0.2192 	loss(eval)=0.3981 	f1(train)=0.9075 	f1(eval)=0.8398 	duration(epoch)=0:02:40.283876
+@016: 	loss(train)=0.2321 	loss(eval)=0.4135 	f1(train)=0.9050 	f1(eval)=0.8372 	duration(epoch)=0:02:40.102100
+@017: 	loss(train)=0.2066 	loss(eval)=0.4418 	f1(train)=0.9200 	f1(eval)=0.8236 	duration(epoch)=0:01:38.624050
+@018: 	loss(train)=0.1988 	loss(eval)=0.4347 	f1(train)=0.9200 	f1(eval)=0.8302 	duration(epoch)=0:01:09.364348
+@019: 	loss(train)=0.1843 	loss(eval)=0.4648 	f1(train)=0.9150 	f1(eval)=0.8242 	duration(epoch)=0:01:08.306315
+@020: 	loss(train)=0.1656 	loss(eval)=0.4899 	f1(train)=0.9300 	f1(eval)=0.8244 	duration(epoch)=0:02:31.765544
+@021: 	loss(train)=0.1790 	loss(eval)=0.5083 	f1(train)=0.9175 	f1(eval)=0.8166 	duration(epoch)=0:02:39.847047
+@022: 	loss(train)=0.1414 	loss(eval)=0.4618 	f1(train)=0.9400 	f1(eval)=0.8358 	duration(epoch)=0:02:39.328391
+@023: 	loss(train)=0.1390 	loss(eval)=0.5180 	f1(train)=0.9500 	f1(eval)=0.8242 	duration(epoch)=0:02:40.352906
+@024: 	loss(train)=0.1388 	loss(eval)=0.4851 	f1(train)=0.9475 	f1(eval)=0.8338 	duration(epoch)=0:02:39.485264
+@025: 	loss(train)=0.1448 	loss(eval)=0.5122 	f1(train)=0.9425 	f1(eval)=0.8264 	duration(epoch)=0:02:39.650834
+Load best model based on evaluation loss.
+@010: 	loss(train)=0.2911 	loss(eval)=0.3789 	f1(train)=0.8700 	f1(eval)=0.8434 	duration(epoch)=0:02:40.165938
+
+[--- EVAL -> ./data/imdb.eval.csv ---]
+AVG           	 tp:     4217	 fp:      783 	 tn:     4217	 fn:      783	 pre=0.8434	 rec=0.8434	 f1=0.8434	 acc=0.8434
+negative      	 tp:     2175	 fp:      481 	 tn:     2042	 fn:      302	 pre=0.8189	 rec=0.8781	 f1=0.8475	 acc=0.8434
+positive      	 tp:     2042	 fp:      302 	 tn:     2175	 fn:      481	 pre=0.8712	 rec=0.8094	 f1=0.8391	 acc=0.8434

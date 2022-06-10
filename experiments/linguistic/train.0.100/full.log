@@ -1,0 +1,14 @@
+
+[--- LOAD/PREPARE DATA -> (train/eval/test) ---]
+
+[--- PREDICT -> ./data/imdb.train.0.100.csv ---]
+[--- EVAL -> ./data/imdb.train.0.100.csv ---]
+AVG           	 tp:     3038	 fp:      962 	 tn:     3038	 fn:      962	 pre=0.7595	 rec=0.7595	 f1=0.7595	 acc=0.7595
+negative      	 tp:     1614	 fp:      525 	 tn:     1424	 fn:      437	 pre=0.7546	 rec=0.7869	 f1=0.7704	 acc=0.7595
+positive      	 tp:     1424	 fp:      437 	 tn:     1614	 fn:      525	 pre=0.7652	 rec=0.7306	 f1=0.7475	 acc=0.7595
+
+[--- PREDICT -> ./data/imdb.eval.csv ---]
+[--- EVAL -> ./data/imdb.eval.csv ---]
+AVG           	 tp:     3782	 fp:     1218 	 tn:     3782	 fn:     1218	 pre=0.7564	 rec=0.7564	 f1=0.7564	 acc=0.7564
+negative      	 tp:     1963	 fp:      704 	 tn:     1819	 fn:      514	 pre=0.7360	 rec=0.7925	 f1=0.7632	 acc=0.7564
+positive      	 tp:     1819	 fp:      514 	 tn:     1963	 fn:      704	 pre=0.7797	 rec=0.7210	 f1=0.7492	 acc=0.7564
