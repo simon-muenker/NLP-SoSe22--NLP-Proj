@@ -38,9 +38,6 @@ class Trainer:
         if self.config is None:
             self.config = self.default_config
 
-        # prepare pytorch, modify rng
-        self.__setup_pytorch()
-
         # setup loss_fn, optimizer, scheduler and early stopping
         self.metric = Metric(self.logger)
         self.loss_fn = torch.nn.CrossEntropyLoss()
