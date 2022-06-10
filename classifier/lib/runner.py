@@ -1,9 +1,13 @@
+import random
 import argparse
 import logging
 from abc import abstractmethod
 
+import torch
+
 from classifier.lib import Data
 from classifier.lib.util import dict_merge, load_json
+from classifier.lib.neural.util import set_cuda_device
 
 
 class Runner:
@@ -82,3 +86,14 @@ class Runner:
         )
 
         return logging.getLogger(__name__)
+
+    #  -------- __setup_pytorch -----------
+    #
+    def __setup_pytorch(self):
+        # make pytorch computations deterministic
+        # src: https://pytorch.org/docs/stable/notes/randomness.html
+        random.seed(self.config['seed'])
+        torch.manual_seed(self.config['seed'])
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        set_cuda_device(self.config['cuda'])

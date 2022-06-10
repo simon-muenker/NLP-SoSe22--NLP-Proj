@@ -1,6 +1,5 @@
 import csv
 import logging
-import random
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Callable, Dict, Tuple
@@ -244,13 +243,3 @@ class Trainer:
             writer = csv.writer(output_file, delimiter=",")
             writer.writerow(cols)
             writer.writerows(zip(*[self.state[c] for c in cols]))
-
-    #  -------- __setup_pytorch -----------
-    #
-    def __setup_pytorch(self):
-        # make pytorch computations deterministic
-        # src: https://pytorch.org/docs/stable/notes/randomness.html
-        random.seed(self.config['seed'])
-        torch.manual_seed(self.config['seed'])
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False

@@ -1,7 +1,25 @@
-
 import torch
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
+
+
+CUDA_DEVICE: str = ''
+
+
+#
+#
+#  -------- set_cuda_device -----------
+#
+def set_cuda_device(i: int = -1) -> None:
+    global CUDA_DEVICE
+
+    if not torch.cuda.is_available():
+        return
+
+    if i == -1:
+        CUDA_DEVICE = f'cuda:{torch.cuda.device_count() - 1}'
+
+    CUDA_DEVICE = f'cuda:{i}'
 
 
 #
@@ -9,6 +27,11 @@ from tqdm import tqdm
 #  -------- get_device -----------
 #
 def get_device(i: int = 0) -> str:
+    global CUDA_DEVICE
+
+    if CUDA_DEVICE and i == 0:
+        return CUDA_DEVICE
+
     return f'cuda:{i}' if torch.cuda.is_available() else 'cpu'
 
 

@@ -1,4 +1,6 @@
 {
+  "seed": 1,
+  "cuda": 5,
   "debug": false,
   "out_path": null,
   "data": {
