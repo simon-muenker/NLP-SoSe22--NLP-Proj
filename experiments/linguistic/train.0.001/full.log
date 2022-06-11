@@ -3,12 +3,12 @@
 
 [--- PREDICT -> ./data/imdb.train.0.001.csv ---]
 [--- EVAL -> ./data/imdb.train.0.001.csv ---]
-AVG           	 tp:       39	 fp:        1 	 tn:       39	 fn:        1	 pre=0.9750	 rec=0.9750	 f1=0.9750	 acc=0.9750
-negative      	 tp:       24	 fp:        1 	 tn:       15	 fn:        0	 pre=0.9600	 rec=1.0000	 f1=0.9796	 acc=0.9750
-positive      	 tp:       15	 fp:        0 	 tn:       24	 fn:        1	 pre=1.0000	 rec=0.9375	 f1=0.9677	 acc=0.9750
+AVG           	 tp:       40	 fp:        0 	 tn:       40	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
+negative      	 tp:       24	 fp:        0 	 tn:       16	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
+positive      	 tp:       16	 fp:        0 	 tn:       24	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
 
 [--- PREDICT -> ./data/imdb.eval.csv ---]
 [--- EVAL -> ./data/imdb.eval.csv ---]
-AVG           	 tp:     3190	 fp:     1810 	 tn:     3190	 fn:     1810	 pre=0.6380	 rec=0.6380	 f1=0.6380	 acc=0.6380
-negative      	 tp:     1830	 fp:     1163 	 tn:     1360	 fn:      647	 pre=0.6114	 rec=0.7388	 f1=0.6691	 acc=0.6380
-positive      	 tp:     1360	 fp:      647 	 tn:     1830	 fn:     1163	 pre=0.6776	 rec=0.5390	 f1=0.6004	 acc=0.6380
+AVG           	 tp:     3017	 fp:     1983 	 tn:     3017	 fn:     1983	 pre=0.6034	 rec=0.6034	 f1=0.6034	 acc=0.6034
+negative      	 tp:     1936	 fp:     1442 	 tn:     1081	 fn:      541	 pre=0.5731	 rec=0.7816	 f1=0.6613	 acc=0.6034
+positive      	 tp:     1081	 fp:      541 	 tn:     1936	 fn:     1442	 pre=0.6665	 rec=0.4285	 f1=0.5216	 acc=0.6034
