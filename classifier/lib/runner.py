@@ -19,6 +19,7 @@ class Runner:
         # --- base setup
         self.config: dict = Runner.load_config()
         self.logger: logging = Runner.load_logger(self.config['out_path'] + "full.log")
+        self.__setup_pytorch()
 
         # --- ---------------------------------
         # --- load data
@@ -97,6 +98,3 @@ class Runner:
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
         set_cuda_device(self.config['cuda'])
-
-        print(torch.cuda.current_device())
-        exit()
