@@ -97,3 +97,6 @@ class Runner:
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
         set_cuda_device(self.config['cuda'])
+
+        print(torch.cuda.current_device())
+        exit()
