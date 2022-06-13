@@ -1,11 +1,9 @@
 import torch
 
 from classifier.lib import Runner
-from classifier.lib.neural import Trainer
-
-from classifier.transformer import Model
-from classifier.transformer import Encoding
+from classifier.lib.neural import Encoding, Trainer
 from classifier.lib.neural.util import get_device
+from classifier.transformer import Model
 
 
 class Main(Runner):
@@ -31,7 +29,6 @@ class Main(Runner):
             self.model,
             self.data,
             self.collation_fn,
-            logger=self.logger,
             out_dir=self.config['out_path'],
             config=self.config['trainer'],
         )
@@ -39,13 +36,6 @@ class Main(Runner):
     #  -------- __call__ -----------
     #
     def __call__(self):
-        # --- ---------------------------------
-        # --- init
-        self.logger.info("\n[--- INIT ---]")
-        self.logger.info(f"- Model has {len(self.model)} trainable parameters.")
-
-        # --- ---------------------------------
-        # --- train
         self.trainer()
 
     #

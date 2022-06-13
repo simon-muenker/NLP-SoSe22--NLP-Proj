@@ -1,8 +1,7 @@
 {
   "data": {
     "config": {
-      "ngrams": [],
-      "remove_stopwords": false
+      "postprocess": false
     }
   },
   "model": {

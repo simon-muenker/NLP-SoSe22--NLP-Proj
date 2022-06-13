@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 import torch
@@ -26,6 +27,8 @@ class Model(AbsModel, nn.Module):
                 self.config["hid_size"],
                 self.config["out_size"])
         )
+
+        logging.info(f'> Init BERT-Head (MLP), trainable parameters: {len(self)}')
 
     #  -------- default_config -----------
     #

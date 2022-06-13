@@ -9,8 +9,6 @@ import pandas as pd
 
 @dataclass
 class Metric:
-    logger: logging
-
     beta: float = 1.0
     _tps: defaultdict = field(default_factory=defaultdict)
     _fps: defaultdict = field(default_factory=defaultdict)
@@ -164,7 +162,7 @@ class Metric:
         def dec(n): return decoding(n) if decoding else n
 
         for class_name in [None] + self.get_classes():
-            self.logger.info((
+            logging.info((
                 (f"{'AVG' if class_name is None else dec(class_name):14}"
                  f"\t tp: {self.get_tp(class_name):8}"
                  f"\t fp: {self.get_fp(class_name):8} "

@@ -1,11 +1,12 @@
+import logging
 from typing import Dict
 
 import pandas as pd
 from pandarallel import pandarallel
 from tqdm import tqdm
 
+from classifier.lib.util import timing
 from classifier.linguistic.group_counter import GroupCounter
-
 
 pandarallel.initialize(progress_bar=True, verbose=1)
 
@@ -21,11 +22,15 @@ class Model:
         self.config = config
         self.polarity_counter: Dict[str, GroupCounter] = {}
 
+        logging.info(f'> Init Freq. Classifier, n-grams: {list(self.config["ngrams"].keys())}')
+
     #  -------- fit -----------
     #
-    def fit(self, data: pd.DataFrame) -> None:
+    @timing
+    def fit(self, data: pd.DataFrame, label: str = '***') -> None:
+        logging.info(f'> Fit Freq. Classifier on {label}')
 
-        for idx, n in enumerate(tqdm(self.config['ngrams'], desc="Fit LookUpDicts")):
+        for idx, n in enumerate(tqdm(self.config['ngrams'], desc='Fit Freq. Classifier on n-grams')):
             self.polarity_counter[n] = GroupCounter(
                 data,
                 key_label=f'{n}-gram',
@@ -37,9 +42,11 @@ class Model:
     #
     #  -------- predict -----------
     #
-    def predict(self, data: pd.DataFrame) -> None:
+    @timing
+    def predict(self, data: pd.DataFrame, label: str = '***') -> None:
+        logging.info(f'> Predict with Freq. Classifier on {label}')
 
-        # calculate the scores for ea
+        # calculate the scores
         for n, lookup in self.polarity_counter.items():
             lookup.predict(data, f'{n}-gram')
 

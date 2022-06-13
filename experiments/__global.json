@@ -9,13 +9,24 @@
       "eval": "./data/imdb.eval.csv",
       "test": "./data/imdb.test.csv"
     },
+    "eval_on": [
+      "train",
+      "eval"
+    ],
     "polarities": {
       "negative": 0,
       "positive": 1
     },
     "data_label": "review",
     "target_label": "sentiment",
-    "config": null
+    "config": {
+      "postprocess": true,
+      "ngrams": [
+        1,
+        2
+      ],
+      "remove_stopwords": true
+    }
   },
   "model": null
 }

@@ -1,13 +1,13 @@
-import random
 import argparse
 import logging
+import random
 from abc import abstractmethod
 
 import torch
 
 from classifier.lib import Data
-from classifier.lib.util import dict_merge, load_json
 from classifier.lib.neural.util import set_cuda_device
+from classifier.lib.util import dict_merge, load_json
 
 
 class Runner:
@@ -17,14 +17,16 @@ class Runner:
     def __init__(self):
         # --- ---------------------------------
         # --- base setup
-        self.config: dict = Runner.load_config()
-        self.logger: logging = Runner.load_logger(self.config['out_path'] + "full.log")
-        self.__setup_pytorch()
+        self.config: dict = Runner.__load_config()
+        self.logger: logging = Runner.__load_logger(f'{self.config["out_path"]}full.log')
+        Runner.__setup_pytorch(self.config["seed"], self.config["cuda"])
 
         # --- ---------------------------------
         # --- load data
-        self.logger.info(f"\n[--- LOAD/PREPARE DATA -> (train/eval/test) ---]")
+        self.logger.info(f'\n[--- PREPARE DATA -> ({list(k for k in self.config["data"]["paths"].keys())}) ---]')
         self.data: dict = self.load_data()
+
+        self.logger.info('\n[--- LOAD COMPONENTS ---]')
 
     #  -------- __call__ -----------
     #
@@ -49,10 +51,10 @@ class Runner:
 
     #
     #
-    #  -------- load_config -----------
+    #  -------- __load_config -----------
     #
     @staticmethod
-    def load_config() -> dict:
+    def __load_config() -> dict:
         # get console arguments, config file
         parser = argparse.ArgumentParser()
         parser.add_argument(
@@ -73,10 +75,10 @@ class Runner:
 
     #
     #
-    #  -------- load_logger -----------
+    #  -------- __load_logger -----------
     #
     @staticmethod
-    def load_logger(path: str, debug: bool = False):
+    def __load_logger(path: str, debug: bool = False):
         logging.basicConfig(
             level=logging.INFO if not debug else logging.DEBUG,
             format="%(message)s",
@@ -86,15 +88,21 @@ class Runner:
             ]
         )
 
-        return logging.getLogger(__name__)
+        logger: logging = logging.getLogger(__name__)
+        logger.info(f'> Loaded logger: {path}')
+
+        return logger
 
     #  -------- __setup_pytorch -----------
     #
-    def __setup_pytorch(self):
+    @staticmethod
+    def __setup_pytorch(seed: int, cuda: int):
+        logging.info(f'> Setup PyTorch: seed({seed}), cuda({cuda})')
+
         # make pytorch computations deterministic
         # src: https://pytorch.org/docs/stable/notes/randomness.html
-        random.seed(self.config['seed'])
-        torch.manual_seed(self.config['seed'])
+        random.seed(seed)
+        torch.manual_seed(seed)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
-        set_cuda_device(self.config['cuda'])
+        set_cuda_device(cuda)

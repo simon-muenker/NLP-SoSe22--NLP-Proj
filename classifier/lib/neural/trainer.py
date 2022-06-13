@@ -17,7 +17,6 @@ class Trainer:
     model: torch.nn.Module
     data: Dict[str, Data]
     collation_fn: Callable
-    logger: logging
     out_dir: str
     config: dict = None
 
@@ -39,9 +38,9 @@ class Trainer:
             self.config = self.default_config
 
         # setup loss_fn, optimizer, scheduler and early stopping
-        self.metric = Metric(self.logger)
+        self.metric = Metric()
         self.loss_fn = torch.nn.CrossEntropyLoss()
-        self.optimizer = optim.AdamW(self.model.parameters(), **self.config["optimizer"])
+        self.optimizer = optim.AdamW(self.model.parameters(), **self.config['optimizer'])
 
     #  -------- default_config -----------
     #
@@ -71,11 +70,10 @@ class Trainer:
     #  -------- __call__ (train) -----------
     #
     def __call__(self) -> dict:
+        logging.info(f'\n[--- TRAIN -> {self.data["train"].data_path} ---]')
+
         saved_model_epoch: int = 0
         saved_eval_metric: tuple = ()
-
-        # log train file
-        self.logger.info(f"\n[--- TRAIN -> {self.data['train'].data_path} ---]")
 
         # --- epoch loop
         try:
@@ -136,10 +134,10 @@ class Trainer:
                     self._log(epoch)
 
         except KeyboardInterrupt:
-            self.logger.warning("Warning: Training interrupted by user!")
+            logging.warning('> Warning: Training interrupted by user!')
 
         # load last save model
-        self.logger.info("Load best model based on evaluation loss.")
+        logging.info('> Load best model based on evaluation loss.')
         self.model = self.model.load(self.out_dir + "model.bin")
         self._log(saved_model_epoch)
 
@@ -148,7 +146,7 @@ class Trainer:
 
         # --- ---------------------------------
         # --- eval
-        self.logger.info(f"\n[--- EVAL -> {self.data['eval'].data_path} ---]")
+        logging.info(f'\n[--- EVAL -> {self.data["eval"].data_path} ---]')
         self.metric.load(saved_eval_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
 
@@ -222,7 +220,7 @@ class Trainer:
     #  -------- _log -----------
     #
     def _log(self, epoch: int) -> None:
-        self.logger.info((
+        logging.info((
             f"@{epoch:03}: \t"
             f"loss(train)={self.state['loss_train'][epoch - 1]:2.4f} \t"
             f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.4f} \t"
@@ -237,6 +235,6 @@ class Trainer:
         cols: list = list(self.state.keys())
 
         with open(self.out_dir + 'train.csv', 'w') as output_file:
-            writer = csv.writer(output_file, delimiter=",")
+            writer = csv.writer(output_file, delimiter=',')
             writer.writerow(cols)
             writer.writerows(zip(*[self.state[c] for c in cols]))

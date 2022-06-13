@@ -4,6 +4,13 @@
 module = classifier
 global_cfg = ./experiments/__global.json
 
+# --- --- ---
+
+#
+# install, download
+make download:
+	@python -m spacy download en_core_web_sm
+
 
 # --- --- ---
 

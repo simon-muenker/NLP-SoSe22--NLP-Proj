@@ -1,5 +1,10 @@
 import collections
 import json
+import logging
+
+from functools import wraps
+
+from time import time
 
 
 #
@@ -20,6 +25,22 @@ def save_json(path: str, data: dict) -> None:
     """Save JSON configuration file."""
     with open(path, "w") as file:
         json.dump(data, file, indent=4)
+
+
+#
+#
+#  -------- timing -----------
+#
+def timing(f):
+    @wraps(f)
+    def wrap(*args, **kw):
+        start = time()
+        result = f(*args, **kw)
+        logging.info(f'> f({f.__name__}) took: {time() - start:2.4f} sec')
+
+        return result
+
+    return wrap
 
 
 #

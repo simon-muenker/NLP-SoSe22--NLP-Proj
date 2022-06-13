@@ -3,9 +3,7 @@ from dataclasses import dataclass
 import pandas as pd
 from pandarallel import pandarallel
 
-
 pandarallel.initialize(progress_bar=True)
-
 
 LABEL: dict = {
     'abs_freq': 'n',

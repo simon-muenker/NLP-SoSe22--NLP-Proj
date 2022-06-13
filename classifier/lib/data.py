@@ -1,3 +1,4 @@
+import logging
 import re
 from dataclasses import dataclass, field
 
@@ -7,9 +8,9 @@ from pandarallel import pandarallel
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
+from classifier.lib.util import timing
 
 pandarallel.initialize(progress_bar=True, verbose=1)
-
 
 LABEL: dict = {
     'token': '1-gram',
@@ -36,24 +37,26 @@ class Data(Dataset):
     @property
     def default_config(self) -> dict:
         return {
-            "ngrams": [1, 2, 3],
+            "postprocess": True,
+            "ngrams": [1, 2],
             "remove_stopwords": True
         }
 
     #  -------- __post_init__ -----------
     #
     def __post_init__(self):
-        # read data from csv file
-        self.data: pd.DataFrame = pd.read_csv(self.data_path)
+        logging.info(f'> Load/Init from {self.data_path}')
 
-        # load default config file if is None
         if self.config is None:
             self.config = self.default_config
+
+        self.data: pd.DataFrame = Data.__load(self.data_path)
 
         if self.config['remove_stopwords']:
             self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))
 
-        self.postprocess()
+        if self.config['postprocess']:
+            self.postprocess()
 
     #  -------- __getitem__ -----------
     #
@@ -94,16 +97,18 @@ class Data(Dataset):
     def postprocess(self) -> None:
 
         # tokenize
-        self.tokenize()
+        self.__tokenize()
 
         # generate ngrams
         if self.config['ngrams']:
             for n in self.config['ngrams']:
-                self.ngrams(n)
+                if n > 1:
+                    self.__ngram(n)
 
-    #  -------- tokenize -----------
+    #  -------- __tokenize -----------
     #
-    def tokenize(self) -> None:
+    @timing
+    def __tokenize(self) -> None:
 
         #  -------- tok -----------
         #
@@ -127,15 +132,24 @@ class Data(Dataset):
 
         self.data[LABEL['token']] = self.data[self.data_label].parallel_apply(tok)
 
-    #  -------- ngrams -----------
+    #  -------- __ngram -----------
     #
-    def ngrams(self, n: int) -> None:
-        if n > 1:
-            self.data[f'{n}{LABEL["grams"]}'] = self.data[LABEL['token']].parallel_apply(
-                lambda sent: list(nltk.ngrams(sent, n))
-            )
+    @timing
+    def __ngram(self, n: int) -> None:
+        self.data[f'{n}{LABEL["grams"]}'] = self.data[LABEL['token']].parallel_apply(
+            lambda sent: list(nltk.ngrams(sent, n))
+        )
+
+    #  -------- load -----------
+    #
+    @staticmethod
+    @timing
+    def __load(path):
+        return pd.read_csv(path)
 
     #  -------- save -----------
     #
+    @timing
     def save(self, path: str):
-        self.data.to_csv(path + ".csv")
+        logging.info(f'> Save to {path}.csv')
+        self.data.to_csv(f'{path}.csv')

@@ -1,11 +1,12 @@
+import logging
 from typing import List, Tuple
 
 import torch
 import torch.nn as nn
 
 from classifier.lib.neural import Model as AbsModel
-from classifier.transformer import Model as Linear
 from classifier.lib.neural.util import get_device
+from classifier.transformer import Model as Linear
 
 
 class Model(AbsModel, nn.Module):
@@ -26,6 +27,8 @@ class Model(AbsModel, nn.Module):
             self.config["out_size"],
             bias=False
         ).to(get_device())
+
+        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)}')
 
     #  -------- default_config -----------
     #

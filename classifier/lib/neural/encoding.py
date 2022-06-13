@@ -1,9 +1,11 @@
+import logging as logger
 from typing import Tuple, List
 
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
 
 from classifier.lib.neural.util import get_device
+from classifier.lib.util import timing
 from classifier.transformer.util import unpad
 
 
@@ -11,6 +13,7 @@ class Encoding:
 
     #  -------- __init__ -----------
     #
+    @timing
     def __init__(self, config: dict = None):
         logging.set_verbosity_error()
 
@@ -18,6 +21,8 @@ class Encoding:
             config = self.default_config()
 
         self.config = config
+
+        logger.info(f'> Init Encoder: \'{self.config["model"]}\'')
         self.tokenizer = AutoTokenizer.from_pretrained(self.config["model"])
         self.model = AutoModel.from_pretrained(self.config["model"], output_hidden_states=True).to(get_device())
 

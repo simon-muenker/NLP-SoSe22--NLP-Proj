@@ -1,3 +1,5 @@
+import logging
+
 from classifier.lib import Runner, Metric
 from classifier.linguistic import Model
 
@@ -8,7 +10,7 @@ class Main(Runner):
     #
     def __init__(self) -> None:
         super().__init__()
-        self.metric = Metric(self.logger)
+        self.metric = Metric()
         self.model = Model(self.config['model'])
 
     #
@@ -17,21 +19,18 @@ class Main(Runner):
     #
     def __call__(self):
 
-        self.model.fit(self.data['train'].data)
+        self.model.fit(self.data['train'].data, label=self.data['train'].data_path)
         self.model.save(self.config['out_path'])
 
         # predict train, eval
+        logging.info(f'\n[--- EVAL -> {self.config["data"]["eval_on"]} ---]')
         for data_label, dataset in self.data.items():
 
-            # skip test for now
-            if data_label == 'test':
+            if data_label not in self.config["data"]["eval_on"]:
                 continue
 
             # predict dataset
-            self.logger.info(f"\n[--- PREDICT -> {dataset.data_path} ---]")
-            self.model.predict(dataset.data)
-
-            self.logger.info(f"[--- EVAL -> {dataset.data_path} ---]")
+            self.model.predict(dataset.data, label=dataset.data_path)
             self.metric.reset()
             self.metric.confusion_matrix(
                 dataset.get_label_keys(),

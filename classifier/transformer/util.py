@@ -13,4 +13,3 @@ def unpad(padded: Union[list, torch.Tensor], length: Union[list, torch.Tensor]) 
     for v, n in zip(padded, length):
         output.append(v[:n])
     return output
-
