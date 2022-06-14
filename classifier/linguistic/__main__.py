@@ -1,5 +1,7 @@
 import logging
 
+import pandas as pd
+
 from classifier.lib import Runner, Metric
 from classifier.linguistic import Model
 
@@ -39,6 +41,7 @@ class Main(Runner):
                 dataset.data['prediction']
             )
             self.metric.show()
+            self.metric.export(f'{self.config["out_path"]}metric.{data_label}')
 
 
 #

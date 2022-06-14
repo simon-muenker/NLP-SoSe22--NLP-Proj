@@ -4,13 +4,11 @@ from dataclasses import dataclass, field
 
 import nltk
 import pandas as pd
-from pandarallel import pandarallel
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
 from classifier.lib.util import timing
 
-pandarallel.initialize(progress_bar=True, verbose=1)
 
 LABEL: dict = {
     'token': '1-gram',

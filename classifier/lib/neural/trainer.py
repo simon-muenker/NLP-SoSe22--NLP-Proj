@@ -149,6 +149,7 @@ class Trainer:
         logging.info(f'\n[--- EVAL -> {self.data["eval"].data_path} ---]')
         self.metric.load(saved_eval_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
+        self.metric.export(f'{self.out_dir}metric.eval', decoding=self.data['train'].decode_label)
 
         return self.state
 

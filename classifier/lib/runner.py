@@ -4,10 +4,12 @@ import random
 from abc import abstractmethod
 
 import torch
+from pandarallel import pandarallel
 
 from classifier.lib import Data
-from classifier.lib.neural.util import set_cuda_device
 from classifier.lib.util import dict_merge, load_json
+
+pandarallel.initialize(progress_bar=True)
 
 
 class Runner:
@@ -93,12 +95,20 @@ class Runner:
     #
     @staticmethod
     def __setup_pytorch(seed: int, cuda: int) -> None:
-        logging.info(f'> Setup PyTorch: seed({seed}), cuda({cuda})')
+
+        # check if cuda is available
+        if not torch.cuda.is_available():
+            cuda = None
+
+        else:
+            # set cuda to last device
+            if cuda == -1 or cuda > torch.cuda.device_count():
+                cuda = torch.cuda.device_count() - 1
 
         # make pytorch computations deterministic
-        # src: https://pytorch.org/docs/stable/notes/randomness.html
+        logging.info(f'> Setup PyTorch: seed({seed}), cuda({cuda})')
         random.seed(seed)
         torch.manual_seed(seed)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
-        set_cuda_device(cuda)
+        torch.cuda.set_device(cuda) if cuda else None

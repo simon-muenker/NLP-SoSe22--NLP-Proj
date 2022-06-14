@@ -174,6 +174,27 @@ class Metric:
                  f"\t acc={self.accuracy(class_name):2.4f}")
             ))
 
+    #  -------- pass -----------
+    #
+    def export(self, path: str, decoding: callable = None) -> None:
+        def dec(n): return decoding(n) if decoding else n
+
+        pd.DataFrame([
+            [
+                'AVG' if class_name is None else dec(class_name),
+                self.get_tp(class_name),
+                self.get_fp(class_name),
+                self.get_tn(class_name),
+                self.get_fn(class_name),
+                self.precision(class_name),
+                self.recall(class_name),
+                self.f_score(class_name),
+                self.accuracy(class_name)
+            ]
+            for class_name in [None] + self.get_classes()
+        ], columns=['label', 'tp', 'fp', 'tn', 'fn', 'prec', 'rec', 'f1', 'acc']
+        ).to_csv(f'{path}.csv', index=False)
+
     #  -------- save -----------
     #
     def save(self) -> Tuple[dict, dict, dict, dict]:

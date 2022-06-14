@@ -5,20 +5,6 @@ from tqdm import tqdm
 
 #
 #
-#  -------- set_cuda_device -----------
-#
-def set_cuda_device(i: int = -1) -> None:
-    if not torch.cuda.is_available():
-        return
-
-    if i == -1:
-        torch.cuda.set_device(torch.cuda.device_count() - 1)
-
-    torch.cuda.set_device(i)
-
-
-#
-#
 #  -------- get_device -----------
 #
 def get_device() -> str:
