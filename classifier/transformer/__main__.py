@@ -20,7 +20,7 @@ class Main(Runner):
         self.encoding = Encoding(self.config['model']['encoding'])
         self.model = Model(
             in_size=self.encoding.dim,
-            out_size=2,
+            out_size=len(self.data['train'].get_label_keys()),
             config=self.config['model']['neural']
         ).to(get_device())
 

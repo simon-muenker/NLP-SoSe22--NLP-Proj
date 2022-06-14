@@ -18,12 +18,12 @@ class Model(AbsModel, nn.Module):
 
         self.embeds = BERTHead(
             self.config["in_size"][0],
-            self.config["in_size"][1],
+            self.config["out_size"] * 2,
             self.config.copy()
         ).to(get_device())
 
         self.output = nn.Linear(
-            self.config["in_size"][1] * 2,
+            self.config["in_size"][1] + self.config["out_size"] * 2,
             self.config["out_size"],
             bias=False
         ).to(get_device())
@@ -35,7 +35,7 @@ class Model(AbsModel, nn.Module):
     @staticmethod
     def default_config() -> dict:
         return {
-            "embeds": Linear.default_config(),
+            "embeds": BERTHead.default_config(),
             "linguistic": None,
         }
 

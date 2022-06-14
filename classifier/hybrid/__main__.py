@@ -12,6 +12,26 @@ from classifier.lib.neural.util import get_device
 from classifier.lib.util import timing
 from classifier.linguistic import Model as Classifier
 
+COLS: dict = {
+    'linguistic': [
+        '1-gram_negative', '1-gram_positive',
+        '2-gram_negative', '2-gram_positive'
+    ],
+    'spacy': [
+        'ent_ratio',
+        'pos_ratio-noun', 'pos_ratio-verb', 'pos_ratio-adv',
+        'pos_ratio-adj', 'pos_ratio-intj', 'pos_ratio-sym'
+    ],
+    '_drop': [
+        '1-gram', '2-gram', 'sum_negative', 'sum_positive', 'prediction'
+    ]
+}
+
+POS_TAGS: list = [
+    'NOUN', 'VERB', 'ADV',
+    'ADJ', 'INTJ', 'SYM'
+]
+
 
 class Main(Runner):
 
@@ -30,8 +50,11 @@ class Main(Runner):
 
         # load network
         self.net = Network(
-            in_size=tuple([self.encoding.dim, 11]),
-            out_size=2,
+            in_size=tuple([
+                self.encoding.dim,
+                len(COLS['linguistic']) + len(COLS['spacy'])
+            ]),
+            out_size=len(self.data['train'].get_label_keys()),
             config=self.config['model']['neural']
         )
 
@@ -61,9 +84,8 @@ class Main(Runner):
             # predict classifier
             self.clss.predict(dataset.data, label=dataset.data_path)
 
-            # Make dynamic list:
-            cols_to_drop: list = ['1-gram', '2-gram', 'sum_negative', 'sum_positive', 'prediction']
-            dataset.data.drop(columns=cols_to_drop, inplace=True)
+            # drop legacy columns
+            dataset.data.drop(columns=COLS['_drop'], inplace=True)
 
             # apply spacy pipeline
             self.apply_spacy(dataset.data, 'review', label=dataset.data_path)
@@ -86,26 +108,10 @@ class Main(Runner):
 
             return pd.Series([
                 len(doc.ents) / len(doc),
-
-                pos.count('NOUN') / len(doc),
-                pos.count('VERB') / len(doc),
-                pos.count('ADV') / len(doc),
-                pos.count('ADJ') / len(doc),
-
-                pos.count('INTJ') / len(doc),
-                pos.count('SYM') / len(doc)
+                *[pos.count(p) / len(doc) for p in POS_TAGS],
             ])
 
-        data[[
-            'ent_ratio',
-            'pos_ratio-noun',
-            'pos_ratio-verb',
-            'pos_ratio-adv',
-            'pos_ratio-adj',
-            'pos_ratio-intj',
-            'pos_ratio-sym',
-
-        ]] = data[col].apply(sc)
+        data[COLS['spacy']] = data[col].apply(sc)
 
     #
     #
@@ -116,23 +122,13 @@ class Main(Runner):
         label: list = []
         clss_pred: list = []
 
-        # FIXME COLLATION
         # collate data
         for sample, review, sentiment in batch:
             text.append(review)
             label.append(sentiment)
             clss_pred.append(torch.tensor(sample[[
-                '1-gram_negative',
-                '1-gram_positive',
-                '2-gram_negative',
-                '2-gram_positive',
-                'ent_ratio',
-                'pos_ratio-noun',
-                'pos_ratio-verb',
-                'pos_ratio-adv',
-                'pos_ratio-adj',
-                'pos_ratio-intj',
-                'pos_ratio-sym',
+                *COLS['linguistic'],
+                *COLS['spacy']
             ]].values, device=get_device()).squeeze())
 
         # embed text
