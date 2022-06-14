@@ -18,15 +18,15 @@ class Runner:
         # --- ---------------------------------
         # --- base setup
         self.config: dict = Runner.__load_config()
-        self.logger: logging = Runner.__load_logger(f'{self.config["out_path"]}full.log')
+        Runner.__load_logger(f'{self.config["out_path"]}full.log')
         Runner.__setup_pytorch(self.config["seed"], self.config["cuda"])
 
         # --- ---------------------------------
         # --- load data
-        self.logger.info(f'\n[--- PREPARE DATA -> ({list(k for k in self.config["data"]["paths"].keys())}) ---]')
+        logging.info(f'\n[--- PREPARE DATA -> ({list(k for k in self.config["data"]["paths"].keys())}) ---]')
         self.data: dict = self.load_data()
 
-        self.logger.info('\n[--- LOAD COMPONENTS ---]')
+        logging.info('\n[--- LOAD COMPONENTS ---]')
 
     #  -------- __call__ -----------
     #
@@ -78,7 +78,7 @@ class Runner:
     #  -------- __load_logger -----------
     #
     @staticmethod
-    def __load_logger(path: str, debug: bool = False):
+    def __load_logger(path: str, debug: bool = False) -> None:
         logging.basicConfig(
             level=logging.INFO if not debug else logging.DEBUG,
             format="%(message)s",
@@ -87,16 +87,12 @@ class Runner:
                 logging.StreamHandler()
             ]
         )
-
-        logger: logging = logging.getLogger(__name__)
-        logger.info(f'> Loaded logger: {path}')
-
-        return logger
+        logging.info(f'> Loaded logger: {path}')
 
     #  -------- __setup_pytorch -----------
     #
     @staticmethod
-    def __setup_pytorch(seed: int, cuda: int):
+    def __setup_pytorch(seed: int, cuda: int) -> None:
         logging.info(f'> Setup PyTorch: seed({seed}), cuda({cuda})')
 
         # make pytorch computations deterministic

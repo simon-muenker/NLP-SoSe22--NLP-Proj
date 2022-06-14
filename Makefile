@@ -8,8 +8,13 @@ global_cfg = ./experiments/__global.json
 
 #
 # install, download
-make download:
+install:
+	@python3 -m pip install -r requirements.txt
+	@make download
+
+download:
 	@python -m spacy download en_core_web_sm
+
 
 
 # --- --- ---

@@ -18,6 +18,7 @@ class Main(Runner):
     #  -------- __call__ -----------
     #
     def __call__(self):
+        logging.info("\n[--- RUN ---]")
 
         self.model.fit(self.data['train'].data, label=self.data['train'].data_path)
         self.model.save(self.config['out_path'])
