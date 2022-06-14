@@ -2,13 +2,9 @@ import logging
 from typing import Dict
 
 import pandas as pd
-from pandarallel import pandarallel
-from tqdm import tqdm
 
 from classifier.lib.util import timing
 from classifier.linguistic.group_counter import GroupCounter
-
-pandarallel.initialize(progress_bar=True, verbose=1)
 
 
 class Model:
@@ -30,7 +26,7 @@ class Model:
     def fit(self, data: pd.DataFrame, label: str = '***') -> None:
         logging.info(f'> Fit Freq. Classifier on {label}')
 
-        for idx, n in enumerate(tqdm(self.config['ngrams'], desc='Fit Freq. Classifier on n-grams')):
+        for n in self.config['ngrams']:
             self.polarity_counter[n] = GroupCounter(
                 data,
                 key_label=f'{n}-gram',

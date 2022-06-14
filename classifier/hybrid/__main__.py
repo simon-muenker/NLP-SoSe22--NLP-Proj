@@ -1,14 +1,15 @@
 import logging
 from typing import List
 
+import pandas as pd
 import spacy
 import torch
 
 from classifier.hybrid import Model as Network
-from classifier.hybrid.spacy_util import PretokenizedTokenizer
 from classifier.lib import Runner
 from classifier.lib.neural import Encoding, Trainer
 from classifier.lib.neural.util import get_device
+from classifier.lib.util import timing
 from classifier.linguistic import Model as Classifier
 
 
@@ -29,7 +30,7 @@ class Main(Runner):
 
         # load network
         self.net = Network(
-            in_size=tuple([self.encoding.dim, 4]),
+            in_size=tuple([self.encoding.dim, 11]),
             out_size=2,
             config=self.config['model']['neural']
         )
@@ -49,31 +50,62 @@ class Main(Runner):
         logging.info("\n[--- RUN ---]")
 
         # --- ---------------------------------
-        # --- fit, save, predict classifier
+        # --- fit, save
         self.clss.fit(self.data['train'].data, label=self.data['train'].data_path)
         self.clss.save(self.config['out_path'])
 
-        self.clss.predict(self.data['train'].data, label=self.data['train'].data_path)
-        self.clss.predict(self.data['eval'].data, label=self.data['eval'].data_path)
+        for data_label, dataset in self.data.items():
+            if data_label not in self.config["data"]["eval_on"]:
+                continue
 
-        # TODO apply
-        # self.apply_pipeline(-- some data: pd.DF --)
+            # predict classifier
+            self.clss.predict(dataset.data, label=dataset.data_path)
+
+            # Make dynamic list:
+            cols_to_drop: list = ['1-gram', '2-gram', 'sum_negative', 'sum_positive', 'prediction']
+            dataset.data.drop(columns=cols_to_drop, inplace=True)
+
+            # apply spacy pipeline
+            self.apply_spacy(dataset.data, 'review', label=dataset.data_path)
 
         # --- ---------------------------------
         # --- train
         self.trainer()
 
     #
-    #  TODO IMPLEMENT
-    #  -------- apply_pipeline -----------
     #
-    def apply_pipeline(self, data):
-        def sc(row: str) -> float:
+    #  -------- apply_spacy -----------
+    #
+    @timing
+    def apply_spacy(self, data: pd.DataFrame, col: str, label: str = '***'):
+        logging.info(f'> Apply Space Pipeline to: {label}')
+
+        def sc(row: str) -> pd.Series:
             doc = self.spacy(row)
+            pos: list = [token.pos_ for token in doc]
 
-            return len(doc.ents) / len(doc)
+            return pd.Series([
+                len(doc.ents) / len(doc),
 
-        data['ent_ratio'] = data["1-gram"].parallel_apply(sc)
+                pos.count('NOUN') / len(doc),
+                pos.count('VERB') / len(doc),
+                pos.count('ADV') / len(doc),
+                pos.count('ADJ') / len(doc),
+
+                pos.count('INTJ') / len(doc),
+                pos.count('SYM') / len(doc)
+            ])
+
+        data[[
+            'ent_ratio',
+            'pos_ratio-noun',
+            'pos_ratio-verb',
+            'pos_ratio-adv',
+            'pos_ratio-adj',
+            'pos_ratio-intj',
+            'pos_ratio-sym',
+
+        ]] = data[col].apply(sc)
 
     #
     #
@@ -93,7 +125,14 @@ class Main(Runner):
                 '1-gram_negative',
                 '1-gram_positive',
                 '2-gram_negative',
-                '2-gram_positive'
+                '2-gram_positive',
+                'ent_ratio',
+                'pos_ratio-noun',
+                'pos_ratio-verb',
+                'pos_ratio-adv',
+                'pos_ratio-adj',
+                'pos_ratio-intj',
+                'pos_ratio-sym',
             ]].values, device=get_device()).squeeze())
 
         # embed text
@@ -114,13 +153,10 @@ class Main(Runner):
     #
     @staticmethod
     def __load_spacy(name: str = 'en_core_web_sm', disable: List[str] = None):
-        # python -m spacy download en_core_web_sm
-
         if disable is None:
-            disable = ['tok2vec', 'parser', 'attribute_ruler', 'lemmatizer']
+            disable = []
 
         pipeline = spacy.load(name, disable=disable)
-        pipeline.tokenizer = PretokenizedTokenizer(pipeline.vocab)
         logging.info(f'> Init Spacy Pipeline: \'{name}\', with: {pipeline.pipe_names}')
 
         return pipeline
