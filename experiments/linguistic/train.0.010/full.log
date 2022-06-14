@@ -1,14 +1,33 @@
+> Loaded logger: ./experiments/linguistic/train.0.010/full.log
+> Setup PyTorch: seed(1), cuda(5)
 
-[--- LOAD/PREPARE DATA -> (train/eval/test) ---]
+[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+> Load/Init from ./data/imdb.train.0.010.csv
+> f(__load) took: 0.0141 sec
+> f(__tokenize) took: 0.4900 sec
+> f(__ngram) took: 0.2552 sec
+> Load/Init from ./data/imdb.eval.csv
+> f(__load) took: 0.0836 sec
+> f(__tokenize) took: 1.1895 sec
+> f(__ngram) took: 0.4719 sec
+> Load/Init from ./data/imdb.test.csv
+> f(__load) took: 0.0647 sec
+> f(__tokenize) took: 1.1460 sec
+> f(__ngram) took: 0.5426 sec
 
-[--- PREDICT -> ./data/imdb.train.0.010.csv ---]
-[--- EVAL -> ./data/imdb.train.0.010.csv ---]
+[--- LOAD COMPONENTS ---]
+> Init Freq. Classifier, n-grams: ['1', '2']
+> Fit Freq. Classifier on ./data/imdb.train.0.010.csv
+> f(fit) took: 0.0523 sec
+
+[--- EVAL -> ['train', 'eval'] ---]
+> Predict with Freq. Classifier on ./data/imdb.train.0.010.csv
+> f(predict) took: 0.5982 sec
 AVG           	 tp:      361	 fp:       39 	 tn:      361	 fn:       39	 pre=0.9025	 rec=0.9025	 f1=0.9025	 acc=0.9025
 negative      	 tp:      176	 fp:       22 	 tn:      185	 fn:       17	 pre=0.8889	 rec=0.9119	 f1=0.9003	 acc=0.9025
 positive      	 tp:      185	 fp:       17 	 tn:      176	 fn:       22	 pre=0.9158	 rec=0.8937	 f1=0.9046	 acc=0.9025
-
-[--- PREDICT -> ./data/imdb.eval.csv ---]
-[--- EVAL -> ./data/imdb.eval.csv ---]
+> Predict with Freq. Classifier on ./data/imdb.eval.csv
+> f(predict) took: 7.4254 sec
 AVG           	 tp:     3608	 fp:     1392 	 tn:     3608	 fn:     1392	 pre=0.7216	 rec=0.7216	 f1=0.7216	 acc=0.7216
 negative      	 tp:     2014	 fp:      929 	 tn:     1594	 fn:      463	 pre=0.6843	 rec=0.8131	 f1=0.7432	 acc=0.7216
 positive      	 tp:     1594	 fp:      463 	 tn:     2014	 fn:      929	 pre=0.7749	 rec=0.6318	 f1=0.6961	 acc=0.7216
