@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 
 import pandas as pd
-from pandarallel import pandarallel
 
-pandarallel.initialize(progress_bar=True)
 
 LABEL: dict = {
     'abs_freq': 'n',
@@ -49,7 +47,7 @@ class GroupCounter:
     #
     def __create(self, data: pd.DataFrame, key_label: str, group_label: str) -> dict:
 
-        analysis = pd.DataFrame = GroupCounter.calculate_absolute_frequencies(
+        analysis: dict = GroupCounter.calculate_absolute_frequencies(
             data,
             key_label=key_label,
             group_label=group_label,
@@ -57,7 +55,7 @@ class GroupCounter:
         )
 
         if self.config.get('pre_selection', self.default_config['pre_selection']) != -1:
-            analysis: dict = GroupCounter.get_most_common(
+            analysis = GroupCounter.get_most_common(
                 analysis,
                 LABEL['abs_freq'],
                 self.config.get('pre_selection', self.default_config['pre_selection'])
@@ -67,10 +65,10 @@ class GroupCounter:
             GroupCounter.subtract_shared(analysis)
 
         elif self.config.get('shared', self.default_config['shared']) == "remove":
-            analysis: dict = GroupCounter.remove_shared(analysis)
+            analysis = GroupCounter.remove_shared(analysis)
 
         if self.config.get('post_selection', self.default_config['post_selection']) != -1:
-            analysis: dict = GroupCounter.get_most_common(
+            analysis = GroupCounter.get_most_common(
                 analysis,
                 LABEL['abs_freq'],
                 self.config.get('post_selection', self.default_config['post_selection'])
