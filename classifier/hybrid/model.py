@@ -6,7 +6,7 @@ import torch.nn as nn
 
 from classifier.lib.neural import Model as AbsModel
 from classifier.lib.neural.util import get_device
-from classifier.transformer import Model as Linear
+from classifier.transformer import Model as BERTHead
 
 
 class Model(AbsModel, nn.Module):
@@ -16,7 +16,7 @@ class Model(AbsModel, nn.Module):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.embeds = Linear(
+        self.embeds = BERTHead(
             self.config["in_size"][0],
             self.config["in_size"][1],
             self.config.copy()
@@ -28,7 +28,7 @@ class Model(AbsModel, nn.Module):
             bias=False
         ).to(get_device())
 
-        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)}')
+        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)- len(self.embeds)}')
 
     #  -------- default_config -----------
     #
