@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-
 LABEL: dict = {
     'abs_freq': 'n',
     'rel_freq': 'p'
@@ -25,11 +24,7 @@ class GroupCounter:
         if self.config is None:
             self.config = self.default_config
 
-        self.analysis: dict = self.__create(
-            self.data,
-            self.key_label,
-            self.group_label
-        )
+        self.analysis: dict = self.__create()
 
     #  -------- default_config -----------
     #
@@ -45,51 +40,25 @@ class GroupCounter:
     #
     #  -------- __create -----------
     #
-    def __create(self, data: pd.DataFrame, key_label: str, group_label: str) -> dict:
+    def __create(self) -> dict:
 
-        analysis: dict = GroupCounter.calculate_absolute_frequencies(
-            data,
-            key_label=key_label,
-            group_label=group_label,
-            value_label=LABEL['abs_freq']
+        analysis: dict = GroupCounter.__calc_abs_freq(
+            self.data, key_label=self.key_label, group_label=self.group_label
         )
 
-        if self.config.get('pre_selection', self.default_config['pre_selection']) != -1:
-            analysis = GroupCounter.get_most_common(
-                analysis,
-                LABEL['abs_freq'],
-                self.config.get('pre_selection', self.default_config['pre_selection'])
-            )
+        analysis = GroupCounter.__most_common(analysis, self.config['pre_selection'])
 
-        if self.config.get('shared', self.default_config['shared']) == "subtract":
-            GroupCounter.subtract_shared(analysis)
+        if self.config['shared'] == "subtract":
+            GroupCounter.__subtract_shared(analysis)
 
-        elif self.config.get('shared', self.default_config['shared']) == "remove":
-            analysis = GroupCounter.remove_shared(analysis)
+        elif self.config['shared'] == "remove":
+            analysis = GroupCounter.__remove_shared(analysis)
 
-        if self.config.get('post_selection', self.default_config['post_selection']) != -1:
-            analysis = GroupCounter.get_most_common(
-                analysis,
-                LABEL['abs_freq'],
-                self.config.get('post_selection', self.default_config['post_selection'])
-            )
+        analysis = GroupCounter.__most_common(analysis, self.config['post_selection'])
 
-        GroupCounter.calculate_relative_frequencies(analysis, LABEL['abs_freq'], LABEL['rel_freq'])
+        GroupCounter.__calc_rel_freq(analysis)
 
         return analysis
-
-    #  -------- subtract_shared -----------
-    #
-    @staticmethod
-    def subtract_shared(analysis: dict):
-        subtracted: dict = {}
-
-        for sentiment, _ in analysis.items():
-            for other_sentiment, other_count in analysis.items():
-                if other_sentiment is not sentiment:
-                    subtracted[sentiment] = analysis[sentiment].subtract(other_count, fill_value=0)
-
-        return subtracted
 
     #  -------- predict -----------
     #
@@ -101,10 +70,10 @@ class GroupCounter:
 
     #
     #
-    #  -------- calculate_absolute_frequencies -----------
+    #  -------- __calc_abs_freq -----------
     #
     @staticmethod
-    def calculate_absolute_frequencies(data: pd.DataFrame, key_label: str, group_label: str, value_label: str) -> dict:
+    def __calc_abs_freq(data: pd.DataFrame, key_label: str, group_label: str) -> dict:
         return {
             label: (
                 group[key_label]
@@ -112,17 +81,30 @@ class GroupCounter:
                 .value_counts()
                 .to_frame()
                 .rename(
-                    {key_label: value_label},
+                    {key_label: LABEL['abs_freq']},
                     axis='columns'
                 )
             ) for label, group in data.groupby(group_label)}
 
-    #
-    #
-    #  -------- remove_shared -----------
+    #  -------- __subtract_shared -----------
     #
     @staticmethod
-    def remove_shared(data: dict):
+    def __subtract_shared(analysis: dict):
+        subtracted: dict = {}
+
+        for sentiment, _ in analysis.items():
+            for other_sentiment, other_count in analysis.items():
+                if other_sentiment is not sentiment:
+                    subtracted[sentiment] = analysis[sentiment].subtract(other_count, fill_value=0)
+
+        return subtracted
+
+    #
+    #
+    #  -------- __remove_shared -----------
+    #
+    @staticmethod
+    def __remove_shared(data: dict):
         #
         token_intersection: set = set.intersection(
             *map(set, [list(count.index) for _, count in data.items()]))
@@ -134,23 +116,30 @@ class GroupCounter:
 
     #
     #
-    #  -------- get_most_common -----------
+    #  -------- __most_common -----------
     #
     @staticmethod
-    def get_most_common(data: dict, column: str, num: int = 1024) -> dict:
+    def __most_common(data: dict, num: int = 1024) -> dict:
         return {
-            sentiment: count.sort_values(by=[column], ascending=False).head(num)
+            sentiment: (
+                count
+                .sort_values(
+                    by=LABEL['abs_freq'],
+                    ascending=False
+                )
+                .head(num)
+            )
             for sentiment, count in data.items()
         }
 
     #
     #
-    #  -------- calculate_relative_frequencies -----------
+    #  -------- __calc_rel_freq -----------
     #
     @staticmethod
-    def calculate_relative_frequencies(data: dict, abs_freq_label: str, rel_freq_label: str) -> None:
+    def __calc_rel_freq(data: dict) -> None:
         for sentiment, count in data.items():
-            count[rel_freq_label] = count[abs_freq_label] / sum(count[abs_freq_label])
+            count[LABEL['rel_freq']] = count[LABEL['abs_freq']] / sum(count[LABEL['abs_freq']])
 
     #  -------- __repr__ -----------
     #

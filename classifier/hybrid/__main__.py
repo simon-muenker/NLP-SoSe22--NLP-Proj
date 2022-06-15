@@ -9,15 +9,11 @@ from classifier.lib.neural import Encoding, Trainer
 from classifier.lib.neural.util import get_device
 from classifier.linguistic import Model as Classifier
 
-COLS: dict = {
-    'linguistic': [
-        '1-gram_negative', '1-gram_positive',
-        '2-gram_negative', '2-gram_positive'
-    ],
-    '_drop': [
-        '1-gram', '2-gram', 'sum_negative', 'sum_positive', 'prediction'
-    ]
-}
+DROP_COLS: list = [
+    '1-gram', '2-gram',
+    'sum_negative', 'sum_positive',
+    'prediction'
+]
 
 
 class Main(Runner):
@@ -39,7 +35,7 @@ class Main(Runner):
         self.net = Network(
             in_size=tuple([
                 self.encoding.dim,
-                len(COLS['linguistic']) + len(self.spacy.col_names)
+                len(self.clss.col_names) + len(self.spacy.col_names)
             ]),
             out_size=len(self.data['train'].get_label_keys()),
             config=self.config['model']['neural']
@@ -72,7 +68,7 @@ class Main(Runner):
             self.clss.predict(dataset.data, label=dataset.data_path)
 
             # drop legacy columns
-            dataset.data.drop(columns=COLS['_drop'], inplace=True)
+            dataset.data.drop(columns=DROP_COLS, inplace=True)
 
             # apply spacy pipeline
             self.spacy.apply(dataset.data, 'review', label=dataset.data_path)
@@ -95,7 +91,7 @@ class Main(Runner):
             text.append(review)
             label.append(sentiment)
             clss_pred.append(torch.tensor(sample[[
-                *COLS['linguistic'],
+                *self.clss.col_names,
                 *self.spacy.col_names
             ]].values, device=get_device()).squeeze())
 

@@ -1,3 +1,4 @@
+import itertools
 import logging
 from typing import Dict
 
@@ -58,3 +59,17 @@ class Model:
     def save(self, path: str):
         for n, lookup in self.polarity_counter.items():
             lookup.write(f'{path}{n}-gram-weights')
+
+    #  -------- property -----------
+    #
+    @property
+    def col_names(self):
+        return [
+            f'{n}-gram_{label}'
+            for n, label in list(
+                itertools.product(
+                    self.config['ngrams'],
+                    self.config['polarities']
+                )
+            )
+        ]
