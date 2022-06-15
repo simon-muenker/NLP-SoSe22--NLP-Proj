@@ -114,7 +114,7 @@ class Main(Runner):
                 *[pos.count(p) / len(doc) for p in POS_TAGS],
             ])
 
-        data[COLS['spacy']] = data[col].apply(sc)
+        data[COLS['spacy']] = data[col].parallel_apply(sc)
 
     #
     #
