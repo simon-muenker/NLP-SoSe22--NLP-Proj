@@ -3,6 +3,7 @@ from typing import List
 
 import pandas as pd
 import spacy
+from spacytextblob.spacytextblob import SpacyTextBlob
 import torch
 
 from classifier.hybrid import Model as Network
@@ -18,7 +19,7 @@ COLS: dict = {
         '2-gram_negative', '2-gram_positive'
     ],
     'spacy': [
-        'ent_ratio',
+        'blob_polarity', 'blob_subjectivity', 'ent_ratio',
         'pos_ratio-noun', 'pos_ratio-verb', 'pos_ratio-adv',
         'pos_ratio-adj', 'pos_ratio-intj', 'pos_ratio-sym'
     ],
@@ -107,6 +108,8 @@ class Main(Runner):
             pos: list = [token.pos_ for token in doc]
 
             return pd.Series([
+                doc._.blob.polarity,
+                doc._.blob.subjectivity,
                 len(doc.ents) / len(doc),
                 *[pos.count(p) / len(doc) for p in POS_TAGS],
             ])
@@ -153,6 +156,8 @@ class Main(Runner):
             disable = []
 
         pipeline = spacy.load(name, disable=disable)
+        pipeline.add_pipe("spacytextblob")
+
         logging.info(f'> Init Spacy Pipeline: \'{name}\', with: {pipeline.pipe_names}')
 
         return pipeline
