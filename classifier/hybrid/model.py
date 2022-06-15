@@ -18,14 +18,15 @@ class Model(AbsModel, nn.Module):
 
         self.embeds = BERTHead(
             self.config["in_size"][0],
-            self.config["out_size"] * 2,
+            self.config["in_size"][1],
             self.config.copy()
         ).to(get_device())
 
+        self.cross_bias = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
+
         self.output = nn.Linear(
-            self.config["in_size"][1] + self.config["out_size"] * 2,
-            self.config["out_size"],
-            bias=False
+            self.config["in_size"][1],
+            self.config["out_size"]
         ).to(get_device())
 
         logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)- len(self.embeds)}')
@@ -42,7 +43,14 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
-        return [t for t in self.output(torch.cat([
-            torch.stack(self.embeds(data[0])),
-            torch.stack(data[1])
-        ], dim=1).float())]
+
+        return [
+            t for t in self.output(
+                (
+                        torch.stack(self.embeds(data[0]))
+                        * torch.stack(data[1])
+                )
+                .add(self.cross_bias)
+                .float()
+            )
+        ]
