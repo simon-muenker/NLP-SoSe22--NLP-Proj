@@ -1,7 +1,5 @@
 import logging
 
-import pandas as pd
-
 from classifier.lib import Runner, Metric
 from classifier.linguistic import Model
 
