@@ -1,7 +1,7 @@
 {
   "data": {
     "paths": {
-      "train": "./data/imdb._debug.csv",
+      "train": "./data/imdb.train.0.010.csv",
       "eval": "./data/imdb._debug.csv",
       "test": "./data/imdb._debug.csv"
     }
