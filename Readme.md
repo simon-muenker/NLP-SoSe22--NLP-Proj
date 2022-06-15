@@ -49,4 +49,7 @@ TODO
 
 ## Credits:
 
-* NLP-Progress Sentiment Analysis (IMDb): <http://nlpprogress.com/english/sentiment_analysis.html#imdb>
+* BERT Transformer by Huggingface: <https://huggingface.co/docs/transformers/model_doc/bert>
+* English NLP Pipeline (small) by Spacy: <https://spacy.io/models/en#en_core_web_sm>
+* Polarity, Subjectivity Pipeline by Textblob: <https://spacytextblob.netlify.app>
+* NLP-Progress Scoreboard Sentiment Analysis (IMDb): <http://nlpprogress.com/english/sentiment_analysis.html#imdb>
