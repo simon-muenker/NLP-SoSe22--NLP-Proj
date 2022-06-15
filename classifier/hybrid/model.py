@@ -22,7 +22,9 @@ class Model(AbsModel, nn.Module):
             self.config.copy()
         ).to(get_device())
 
-        self.cross_bias = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
+        self.biaffine_w1 = nn.Parameter(torch.ones(self.config["in_size"][1])).to(get_device())
+        self.biaffine_w2 = nn.Parameter(torch.ones(self.config["in_size"][1])).to(get_device())
+        self.biaffine_bias = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
 
         self.output = nn.Linear(
             self.config["in_size"][1],
@@ -43,14 +45,11 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
-
         return [
             t for t in self.output(
-                (
-                        torch.stack(self.embeds(data[0]))
-                        * torch.stack(data[1])
-                )
-                .add(self.cross_bias)
+                (torch.stack(self.embeds(data[0])) * self.biaffine_w1)
+                .add(torch.stack(data[1]) * self.biaffine_w2)
+                .add(self.biaffine_bias)
                 .float()
             )
         ]
