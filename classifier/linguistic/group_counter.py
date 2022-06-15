@@ -94,17 +94,10 @@ class GroupCounter:
     #  -------- predict -----------
     #
     def predict(self, data: pd.DataFrame, label: str) -> None:
-
-        #  -------- predict -----------
-        #
-        def pred(row):
-            return count.loc[count.index.isin(row)][LABEL['rel_freq']].sum()
-
         for group, count in self.analysis.items():
-            data[f'{label}_{group}'] = data[label].apply(pred)
-
-            # ToDo: enable parallel processing
-            # data[f'{label}_{group}'] = data[label].parallel_apply(pred)
+            data[f'{label}_{group}'] = data[label].parallel_apply(
+                lambda row: count.loc[count.index.isin(row)][LABEL['rel_freq']].sum()
+            )
 
     #
     #
@@ -112,18 +105,17 @@ class GroupCounter:
     #
     @staticmethod
     def calculate_absolute_frequencies(data: pd.DataFrame, key_label: str, group_label: str, value_label: str) -> dict:
-
-        #  -------- calc_abs -----------
-        #
-        def calc_abs(df: pd.DataFrame) -> pd.DataFrame:
-            #
-            count = df[key_label].explode().value_counts().to_frame()
-
-            count.rename({key_label: value_label}, axis='columns', inplace=True)
-
-            return count
-
-        return {label: calc_abs(group) for label, group in data.groupby(group_label)}
+        return {
+            label: (
+                group[key_label]
+                .explode()
+                .value_counts()
+                .to_frame()
+                .rename(
+                    {key_label: value_label},
+                    axis='columns'
+                )
+            ) for label, group in data.groupby(group_label)}
 
     #
     #
