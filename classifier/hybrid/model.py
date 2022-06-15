@@ -22,8 +22,8 @@ class Model(AbsModel, nn.Module):
             self.config.copy()
         ).to(get_device())
 
-        self.biaffine_w1 = nn.Parameter(torch.ones(self.config["in_size"][1])).to(get_device())
-        self.biaffine_w2 = nn.Parameter(torch.ones(self.config["in_size"][1])).to(get_device())
+        self.biaffine_w1 = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
+        self.biaffine_w2 = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
         self.biaffine_bias = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
 
         self.output = nn.Linear(
