@@ -7,16 +7,7 @@ from spacytextblob.spacytextblob import SpacyTextBlob
 
 from classifier.lib.util import timing
 
-POS_TAGS: list = [
-    'NOUN', 'VERB', 'ADV',
-    'ADJ', 'INTJ', 'SYM'
-]
-
-COL_NAMES: list = [
-    'blob_polarity', 'blob_subjectivity', 'ent_ratio',
-    'pos_ratio-noun', 'pos_ratio-verb', 'pos_ratio-adv',
-    'pos_ratio-adj', 'pos_ratio-intj', 'pos_ratio-sym'
-]
+COL_NAMES: list = ['blob_polarity', 'blob_subjectivity', 'ent_ratio']
 
 
 class SpacyPipe:
@@ -41,18 +32,13 @@ class SpacyPipe:
     def apply(self, data: pd.DataFrame, col: str, label: str = '***'):
         logging.info(f'> Apply Space Pipeline to: {label}')
 
-        def sc(row: str) -> pd.Series:
-            doc = self.pipeline(row)
-            pos: list = [token.pos_ for token in doc]
-
-            return pd.Series([
+        data[COL_NAMES] = pd.DataFrame.from_records([
+            pd.Series([
                 doc._.blob.polarity,
                 doc._.blob.subjectivity,
                 len(doc.ents) / len(doc),
-                *[pos.count(p) / len(doc) for p in POS_TAGS],
-            ])
-
-        data[COL_NAMES] = data[col].apply(sc)
+            ]) for doc in self.pipeline.pipe(data[col])
+        ])
 
     #  -------- col_names -----------
     #
