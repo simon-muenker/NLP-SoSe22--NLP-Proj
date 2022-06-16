@@ -90,24 +90,25 @@ class Main(Runner):
         for sample, review, sentiment in batch:
             text.append(review)
             label.append(sentiment)
-            clss_pred.append(torch.tensor(sample[[
-                *self.clss.col_names,
-                *self.spacy.col_names
-            ]].values, device=get_device()).squeeze())
+            clss_pred.append(
+                torch.tensor(sample[[
+                    *self.clss.col_names,
+                    *self.spacy.col_names
+                ]].values, device=get_device())
+                .squeeze()
+                .float()
+            )
 
         # embed text
-        _, sent_embeds, _ = self.encoding(text)
+        _, sent_embeds, _ = self.encoding(text, return_unpad=False)
 
-        # extract only first embeddings (CLS)
-        cls_embeds: list = [tco[0] for tco in sent_embeds]
-
-        # transform labels
-        label_ids: torch.Tensor = torch.tensor(
-            [self.data['train'].encode_label(lb) for lb in label],
-            dtype=torch.long, device=get_device()
+        return (
+            (sent_embeds[:, 1], clss_pred),
+            torch.tensor(
+                [self.data['train'].encode_label(lb) for lb in label],
+                dtype=torch.long, device=get_device()
+            )
         )
-
-        return (cls_embeds, clss_pred), label_ids
 
 
 #

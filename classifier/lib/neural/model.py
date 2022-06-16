@@ -33,7 +33,7 @@ class Model(nn.Module):
     #  -------- forward -----------
     #
     @abstractmethod
-    def forward(self, data: Tuple[List[torch.Tensor], List]) -> List[torch.Tensor]:
+    def forward(self, data: Tuple[List[torch.Tensor], List]) -> torch.Tensor:
         pass
 
     #
@@ -46,7 +46,7 @@ class Model(nn.Module):
             batch: Tuple[torch.Tensor, List[torch.Tensor]]):
         # predict batch
         embeds, gold_label = batch
-        pred_label = torch.stack(self(embeds))
+        pred_label = self(embeds)
 
         # compute loss, backward
         return (

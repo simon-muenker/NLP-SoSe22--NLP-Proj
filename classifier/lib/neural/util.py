@@ -1,3 +1,5 @@
+from typing import Union
+
 import torch
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
@@ -10,6 +12,17 @@ from tqdm import tqdm
 def get_device() -> str:
     return f"cuda:{torch.cuda.current_device()}" if torch.cuda.is_available() else "cpu"
 
+
+#
+#
+#  -------- unpad -----------
+#
+def unpad(padded: Union[list, torch.Tensor], length: Union[list, torch.Tensor]) -> Union[list, torch.Tensor]:
+    """Convert the given packaged sequence into a list of vectors."""
+    output = []
+    for v, n in zip(padded, length):
+        output.append(v[:n])
+    return output
 
 #
 #

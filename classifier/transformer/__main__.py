@@ -52,18 +52,16 @@ class Main(Runner):
             label.append(sentiment)
 
         # embed text
-        _, sent_embeds, _ = self.encoding(text)
+        _, sent_embeds, _ = self.encoding(text, return_unpad=False)
 
-        # extract only first embeddings (CLS)
-        cls_embeds: list = [tco[0] for tco in sent_embeds]
-
-        # transform labels
-        label_ids: torch.Tensor = torch.tensor(
-            [self.data['train'].encode_label(lb) for lb in label],
-            dtype=torch.long, device=get_device()
+        # extract only first embeddings (CLS); transform labels
+        return (
+            sent_embeds[:, 1],
+            torch.tensor(
+                [self.data['train'].encode_label(lb) for lb in label],
+                dtype=torch.long, device=get_device()
+            )
         )
-
-        return cls_embeds, label_ids
 
 
 #

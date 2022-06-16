@@ -17,7 +17,7 @@ class SpacyPipe:
     #
     def __init__(self, name: str = 'en_core_web_sm', disable: List[str] = None):
         if disable is None:
-            disable = []
+            disable = ['tok2vec', 'tagger', 'parser', 'lemmatizer']
 
         self.pipeline = spacy.load(name, disable=disable)
         self.pipeline.add_pipe("spacytextblob")

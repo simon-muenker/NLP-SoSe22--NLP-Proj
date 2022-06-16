@@ -3,10 +3,8 @@ from typing import List
 
 import torch
 import torch.nn as nn
-import torch.nn.utils.rnn as rnn
 
 from classifier.lib.neural import Model as AbsModel
-from classifier.transformer.util import unpad
 
 
 class Model(AbsModel, nn.Module):
@@ -43,18 +41,5 @@ class Model(AbsModel, nn.Module):
     #
     #  -------- forward -----------
     #
-    def forward(self, embeds: List[torch.Tensor]) -> List[torch.Tensor]:
-        # pack sentence vectors as a packed sequence
-        packed_embeds = rnn.pack_sequence(
-            embeds, enforce_sorted=False
-        )
-
-        # convert packed representation to a padded representation
-        padded_embeds, pad_mask = rnn.pad_packed_sequence(
-            packed_embeds, batch_first=True
-        )
-
-        # apply MLP to padded sequence
-        padded_mlp_out = self.net(padded_embeds)
-
-        return unpad(padded_mlp_out, pad_mask)
+    def forward(self, embeds: torch.Tensor) -> torch.Tensor:
+        return self.net(embeds)

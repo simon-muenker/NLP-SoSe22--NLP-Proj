@@ -1,12 +1,11 @@
 import logging as logger
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
 
-from classifier.lib.neural.util import get_device
+from classifier.lib.neural.util import get_device, unpad
 from classifier.lib.util import timing
-from classifier.transformer.util import unpad
 
 
 class Encoding:
@@ -44,7 +43,7 @@ class Encoding:
             self,
             batch: List[str],
             return_unpad: bool = True
-    ) -> Tuple[List, List[torch.Tensor], list]:
+    ) -> Union[Tuple[List, List[torch.Tensor], list], Tuple[List, torch.Tensor, torch.Tensor]]:
         encoding = self.tokenizer(batch, padding=True, truncation=True)
 
         tokens: List[List[str]] = [self.ids_to_tokens(ids) for ids in encoding['input_ids']]
@@ -61,7 +60,7 @@ class Encoding:
                 unpad(ids, masks)
             )
 
-        return tokens, list(ctes), list(ids)
+        return tokens, ctes, ids
 
     #  -------- contextualize -----------
     #
@@ -90,8 +89,8 @@ class Encoding:
 
     #  -------- __call__ -----------
     #
-    def __call__(self, batch: List[str]):
-        return self.batch_encode(batch)
+    def __call__(self, batch: List[str], return_unpad: bool = True):
+        return self.batch_encode(batch, return_unpad=return_unpad)
 
     #  -------- __len__ -----------
     #
