@@ -103,7 +103,7 @@ class Main(Runner):
         _, sent_embeds, _ = self.encoding(text, return_unpad=False)
 
         return (
-            (sent_embeds[:, 1], clss_pred),
+            (sent_embeds[:, 1], torch.stack(clss_pred)),
             torch.tensor(
                 [self.data['train'].encode_label(lb) for lb in label],
                 dtype=torch.long, device=get_device()

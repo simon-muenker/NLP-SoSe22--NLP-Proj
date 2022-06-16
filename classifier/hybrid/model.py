@@ -49,15 +49,12 @@ class Model(AbsModel, nn.Module):
 
     #  -------- forward -----------
     #
-    def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
+    def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         embed: torch.Tensor = self.embeds(data[0])
 
         return self.output(
                 torch.cat([
-                    self.biaffine(
-                        embed[:, :-self.config["out_size"]],
-                        torch.stack(data[1])
-                    ),
+                    self.biaffine(embed[:, :-self.config["out_size"]], data[1]),
                     embed[:, -self.config["out_size"]:]
                 ], dim=1)
             )
