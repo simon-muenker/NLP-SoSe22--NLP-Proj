@@ -41,22 +41,14 @@ class GroupCounter:
     #  -------- __create -----------
     #
     def __create(self) -> dict:
+        gc = GroupCounter
+        analysis: dict
 
-        analysis: dict = GroupCounter.__calc_abs_freq(
-            self.data, key_label=self.key_label, group_label=self.group_label
-        )
-
-        analysis = GroupCounter.__most_common(analysis, self.config['pre_selection'])
-
-        if self.config['shared'] == "subtract":
-            GroupCounter.__subtract_shared(analysis)
-
-        elif self.config['shared'] == "remove":
-            analysis = GroupCounter.__remove_shared(analysis)
-
-        analysis = GroupCounter.__most_common(analysis, self.config['post_selection'])
-
-        GroupCounter.__calc_rel_freq(analysis)
+        analysis = gc.__calc_abs_freq(self.data, self.key_label, self.group_label)
+        analysis = gc.__most_common(analysis, self.config['pre_selection'])
+        analysis = gc.__remove_shared(analysis)
+        analysis = gc.__most_common(analysis, self.config['post_selection'])
+        analysis = gc.__calc_rel_freq(analysis)
 
         return analysis
 
@@ -85,19 +77,6 @@ class GroupCounter:
                     axis='columns'
                 )
             ) for label, group in data.groupby(group_label)}
-
-    #  -------- __subtract_shared -----------
-    #
-    @staticmethod
-    def __subtract_shared(analysis: dict):
-        subtracted: dict = {}
-
-        for sentiment, _ in analysis.items():
-            for other_sentiment, other_count in analysis.items():
-                if other_sentiment is not sentiment:
-                    subtracted[sentiment] = analysis[sentiment].subtract(other_count, fill_value=0)
-
-        return subtracted
 
     #
     #
@@ -137,9 +116,15 @@ class GroupCounter:
     #  -------- __calc_rel_freq -----------
     #
     @staticmethod
-    def __calc_rel_freq(data: dict) -> None:
-        for sentiment, count in data.items():
-            count[LABEL['rel_freq']] = count[LABEL['abs_freq']] / sum(count[LABEL['abs_freq']])
+    def __calc_rel_freq(data: dict) -> dict:
+        return {
+            sentiment: (
+                count
+                .assign(
+                    p=count[LABEL['abs_freq']] / sum(count[LABEL['abs_freq']])
+                )
+            ) for sentiment, count in data.items()
+        }
 
     #  -------- __repr__ -----------
     #
