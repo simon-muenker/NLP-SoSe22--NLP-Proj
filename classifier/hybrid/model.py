@@ -18,7 +18,7 @@ class Model(AbsModel, nn.Module):
 
         self.embeds = BERTHead(
             self.config["in_size"][0],
-            self.config["in_size"][1],
+            self.config["in_size"][1] + self.config["out_size"],
             self.config.copy()
         ).to(get_device())
 
@@ -27,7 +27,7 @@ class Model(AbsModel, nn.Module):
         self.biaffine_bias = nn.Parameter(torch.zeros(self.config["in_size"][1]), requires_grad=True).to(get_device())
 
         self.output = nn.Linear(
-            self.config["in_size"][1],
+            self.config["in_size"][1] + self.config["out_size"],
             self.config["out_size"]
         ).to(get_device())
 
@@ -45,11 +45,17 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[List[torch.Tensor], List[torch.Tensor]]) -> List[torch.Tensor]:
+        embed: torch.Tensor = torch.stack(self.embeds(data[0]))
+
         return [
             t for t in self.output(
-                (torch.stack(self.embeds(data[0])) * self.biaffine_w1)
-                .add(torch.stack(data[1]) * self.biaffine_w2)
-                .add(self.biaffine_bias)
-                .float()
+                torch.cat([
+                    (embed[:, :-self.config["out_size"]] * self.biaffine_w1)
+                    .add(torch.stack(data[1]) * self.biaffine_w2)
+                    .add(self.biaffine_bias)
+                    .float()
+                    ,
+                    embed[:, -self.config["out_size"]:]
+                ], dim=1)
             )
         ]
