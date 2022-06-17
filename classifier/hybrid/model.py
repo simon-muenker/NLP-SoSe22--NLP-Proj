@@ -24,7 +24,7 @@ class Model(AbsModel, nn.Module):
             ).to(get_device())
 
         self.biaffine = Biaffine(self.config["in_size"][1], dropout=0)
-        self.dropout = nn.Dropout(self.config['dropout'])
+        self.dropout = nn.Dropout(0.1)
 
         self.output = nn.Linear(
             self.config["in_size"][1] + self.config["out_size"],
