@@ -48,7 +48,7 @@ class Model(AbsModel, nn.Module):
 
         return self.output(
                 torch.cat([
-                    self.biaffine(embed[:, :-self.config["out_size"]], data[1]),
+                    embed[:, :-self.config["out_size"]] * data[1],
                     embed[:, -self.config["out_size"]:]
                 ], dim=1)
             )
