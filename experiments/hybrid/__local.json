@@ -17,7 +17,7 @@
     },
     "neural": {
       "hid_size": 256,
-      "dropout": 0.2
+      "dropout": 0.3
     },
     "linguistic": {
       "group_label": "sentiment",
