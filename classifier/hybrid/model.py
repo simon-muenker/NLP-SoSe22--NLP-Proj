@@ -1,10 +1,9 @@
 import logging
-from typing import List, Tuple
+from typing import Tuple
 
 import torch
 import torch.nn as nn
 
-from classifier.lib.neural import Biaffine
 from classifier.lib.neural import Model as AbsModel
 from classifier.lib.neural.util import get_device
 from classifier.transformer import Model as BERTHead
@@ -19,15 +18,14 @@ class Model(AbsModel, nn.Module):
 
         self.embeds = BERTHead(
                 self.config["in_size"][0],
-                self.config["in_size"][1] + self.config["out_size"],
+                self.config["in_size"][1],
                 self.config.copy()
             ).to(get_device())
 
-        self.biaffine = Biaffine(self.config["in_size"][1], dropout=0)
-        self.dropout = nn.Dropout(0.1)
+        self.dropout = nn.Dropout(0.0)
 
         self.output = nn.Linear(
-            self.config["in_size"][1] + self.config["out_size"],
+            self.config["in_size"][1],
             self.config["out_size"]
         ).to(get_device())
 
@@ -45,11 +43,4 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        embed: torch.Tensor = self.embeds(data[0])
-
-        return self.output(
-                self.dropout(torch.cat([
-                    embed[:, :-self.config["out_size"]] * data[1],
-                    embed[:, -self.config["out_size"]:]
-                ], dim=1))
-            )
+        return self.output(self.dropout(self.embeds(data[0]) * data[1]))
