@@ -22,8 +22,6 @@ class Model(AbsModel, nn.Module):
                 self.config.copy()
             ).to(get_device())
 
-        self.dropout = nn.Dropout(0.0)
-
         self.output = nn.Linear(
             self.config["in_size"][1],
             self.config["out_size"]
@@ -43,4 +41,4 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        return self.output(self.dropout(self.embeds(data[0]) * data[1]))
+        return self.output(self.embeds(data[0]) * data[1])

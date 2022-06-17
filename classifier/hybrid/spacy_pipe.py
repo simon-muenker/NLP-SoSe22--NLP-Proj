@@ -7,7 +7,16 @@ from spacytextblob.spacytextblob import SpacyTextBlob
 
 from classifier.lib.util import timing
 
-COL_NAMES: list = ['blob_polarity', 'blob_subjectivity', 'ent_ratio']
+COL_NAMES: list = [
+    'blob_polarity', 'blob_subjectivity', 'ent_ratio',
+    'pos_ratio-noun', 'pos_ratio-verb', 'pos_ratio-adv',
+    'pos_ratio-adj', 'pos_ratio-intj', 'pos_ratio-sym'
+]
+
+POS_TAGS: list = [
+    'NOUN', 'VERB', 'ADV',
+    'ADJ', 'INTJ', 'SYM'
+]
 
 
 class SpacyPipe:
@@ -17,7 +26,7 @@ class SpacyPipe:
     #
     def __init__(self, name: str = 'en_core_web_sm', disable: List[str] = None):
         if disable is None:
-            disable = ['tok2vec', 'tagger', 'parser', 'lemmatizer']
+            disable = []
 
         self.pipeline = spacy.load(name, disable=disable)
         self.pipeline.add_pipe("spacytextblob")
@@ -37,6 +46,7 @@ class SpacyPipe:
                 doc._.blob.polarity,
                 doc._.blob.subjectivity,
                 len(doc.ents) / len(doc),
+                *[[token.pos_ for token in doc].count(p) / len(doc) for p in POS_TAGS]
             ]) for doc in self.pipeline.pipe(data[col])
         ])
 
