@@ -24,6 +24,7 @@ class Model(AbsModel, nn.Module):
             ).to(get_device())
 
         self.biaffine = Biaffine(self.config["in_size"][1], dropout=0)
+        self.dropout = nn.Dropout(self.config['dropout'])
 
         self.output = nn.Linear(
             self.config["in_size"][1] + self.config["out_size"],
@@ -47,8 +48,8 @@ class Model(AbsModel, nn.Module):
         embed: torch.Tensor = self.embeds(data[0])
 
         return self.output(
-                torch.cat([
+                self.dropout(torch.cat([
                     embed[:, :-self.config["out_size"]] * data[1],
                     embed[:, -self.config["out_size"]:]
-                ], dim=1)
+                ], dim=1))
             )
