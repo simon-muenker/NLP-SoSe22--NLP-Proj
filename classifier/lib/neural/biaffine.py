@@ -21,4 +21,4 @@ class Biaffine(nn.Module):
     #  -------- forward -----------
     #
     def forward(self, x1: torch.Tensor, x2: torch.Tensor) -> torch.Tensor:
-        return self.acf(self.dropout((x1 * self.w1) + (x2 * self.w2) + self.bias))
+        return self.acf((self.dropout(x1) * self.w1) + (self.dropout(x2) * self.w2) + self.bias)

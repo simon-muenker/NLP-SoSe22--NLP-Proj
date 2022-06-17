@@ -1,5 +1,4 @@
 import logging
-from typing import List
 
 import torch
 import torch.nn as nn
@@ -15,11 +14,11 @@ class Model(AbsModel, nn.Module):
         super().__init__(in_size, out_size, config)
 
         self.net = nn.Sequential(
+            nn.Dropout(
+                p=self.config["dropout"]),
             nn.Linear(
                 self.config["in_size"],
                 self.config["hid_size"]),
-            nn.Dropout(
-                p=self.config["dropout"]),
             nn.LeakyReLU(),
             nn.Linear(
                 self.config["hid_size"],

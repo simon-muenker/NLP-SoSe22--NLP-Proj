@@ -17,19 +17,13 @@ class Model(AbsModel, nn.Module):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.embeds = nn.Sequential(
-            BERTHead(
+        self.embeds = BERTHead(
                 self.config["in_size"][0],
                 self.config["in_size"][1] + self.config["out_size"],
                 self.config.copy()
-            ),
-            nn.Dropout(
-                p=self.config["dropout"]
-            ),
-            nn.LeakyReLU()
-        ).to(get_device())
+            ).to(get_device())
 
-        self.biaffine = Biaffine(self.config["in_size"][1], self.config["dropout"])
+        self.biaffine = Biaffine(self.config["in_size"][1], dropout=0)
 
         self.output = nn.Linear(
             self.config["in_size"][1] + self.config["out_size"],
