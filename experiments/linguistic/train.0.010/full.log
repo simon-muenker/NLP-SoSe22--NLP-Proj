@@ -3,33 +3,33 @@
 
 [--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
 > Load/Init from ./data/imdb.train.0.010.csv
-> f(__load) took: 0.0083 sec
-> f(__tokenize) took: 0.3392 sec
-> f(__ngram) took: 0.2265 sec
+> f(__load) took: 0.0096 sec
+> f(__tokenize) took: 0.3444 sec
+> f(__ngram) took: 0.2244 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0845 sec
-> f(__tokenize) took: 1.1407 sec
-> f(__ngram) took: 0.4873 sec
+> f(__load) took: 0.0843 sec
+> f(__tokenize) took: 1.2031 sec
+> f(__ngram) took: 0.4590 sec
 > Load/Init from ./data/imdb.test.csv
-> f(__load) took: 0.0660 sec
-> f(__tokenize) took: 1.2263 sec
-> f(__ngram) took: 0.5683 sec
+> f(__load) took: 0.0650 sec
+> f(__tokenize) took: 1.1733 sec
+> f(__ngram) took: 0.5917 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Freq. Classifier, n-grams: ['1', '2']
 
 [--- RUN ---]
 > Fit Freq. Classifier on ./data/imdb.train.0.010.csv
-> f(fit) took: 0.0616 sec
+> f(fit) took: 0.0501 sec
 
 [--- EVAL -> ['train', 'eval'] ---]
 > Predict with Freq. Classifier on ./data/imdb.train.0.010.csv
-> f(predict) took: 1.5352 sec
-AVG           	 tp:      361	 fp:       39 	 tn:      361	 fn:       39	 pre=0.9025	 rec=0.9025	 f1=0.9025	 acc=0.9025
-negative      	 tp:      176	 fp:       22 	 tn:      185	 fn:       17	 pre=0.8889	 rec=0.9119	 f1=0.9003	 acc=0.9025
-positive      	 tp:      185	 fp:       17 	 tn:      176	 fn:       22	 pre=0.9158	 rec=0.8937	 f1=0.9046	 acc=0.9025
+> f(predict) took: 1.6350 sec
+AVG           	 tp:      379	 fp:       21 	 tn:      379	 fn:       21	 pre=0.9475	 rec=0.9475	 f1=0.9475	 acc=0.9475
+negative      	 tp:      204	 fp:       16 	 tn:      175	 fn:        5	 pre=0.9273	 rec=0.9761	 f1=0.9510	 acc=0.9475
+positive      	 tp:      175	 fp:        5 	 tn:      204	 fn:       16	 pre=0.9722	 rec=0.9162	 f1=0.9434	 acc=0.9475
 > Predict with Freq. Classifier on ./data/imdb.eval.csv
-> f(predict) took: 2.6465 sec
-AVG           	 tp:     3608	 fp:     1392 	 tn:     3608	 fn:     1392	 pre=0.7216	 rec=0.7216	 f1=0.7216	 acc=0.7216
-negative      	 tp:     2014	 fp:      929 	 tn:     1594	 fn:      463	 pre=0.6843	 rec=0.8131	 f1=0.7432	 acc=0.7216
-positive      	 tp:     1594	 fp:      463 	 tn:     2014	 fn:      929	 pre=0.7749	 rec=0.6318	 f1=0.6961	 acc=0.7216
+> f(predict) took: 2.8475 sec
+AVG           	 tp:     3551	 fp:     1449 	 tn:     3551	 fn:     1449	 pre=0.7102	 rec=0.7102	 f1=0.7102	 acc=0.7102
+negative      	 tp:     1986	 fp:      972 	 tn:     1565	 fn:      477	 pre=0.6714	 rec=0.8063	 f1=0.7327	 acc=0.7102
+positive      	 tp:     1565	 fp:      477 	 tn:     1986	 fn:      972	 pre=0.7664	 rec=0.6169	 f1=0.6836	 acc=0.7102
