@@ -28,7 +28,6 @@ class Data(Dataset):
     config: dict = None
 
     stop_words: list = field(default_factory=list)
-    lemmatizer: nltk.stem.WordNetLemmatizer = None
 
     #  -------- default_config -----------
     #
@@ -55,40 +54,6 @@ class Data(Dataset):
 
         if self.config['postprocess']:
             self.postprocess()
-
-    #  -------- __getitem__ -----------
-    #
-    def __getitem__(self, idx) -> T_co:
-        return (
-            self.data.iloc[[idx]],
-            self.data[self.data_label][idx],
-            self.data[self.target_label][idx]
-        )
-
-    #  -------- __len__ -----------
-    #
-    def __len__(self) -> int:
-        return len(self.data)
-
-    #  -------- encode_label -----------
-    #
-    def encode_label(self, label: str) -> int:
-        return self.polarities.get(label)
-
-    #  -------- decode_label -----------
-    #
-    def decode_label(self, label: int) -> str:
-        return {v: k for k, v in self.polarities.items()}.get(label)
-
-    #  -------- get_label_keys -----------
-    #
-    def get_label_keys(self) -> set:
-        return set(k for k in self.polarities.keys())
-
-    #  -------- get_label_values -----------
-    #
-    def get_label_values(self) -> set:
-        return set(k for k in self.polarities.values())
 
     #  -------- postprocess -----------
     #
@@ -151,3 +116,37 @@ class Data(Dataset):
     def save(self, path: str):
         logging.info(f'> Save to {path}.csv')
         self.data.to_csv(f'{path}.csv')
+
+    #  -------- encode_label -----------
+    #
+    def encode_label(self, label: str) -> int:
+        return self.polarities.get(label)
+
+    #  -------- decode_label -----------
+    #
+    def decode_label(self, label: int) -> str:
+        return {v: k for k, v in self.polarities.items()}.get(label)
+
+    #  -------- get_label_keys -----------
+    #
+    def get_label_keys(self) -> set:
+        return set(k for k in self.polarities.keys())
+
+    #  -------- get_label_values -----------
+    #
+    def get_label_values(self) -> set:
+        return set(k for k in self.polarities.values())
+
+    #  -------- __getitem__ -----------
+    #
+    def __getitem__(self, idx) -> T_co:
+        return (
+            self.data.iloc[[idx]],
+            self.data[self.data_label][idx],
+            self.data[self.target_label][idx]
+        )
+
+    #  -------- __len__ -----------
+    #
+    def __len__(self) -> int:
+        return len(self.data)
