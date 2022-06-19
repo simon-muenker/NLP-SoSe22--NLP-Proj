@@ -45,7 +45,7 @@ python3 -m $classifier.linguistic -C ./global.json ./model.json
 TODO
 
 ## Results (TBC)
-TODO
+![Line plot showing differences between model type and train data size](./experiments/__output.png)
 
 ## Credits:
 
