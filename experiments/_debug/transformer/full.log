@@ -3,48 +3,48 @@
 
 [--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
 > Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0023 sec
+> f(__load) took: 0.0033 sec
 > Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0015 sec
+> f(__load) took: 0.0018 sec
 > Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0013 sec
+> f(__load) took: 0.0017 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'bert-base-uncased'
-> f(__init__) took: 7.6872 sec
+> f(__init__) took: 9.5973 sec
 > Init BERT-Head (MLP), trainable parameters: 197378
 
 [--- TRAIN -> ./data/imdb._debug.csv ---]
-@001: 	loss(train)=0.6905 	loss(eval)=0.6445 	f1(train)=0.5250 	f1(eval)=0.6250 	duration(epoch)=0:00:01.048294
-@002: 	loss(train)=0.6096 	loss(eval)=0.5870 	f1(train)=0.6500 	f1(eval)=0.6000 	duration(epoch)=0:00:01.009293
-@003: 	loss(train)=0.6452 	loss(eval)=0.6336 	f1(train)=0.6000 	f1(eval)=0.6000 	duration(epoch)=0:00:00.976192
-@004: 	loss(train)=0.5646 	loss(eval)=0.5976 	f1(train)=0.6000 	f1(eval)=0.6000 	duration(epoch)=0:00:01.008076
-@005: 	loss(train)=0.6727 	loss(eval)=0.6673 	f1(train)=0.6000 	f1(eval)=0.6000 	duration(epoch)=0:00:00.957584
-@006: 	loss(train)=0.6594 	loss(eval)=0.6505 	f1(train)=0.6250 	f1(eval)=0.6000 	duration(epoch)=0:00:00.954550
-@007: 	loss(train)=0.5989 	loss(eval)=0.5287 	f1(train)=0.6000 	f1(eval)=0.6750 	duration(epoch)=0:00:00.971555
-@008: 	loss(train)=0.5552 	loss(eval)=0.5426 	f1(train)=0.7000 	f1(eval)=0.7500 	duration(epoch)=0:00:01.033903
-@009: 	loss(train)=0.5808 	loss(eval)=0.5203 	f1(train)=0.7750 	f1(eval)=0.8500 	duration(epoch)=0:00:00.944202
-@010: 	loss(train)=0.5269 	loss(eval)=0.5745 	f1(train)=0.7750 	f1(eval)=0.8500 	duration(epoch)=0:00:00.979376
-@011: 	loss(train)=0.5348 	loss(eval)=0.5041 	f1(train)=0.8250 	f1(eval)=0.8500 	duration(epoch)=0:00:01.017758
-@012: 	loss(train)=0.5111 	loss(eval)=0.4804 	f1(train)=0.8750 	f1(eval)=0.8500 	duration(epoch)=0:00:00.976283
-@013: 	loss(train)=0.5211 	loss(eval)=0.4578 	f1(train)=0.8750 	f1(eval)=0.8500 	duration(epoch)=0:00:00.979346
-@014: 	loss(train)=0.4962 	loss(eval)=0.4640 	f1(train)=0.8250 	f1(eval)=0.8500 	duration(epoch)=0:00:00.992204
-@015: 	loss(train)=0.4653 	loss(eval)=0.4736 	f1(train)=0.8750 	f1(eval)=0.8500 	duration(epoch)=0:00:00.947463
-@016: 	loss(train)=0.4399 	loss(eval)=0.4545 	f1(train)=0.9000 	f1(eval)=0.8750 	duration(epoch)=0:00:01.029098
-@017: 	loss(train)=0.4405 	loss(eval)=0.4135 	f1(train)=0.8500 	f1(eval)=0.8750 	duration(epoch)=0:00:01.033982
-@018: 	loss(train)=0.4737 	loss(eval)=0.3991 	f1(train)=0.8750 	f1(eval)=0.8750 	duration(epoch)=0:00:01.013986
-@019: 	loss(train)=0.4403 	loss(eval)=0.4101 	f1(train)=0.8750 	f1(eval)=0.9000 	duration(epoch)=0:00:01.033156
-@020: 	loss(train)=0.4062 	loss(eval)=0.4123 	f1(train)=0.9250 	f1(eval)=0.9250 	duration(epoch)=0:00:00.994667
-@021: 	loss(train)=0.4055 	loss(eval)=0.3929 	f1(train)=0.9000 	f1(eval)=0.9500 	duration(epoch)=0:00:01.023862
-@022: 	loss(train)=0.3613 	loss(eval)=0.3401 	f1(train)=0.9250 	f1(eval)=0.9250 	duration(epoch)=0:00:00.985887
-@023: 	loss(train)=0.3618 	loss(eval)=0.3592 	f1(train)=0.9250 	f1(eval)=0.9250 	duration(epoch)=0:00:01.029272
-@024: 	loss(train)=0.3170 	loss(eval)=0.3457 	f1(train)=0.9250 	f1(eval)=0.9250 	duration(epoch)=0:00:00.993170
-@025: 	loss(train)=0.3690 	loss(eval)=0.3598 	f1(train)=0.9250 	f1(eval)=0.9500 	duration(epoch)=0:00:00.931879
+@001: 	loss(train)=0.6862 	loss(eval)=0.6232 	f1(train)=0.4500 	f1(eval)=0.6500 	duration(epoch)=0:00:01.087726
+@002: 	loss(train)=0.5788 	loss(eval)=0.6195 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:01.016398
+@003: 	loss(train)=0.6069 	loss(eval)=0.5998 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:01.030681
+@004: 	loss(train)=0.5713 	loss(eval)=0.5465 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:01.016167
+@005: 	loss(train)=0.5977 	loss(eval)=0.5906 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:01.009309
+@006: 	loss(train)=0.4656 	loss(eval)=0.5460 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:01.018060
+@007: 	loss(train)=0.5218 	loss(eval)=0.5270 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:01.018334
+@008: 	loss(train)=0.5743 	loss(eval)=0.5430 	f1(train)=0.7000 	f1(eval)=0.7000 	duration(epoch)=0:00:01.007909
+@009: 	loss(train)=0.4885 	loss(eval)=0.5403 	f1(train)=0.7000 	f1(eval)=0.7250 	duration(epoch)=0:00:01.011990
+@010: 	loss(train)=0.5413 	loss(eval)=0.4646 	f1(train)=0.7500 	f1(eval)=0.7250 	duration(epoch)=0:00:01.017383
+@011: 	loss(train)=0.4757 	loss(eval)=0.4564 	f1(train)=0.7250 	f1(eval)=0.8000 	duration(epoch)=0:00:01.026897
+@012: 	loss(train)=0.4984 	loss(eval)=0.4449 	f1(train)=0.7500 	f1(eval)=0.8750 	duration(epoch)=0:00:01.022811
+@013: 	loss(train)=0.4454 	loss(eval)=0.4154 	f1(train)=0.8500 	f1(eval)=0.8750 	duration(epoch)=0:00:01.018193
+@014: 	loss(train)=0.4047 	loss(eval)=0.4278 	f1(train)=0.8250 	f1(eval)=0.9000 	duration(epoch)=0:00:01.023884
+@015: 	loss(train)=0.4121 	loss(eval)=0.4167 	f1(train)=0.9000 	f1(eval)=0.8750 	duration(epoch)=0:00:01.035998
+@016: 	loss(train)=0.4393 	loss(eval)=0.3595 	f1(train)=0.8750 	f1(eval)=0.9000 	duration(epoch)=0:00:01.026207
+@017: 	loss(train)=0.3958 	loss(eval)=0.3768 	f1(train)=0.9000 	f1(eval)=0.9000 	duration(epoch)=0:00:01.022678
+@018: 	loss(train)=0.3866 	loss(eval)=0.3794 	f1(train)=0.9000 	f1(eval)=0.9000 	duration(epoch)=0:00:01.019836
+@019: 	loss(train)=0.3868 	loss(eval)=0.3465 	f1(train)=0.8750 	f1(eval)=0.9000 	duration(epoch)=0:00:01.031314
+@020: 	loss(train)=0.3160 	loss(eval)=0.3208 	f1(train)=0.8750 	f1(eval)=0.9000 	duration(epoch)=0:00:01.029682
+@021: 	loss(train)=0.3585 	loss(eval)=0.3649 	f1(train)=0.9000 	f1(eval)=0.9000 	duration(epoch)=0:00:01.024699
+@022: 	loss(train)=0.3452 	loss(eval)=0.2826 	f1(train)=0.9000 	f1(eval)=0.9000 	duration(epoch)=0:00:01.019511
+@023: 	loss(train)=0.3084 	loss(eval)=0.3239 	f1(train)=0.9250 	f1(eval)=0.9250 	duration(epoch)=0:00:01.025187
+@024: 	loss(train)=0.3113 	loss(eval)=0.3094 	f1(train)=0.9250 	f1(eval)=0.9250 	duration(epoch)=0:00:01.018574
+@025: 	loss(train)=0.3085 	loss(eval)=0.2679 	f1(train)=0.9500 	f1(eval)=0.9500 	duration(epoch)=0:00:01.021109
 > Load best model based on evaluation loss.
 > Init BERT-Head (MLP), trainable parameters: 197378
-@025: 	loss(train)=0.3690 	loss(eval)=0.3598 	f1(train)=0.9250 	f1(eval)=0.9500 	duration(epoch)=0:00:00.931879
+@025: 	loss(train)=0.3085 	loss(eval)=0.2679 	f1(train)=0.9500 	f1(eval)=0.9500 	duration(epoch)=0:00:01.021109
 
 [--- EVAL -> ./data/imdb._debug.csv ---]
 AVG           	 tp:       38	 fp:        2 	 tn:       38	 fn:        2	 pre=0.9500	 rec=0.9500	 f1=0.9500	 acc=0.9500
-negative      	 tp:       24	 fp:        2 	 tn:       14	 fn:        0	 pre=0.9231	 rec=1.0000	 f1=0.9600	 acc=0.9500
-positive      	 tp:       14	 fp:        0 	 tn:       24	 fn:        2	 pre=1.0000	 rec=0.8750	 f1=0.9333	 acc=0.9500
+negative      	 tp:       27	 fp:        2 	 tn:       11	 fn:        0	 pre=0.9310	 rec=1.0000	 f1=0.9643	 acc=0.9500
+positive      	 tp:       11	 fp:        0 	 tn:       27	 fn:        2	 pre=1.0000	 rec=0.8462	 f1=0.9167	 acc=0.9500
