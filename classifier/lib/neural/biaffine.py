@@ -9,7 +9,7 @@ class Biaffine(nn.Module):
     #  -------- init -----------
     #
     def __init__(self, size: int, dropout: float = 0.2):
-        super(Biaffine).__init__()
+        super().__init__()
 
         self.w1 = nn.Parameter(torch.ones(size), requires_grad=True).to(get_device())
         self.w2 = nn.Parameter(torch.ones(size), requires_grad=True).to(get_device())
