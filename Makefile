@@ -23,6 +23,7 @@ download:
 #
 # collected calls:
 ex: ex_linguistic ex_transformer ex_hybrid
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/analysis.ipynb
 
 # --- --- ---
 
