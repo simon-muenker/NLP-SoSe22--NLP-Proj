@@ -7,7 +7,7 @@
   },
   "model": {
     "encoding": {
-      "model": "bert-base-uncased",
+      "model": "fabriceyhc/bert-base-uncased-imdb",
       "layers": [
         -1
       ]
