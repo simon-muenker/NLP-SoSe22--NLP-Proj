@@ -41,7 +41,7 @@
   },
   "trainer": {
     "seed": 1,
-    "epochs": 25,
+    "epochs": 5,
     "shuffle": true,
     "batch_size": 4,
     "num_workers": 0,
