@@ -3,26 +3,26 @@
 
 [--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
 > Load/Init from ./data/imdb.train.0.010.csv
-> f(__load) took: 0.0090 sec
+> f(__load) took: 0.0089 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0589 sec
+> f(__load) took: 0.0556 sec
 > Load/Init from ./data/imdb.test.csv
-> f(__load) took: 0.0583 sec
+> f(__load) took: 0.0557 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.1783 sec
+> f(__init__) took: 8.2515 sec
 > Init BERT-Head (MLP), trainable parameters: 197378
 
 [--- TRAIN -> ./data/imdb.train.0.010.csv ---]
-@001: 	loss(train)=0.1804 	loss(eval)=0.2277 	f1(train)=0.9100 	f1(eval)=0.9570 	duration(epoch)=0:01:07.420548
-@002: 	loss(train)=0.0845 	loss(eval)=0.1582 	f1(train)=0.9725 	f1(eval)=0.9574 	duration(epoch)=0:01:08.123358
-@003: 	loss(train)=0.0674 	loss(eval)=0.1462 	f1(train)=0.9825 	f1(eval)=0.9580 	duration(epoch)=0:01:08.410723
-@004: 	loss(train)=0.0519 	loss(eval)=0.1354 	f1(train)=0.9875 	f1(eval)=0.9558 	duration(epoch)=0:01:08.560416
-@005: 	loss(train)=0.0405 	loss(eval)=0.1483 	f1(train)=0.9875 	f1(eval)=0.9554 	duration(epoch)=0:01:08.371619
+@001: 	loss(train)=0.1804 	loss(eval)=0.2277 	f1(train)=0.9100 	f1(eval)=0.9570 	duration(epoch)=0:01:07.455228
+@002: 	loss(train)=0.0845 	loss(eval)=0.1582 	f1(train)=0.9725 	f1(eval)=0.9574 	duration(epoch)=0:01:08.138315
+@003: 	loss(train)=0.0674 	loss(eval)=0.1462 	f1(train)=0.9825 	f1(eval)=0.9580 	duration(epoch)=0:01:08.388825
+@004: 	loss(train)=0.0519 	loss(eval)=0.1354 	f1(train)=0.9875 	f1(eval)=0.9558 	duration(epoch)=0:01:08.495780
+@005: 	loss(train)=0.0405 	loss(eval)=0.1483 	f1(train)=0.9875 	f1(eval)=0.9554 	duration(epoch)=0:01:08.435969
 > Load best model based on evaluation loss.
 > Init BERT-Head (MLP), trainable parameters: 197378
-@003: 	loss(train)=0.0674 	loss(eval)=0.1462 	f1(train)=0.9825 	f1(eval)=0.9580 	duration(epoch)=0:01:08.410723
+@003: 	loss(train)=0.0674 	loss(eval)=0.1462 	f1(train)=0.9825 	f1(eval)=0.9580 	duration(epoch)=0:01:08.388825
 
 [--- EVAL -> ./data/imdb.eval.csv ---]
 AVG           	 tp:     4790	 fp:      210 	 tn:     4790	 fn:      210	 pre=0.9580	 rec=0.9580	 f1=0.9580	 acc=0.9580

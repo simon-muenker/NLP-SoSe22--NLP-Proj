@@ -3,33 +3,33 @@
 
 [--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
 > Load/Init from ./data/imdb.train.1.000.csv
-> f(__load) took: 0.4462 sec
-> f(__tokenize) took: 6.2779 sec
-> f(__ngram) took: 3.2037 sec
+> f(__load) took: 0.4619 sec
+> f(__tokenize) took: 6.2399 sec
+> f(__ngram) took: 3.5041 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0631 sec
-> f(__tokenize) took: 1.5124 sec
-> f(__ngram) took: 3.1452 sec
+> f(__load) took: 0.0623 sec
+> f(__tokenize) took: 1.5001 sec
+> f(__ngram) took: 2.8753 sec
 > Load/Init from ./data/imdb.test.csv
-> f(__load) took: 0.0642 sec
-> f(__tokenize) took: 1.5720 sec
-> f(__ngram) took: 1.0177 sec
+> f(__load) took: 0.0656 sec
+> f(__tokenize) took: 1.5441 sec
+> f(__ngram) took: 0.9300 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Freq. Classifier, n-grams: ['1', '2']
 
 [--- RUN ---]
 > Fit Freq. Classifier on ./data/imdb.train.1.000.csv
-> f(fit) took: 6.0627 sec
+> f(fit) took: 6.4321 sec
 
 [--- EVAL -> ['train', 'eval'] ---]
 > Predict with Freq. Classifier on ./data/imdb.train.1.000.csv
-> f(predict) took: 12.4431 sec
+> f(predict) took: 12.5745 sec
 AVG           	 tp:    31662	 fp:     8338 	 tn:    31662	 fn:     8338	 pre=0.7915	 rec=0.7915	 f1=0.7915	 acc=0.7915
 negative      	 tp:    16189	 fp:     4520 	 tn:    15473	 fn:     3818	 pre=0.7817	 rec=0.8092	 f1=0.7952	 acc=0.7915
 positive      	 tp:    15473	 fp:     3818 	 tn:    16189	 fn:     4520	 pre=0.8021	 rec=0.7739	 f1=0.7878	 acc=0.7915
 > Predict with Freq. Classifier on ./data/imdb.eval.csv
-> f(predict) took: 4.6442 sec
+> f(predict) took: 4.5824 sec
 AVG           	 tp:     3955	 fp:     1045 	 tn:     3955	 fn:     1045	 pre=0.7910	 rec=0.7910	 f1=0.7910	 acc=0.7910
 negative      	 tp:     1983	 fp:      565 	 tn:     1972	 fn:      480	 pre=0.7783	 rec=0.8051	 f1=0.7915	 acc=0.7910
 positive      	 tp:     1972	 fp:      480 	 tn:     1983	 fn:      565	 pre=0.8042	 rec=0.7773	 f1=0.7905	 acc=0.7910
