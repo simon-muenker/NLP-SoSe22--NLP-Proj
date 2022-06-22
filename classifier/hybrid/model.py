@@ -18,12 +18,12 @@ class Model(AbsModel, nn.Module):
 
         self.embeds = BERTHead(
                 self.config["in_size"][0],
-                self.config["out_size"],
+                self.config["in_size"][1],
                 self.config.copy()
             ).to(get_device())
 
         self.output = nn.Linear(
-            self.config["in_size"][1] + self.config["out_size"],
+            self.config["in_size"][1],
             self.config["out_size"]
         ).to(get_device())
 
@@ -41,4 +41,4 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        return self.output(torch.cat([self.embeds(data[0]), data[1]], dim=1))
+        return self.output(self.embeds(data[0]) * data[1])
