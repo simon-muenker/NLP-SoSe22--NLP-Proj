@@ -22,7 +22,7 @@ class Model(AbsModel, nn.Module):
             self.config.copy()
         ).to(get_device())
 
-        self.drop = nn.Dropout(0.1).to(get_device())
+        self.drop = nn.Dropout(self.config["dropout"]).to(get_device())
 
         self.output = nn.Linear(
             self.config["in_size"][1] + self.config["out_size"],
