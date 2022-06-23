@@ -22,6 +22,8 @@ class Model(AbsModel, nn.Module):
             self.config.copy()
         ).to(get_device())
 
+        self.drop = nn.Dropout(0.1).to(get_device())
+
         self.output = nn.Linear(
             self.config["in_size"][1] + self.config["out_size"],
             self.config["out_size"]
@@ -44,8 +46,10 @@ class Model(AbsModel, nn.Module):
         emb: torch.Tensor = self.embeds(data[0])
 
         return self.output(
-            torch.cat([
-                emb[:, :-self.config["out_size"]] * data[1],
-                emb[:, -self.config["out_size"]:]
-            ], dim=1)
+            self.drop(
+                torch.cat([
+                    emb[:, :-self.config["out_size"]] * data[1],
+                    emb[:, -self.config["out_size"]:]
+                ], dim=1)
+            )
         )
