@@ -17,17 +17,17 @@ class Model(AbsModel, nn.Module):
         super().__init__(in_size, out_size, config)
 
         self.embeds = BERTHead(
-                self.config["in_size"][0],
-                self.config["in_size"][1],
-                self.config.copy()
-            ).to(get_device())
+            self.config["in_size"][0],
+            self.config["in_size"][1] + self.config["out_size"],
+            self.config.copy()
+        ).to(get_device())
 
         self.output = nn.Linear(
-            self.config["in_size"][1],
+            self.config["in_size"][1] + self.config["out_size"],
             self.config["out_size"]
         ).to(get_device())
 
-        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)- len(self.embeds)}')
+        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self) - len(self.embeds)}')
 
     #  -------- default_config -----------
     #
@@ -41,4 +41,11 @@ class Model(AbsModel, nn.Module):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        return self.output(self.embeds(data[0]) * data[1])
+        emb: torch.Tensor = self.embeds(data[0])
+
+        return self.output(
+            torch.cat([
+                emb[:, :-self.config["out_size"]] * data[1],
+                emb[:, -self.config["out_size"]:]
+            ], dim=1)
+        )
