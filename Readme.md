@@ -24,12 +24,11 @@ make debug
 make ex
 
 # run individual sub experiments:
-# TYPE := [linguistic, transformer, hybrid]
-# SIZE := [1.000, 0.100, 0.010]
-# make ex_[TYPE]_train.[SIZE]
+# TYPE := [base, features, hybrid]
+# make ex_[TYPE]
 
 # e.g.:
-make ex_linguistic_train.0.010
+make ex_features
 ```
 ### Python module:
 ```bash
@@ -38,14 +37,14 @@ make ex_linguistic_train.0.010
 # python3 -m $classifier.[TYPE] -C CONFIGS
 
 # e.g.:
-python3 -m $classifier.linguistic -C ./global.json ./model.json
+python3 -m $classifier.base -C ./global.json ./model.json
 ```
 
 #### Config:
-TODO
+ToDo
 
-## Results (TBC)
-![Line plot showing differences between model type and train data size](./experiments/__output.png)
+## Results
+ToDo
 
 ## Credits:
 

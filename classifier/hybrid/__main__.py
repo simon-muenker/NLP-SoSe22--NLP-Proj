@@ -2,12 +2,14 @@ import logging
 
 import torch
 
-from classifier.hybrid import Model as Network
-from classifier.hybrid import SpacyPipe
-from classifier.lib import Runner
-from classifier.lib.neural import Encoding, Trainer
-from classifier.lib.neural.util import get_device
-from classifier.linguistic import Model as Classifier
+from classifier import Runner
+
+from classifier.features.model import Model as Classifier
+from classifier.hybrid.model import Model as Network
+
+from .spacy_pipe import SpacyPipe
+from .._neural import Encoder, Trainer
+from .._neural.util import get_device
 
 DROP_COLS: list = [
     '1-gram', '2-gram',
@@ -27,14 +29,14 @@ class Main(Runner):
         # --- load components
 
         # load encoding, classifier, spacy
-        self.encoding = Encoding(self.config['model']['encoding'])
+        self.encoder = Encoder(self.config['model']['encoding'])
         self.clss = Classifier(self.config['model']['linguistic'])
         self.spacy = SpacyPipe()
 
-        # load network
-        self.net = Network(
+        # load model
+        self.model = Network(
             in_size=tuple([
-                self.encoding.dim,
+                self.encoder.dim,
                 len(self.clss.col_names) + len(self.spacy.col_names)
             ]),
             out_size=len(self.data['train'].get_label_keys()),
@@ -43,7 +45,7 @@ class Main(Runner):
 
         # load trainer
         self.trainer = Trainer(
-            self.net,
+            self.model,
             self.data,
             self.collation_fn,
             out_dir=self.config['out_path'],
@@ -100,7 +102,7 @@ class Main(Runner):
             )
 
         # embed text
-        _, sent_embeds, _ = self.encoding(text, return_unpad=False)
+        _, sent_embeds, _ = self.encoder(text, return_unpad=False)
 
         return (
             (sent_embeds[:, 1], torch.stack(clss_pred)),

@@ -5,7 +5,7 @@ import pandas as pd
 import spacy
 from spacytextblob.spacytextblob import SpacyTextBlob
 
-from classifier.lib.util import timing
+from classifier.util import timing
 
 COL_NAMES: list = [
     'blob_polarity', 'blob_subjectivity', 'ent_ratio',

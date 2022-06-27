@@ -4,29 +4,30 @@ from typing import Tuple
 import torch
 import torch.nn as nn
 
-from classifier.lib.neural import Model as AbsModel
-from classifier.lib.neural.util import get_device
-from classifier.transformer import Model as BERTHead
+from .._neural import ModelFrame, MLP
+from .._neural.util import get_device
 
 
-class Model(AbsModel, nn.Module):
+class Model(ModelFrame):
 
     #  -------- init -----------
     #
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.bertPred = BERTHead(
+        self.bertPred = MLP(
             self.config["in_size"][0],
+            self.config['hid_size'],
             self.config["out_size"],
-            self.config.copy()
-        ).to(get_device())
+            dropout=self.config['dropout']
+        )
 
-        self.bertFeat = BERTHead(
+        self.bertFeat = MLP(
             self.config["in_size"][0],
+            self.config['hid_size'],
             self.config["in_size"][1],
-            self.config.copy()
-        ).to(get_device())
+            dropout=self.config['dropout']
+        )
 
         self.drop = nn.Dropout(self.config["dropout"]).to(get_device())
 
@@ -35,22 +36,19 @@ class Model(AbsModel, nn.Module):
             self.config["out_size"]
         ).to(get_device())
 
-        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self) - len(self.bertPred) - len(self.bertFeat)}')
+        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)}')
 
     #  -------- default_config -----------
     #
     @staticmethod
     def default_config() -> dict:
         return {
-            "embeds": BERTHead.default_config(),
-            "linguistic": None,
+
         }
 
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        emb: torch.Tensor = self.bertFeat(data[0])
-
         return self.output(
             self.drop(
                 torch.cat([
