@@ -1,0 +1,29 @@
+> Loaded logger: ./experiments/_debug/base/full.log
+> Setup PyTorch: seed(1), cuda(5)
+
+[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0029 sec
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0017 sec
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0016 sec
+
+[--- LOAD COMPONENTS ---]
+> Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
+> f(__init__) took: 8.5526 sec
+> Init BERT-Head (MLP), trainable parameters: 197378
+
+[--- TRAIN -> ./data/imdb._debug.csv ---]
+@001: 	loss(train)=0.2257 	loss(eval)=0.0543 	f1(train)=0.9250 	f1(eval)=0.9750 	duration(epoch)=0:00:01.215014
+@002: 	loss(train)=0.0594 	loss(eval)=0.0434 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.089233
+@003: 	loss(train)=0.0416 	loss(eval)=0.0262 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.101177
+@004: 	loss(train)=0.0251 	loss(eval)=0.0166 	f1(train)=0.9750 	f1(eval)=1.0000 	duration(epoch)=0:00:01.087565
+> Load best model based on evaluation loss.
+> Init BERT-Head (MLP), trainable parameters: 197378
+@004: 	loss(train)=0.0251 	loss(eval)=0.0166 	f1(train)=0.9750 	f1(eval)=1.0000 	duration(epoch)=0:00:01.087565
+
+[--- EVAL -> ./data/imdb._debug.csv ---]
+AVG           	 tp:       40	 fp:        0 	 tn:       40	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
+negative      	 tp:       27	 fp:        0 	 tn:       13	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
+positive      	 tp:       13	 fp:        0 	 tn:       27	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000

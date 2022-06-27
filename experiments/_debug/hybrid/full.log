@@ -1,0 +1,49 @@
+> Loaded logger: ./experiments/_debug/hybrid/full.log
+> Setup PyTorch: seed(1), cuda(5)
+
+[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0028 sec
+> f(__tokenize) took: 0.3042 sec
+> f(__ngram) took: 0.2578 sec
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0042 sec
+> f(__tokenize) took: 0.2410 sec
+> f(__ngram) took: 0.2633 sec
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0051 sec
+> f(__tokenize) took: 0.2590 sec
+> f(__ngram) took: 0.2629 sec
+
+[--- LOAD COMPONENTS ---]
+> Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
+> f(__init__) took: 8.5890 sec
+> Init Freq. Classifier, n-grams: ['1', '2']
+> Init Spacy Pipeline: 'en_core_web_sm', with: ['tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner', 'spacytextblob']
+> Init Neural Assemble (MLP), trainable parameters: 397615
+
+[--- RUN ---]
+> Fit Freq. Classifier on ./data/imdb._debug.csv
+> f(fit) took: 0.0168 sec
+> Predict with Freq. Classifier on ./data/imdb._debug.csv
+> f(predict) took: 3.2831 sec
+> Apply Space Pipeline to: ./data/imdb._debug.csv
+> f(apply) took: 2.3106 sec
+> Predict with Freq. Classifier on ./data/imdb._debug.csv
+> f(predict) took: 3.6791 sec
+> Apply Space Pipeline to: ./data/imdb._debug.csv
+> f(apply) took: 1.7479 sec
+
+[--- TRAIN -> ./data/imdb._debug.csv ---]
+@001: 	loss(train)=0.4514 	loss(eval)=0.2428 	f1(train)=0.9250 	f1(eval)=0.9750 	duration(epoch)=0:00:01.276538
+@002: 	loss(train)=0.1868 	loss(eval)=0.1085 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.191802
+@003: 	loss(train)=0.1028 	loss(eval)=0.0691 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.228862
+@004: 	loss(train)=0.0908 	loss(eval)=0.0514 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.299844
+> Load best model based on evaluation loss.
+> Init Neural Assemble (MLP), trainable parameters: 397615
+@004: 	loss(train)=0.0908 	loss(eval)=0.0514 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.299844
+
+[--- EVAL -> ./data/imdb._debug.csv ---]
+AVG           	 tp:       39	 fp:        1 	 tn:       39	 fn:        1	 pre=0.9750	 rec=0.9750	 f1=0.9750	 acc=0.9750
+negative      	 tp:       26	 fp:        0 	 tn:       13	 fn:        1	 pre=1.0000	 rec=0.9630	 f1=0.9811	 acc=0.9750
+positive      	 tp:       13	 fp:        1 	 tn:       26	 fn:        0	 pre=0.9286	 rec=1.0000	 f1=0.9630	 acc=0.9750
