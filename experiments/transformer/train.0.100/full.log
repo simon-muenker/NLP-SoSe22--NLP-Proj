@@ -3,28 +3,28 @@
 
 [--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
 > Load/Init from ./data/imdb.train.0.100.csv
-> f(__load) took: 0.0498 sec
+> f(__load) took: 0.0496 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0594 sec
+> f(__load) took: 0.0613 sec
 > Load/Init from ./data/imdb.test.csv
 > f(__load) took: 0.0588 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.3593 sec
+> f(__init__) took: 8.5313 sec
 > Init BERT-Head (MLP), trainable parameters: 197378
 
 [--- TRAIN -> ./data/imdb.train.0.100.csv ---]
-@001: 	loss(train)=0.1541 	loss(eval)=0.1169 	f1(train)=0.9485 	f1(eval)=0.9586 	duration(epoch)=0:01:53.886121
-@002: 	loss(train)=0.1246 	loss(eval)=0.1170 	f1(train)=0.9560 	f1(eval)=0.9586 	duration(epoch)=0:01:54.301691
-@003: 	loss(train)=0.1185 	loss(eval)=0.1173 	f1(train)=0.9587 	f1(eval)=0.9600 	duration(epoch)=0:01:54.108135
-@004: 	loss(train)=0.1167 	loss(eval)=0.1310 	f1(train)=0.9613 	f1(eval)=0.9598 	duration(epoch)=0:01:54.374300
-@005: 	loss(train)=0.1116 	loss(eval)=0.1184 	f1(train)=0.9607 	f1(eval)=0.9608 	duration(epoch)=0:01:54.053898
+@001: 	loss(train)=0.1545 	loss(eval)=0.1171 	f1(train)=0.9493 	f1(eval)=0.9588 	duration(epoch)=0:01:53.787280
+@002: 	loss(train)=0.1253 	loss(eval)=0.1167 	f1(train)=0.9547 	f1(eval)=0.9586 	duration(epoch)=0:01:54.154479
+@003: 	loss(train)=0.1204 	loss(eval)=0.1172 	f1(train)=0.9573 	f1(eval)=0.9606 	duration(epoch)=0:01:54.168643
+@004: 	loss(train)=0.1185 	loss(eval)=0.1319 	f1(train)=0.9607 	f1(eval)=0.9606 	duration(epoch)=0:01:54.100575
+@005: 	loss(train)=0.1146 	loss(eval)=0.1183 	f1(train)=0.9615 	f1(eval)=0.9614 	duration(epoch)=0:01:54.298734
 > Load best model based on evaluation loss.
 > Init BERT-Head (MLP), trainable parameters: 197378
-@005: 	loss(train)=0.1116 	loss(eval)=0.1184 	f1(train)=0.9607 	f1(eval)=0.9608 	duration(epoch)=0:01:54.053898
+@005: 	loss(train)=0.1146 	loss(eval)=0.1183 	f1(train)=0.9615 	f1(eval)=0.9614 	duration(epoch)=0:01:54.298734
 
 [--- EVAL -> ./data/imdb.eval.csv ---]
-AVG           	 tp:     4804	 fp:      196 	 tn:     4804	 fn:      196	 pre=0.9608	 rec=0.9608	 f1=0.9608	 acc=0.9608
-negative      	 tp:     2345	 fp:       78 	 tn:     2459	 fn:      118	 pre=0.9678	 rec=0.9521	 f1=0.9599	 acc=0.9608
-positive      	 tp:     2459	 fp:      118 	 tn:     2345	 fn:       78	 pre=0.9542	 rec=0.9693	 f1=0.9617	 acc=0.9608
+AVG           	 tp:     4807	 fp:      193 	 tn:     4807	 fn:      193	 pre=0.9614	 rec=0.9614	 f1=0.9614	 acc=0.9614
+negative      	 tp:     2344	 fp:       74 	 tn:     2463	 fn:      119	 pre=0.9694	 rec=0.9517	 f1=0.9605	 acc=0.9614
+positive      	 tp:     2463	 fp:      119 	 tn:     2344	 fn:       74	 pre=0.9539	 rec=0.9708	 f1=0.9623	 acc=0.9614
