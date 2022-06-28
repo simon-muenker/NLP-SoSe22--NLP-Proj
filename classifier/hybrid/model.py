@@ -17,9 +17,11 @@ class Model(ModelFrame):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.base = Base(in_size[0], out_size, config=config.copy())
-        self.features = Features(in_size[1], out_size)
-        self.output = nn.Linear(out_size * 2, out_size, bias=False).to(get_device())
+        hid_size: int = 48
+
+        self.base = Base(in_size[0], hid_size, config=config.copy())
+        self.features = Features(in_size[1], hid_size)
+        self.output = nn.Linear(hid_size, out_size).to(get_device())
 
         logging.info(
             f'> Init Neural Assemble (Base+Features), trainable parameters: '
@@ -37,9 +39,4 @@ class Model(ModelFrame):
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        return self.output(
-            torch.cat([
-                self.base(data[0]),
-                self.features(data[1])
-            ], dim=1)
-        )
+        return self.output(self.base(data[0]) * self.features(data[1]))
