@@ -96,7 +96,7 @@ class Trainer:
                 f1_train: float = self.metric.f_score()
 
                 # --- ---------------------------------
-                # --- begin eval
+                # --- begin test
                 self.metric.reset()
                 loss_test: float = 0.0
                 for idx, batch in load_iterator(
@@ -144,11 +144,11 @@ class Trainer:
         self._write_state()
 
         # --- ---------------------------------
-        # --- eval
+        # --- test
         logging.info(f'\n[--- EVAL -> {self.data["test"].data_path} ---]')
         self.metric.load(saved_test_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
-        self.metric.export(f'{self.out_dir}metric.eval', decoding=self.data['train'].decode_label)
+        self.metric.export(f'{self.out_dir}metric.test', decoding=self.data['train'].decode_label)
 
         return self.state
 
@@ -223,9 +223,9 @@ class Trainer:
         logging.info((
             f"@{epoch:03}: \t"
             f"loss(train)={self.state['loss_train'][epoch - 1]:2.4f} \t"
-            f"loss(eval)={self.state['loss_test'][epoch - 1]:2.4f} \t"
+            f"loss(test)={self.state['loss_test'][epoch - 1]:2.4f} \t"
             f"f1(train)={self.state['f1_train'][epoch - 1]:2.4f} \t"
-            f"f1(eval)={self.state['f1_test'][epoch - 1]:2.4f} \t"
+            f"f1(test)={self.state['f1_test'][epoch - 1]:2.4f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
