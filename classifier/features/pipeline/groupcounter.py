@@ -30,9 +30,9 @@ class GroupCounter:
 
     #  -------- predict -----------
     #
-    def predict(self, data: pd.DataFrame, label: str) -> None:
+    def predict(self, data: pd.DataFrame) -> None:
         for group, count in self.analysis.items():
-            data[f'{label}_{group}'] = data[label].parallel_apply(
+            data[f'{self.key_label}_{group}'] = data[self.key_label].parallel_apply(
                 lambda row: count.loc[count.index.isin(row)][LABEL['rel_freq']].sum()
             )
 
@@ -102,13 +102,14 @@ class GroupCounter:
             ) for sentiment, count in data.items()
         }
 
-    #  -------- __repr__ -----------
+    #  -------- property -----------
     #
-    def __repr__(self) -> str:
-        return "".join(
-            f'\nname({sentiment}) || len({len(count)}) || sum({sum(count["n"])}) \n {count.head(16)}'
-            for sentiment, count in self.data.items()
-        )
+    @property
+    def col_names(self) -> list:
+        return [
+            f'{self.key_label}_{label}'
+            for label, _ in self.analysis.items()
+        ]
 
     #  -------- write -----------
     #

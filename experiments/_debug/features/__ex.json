@@ -2,9 +2,23 @@
   "out_path": "./experiments/_debug/features/",
   "model": {
     "features": {
-      "ngrams": {
-        "1": 1024,
-        "2": 128
+      "ngram_counter": {
+        "1": 256,
+        "2": 2048
+      },
+      "spacy_pipeline": {
+        "model": "en_core_web_sm",
+        "pos_tags": [
+          "NOUN",
+          "VERB",
+          "ADV",
+          "ADJ",
+          "INTJ",
+          "SYM"
+        ],
+        "ents": "True",
+        "blob": "True",
+        "disabled": []
       }
     }
   }
