@@ -34,7 +34,6 @@ class Main(Runner):
 
         # collate data
         for _, review, sentiment in batch:
-            print(review)
             text.append(review)
             label.append(sentiment)
 
