@@ -24,7 +24,7 @@ class Runner:
         Runner.__load_logger(f'{self.config["out_path"]}full.log')
         Runner.__setup_pytorch(self.config["seed"], self.config["cuda"])
 
-        pandarallel.initialize(progress_bar=False)
+        pandarallel.initialize(progress_bar=False, verbose=int(False))
 
         # --- ---------------------------------
         # --- load data
