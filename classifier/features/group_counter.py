@@ -55,8 +55,8 @@ class GroupCounter:
     def predict(self, data: pd.DataFrame, label: str) -> None:
         for group, count in self.analysis.items():
             data[f'{label}_{group}'] = data[label].parallel_apply(
-                lambda row: count.loc[count.index.isin(row)][LABEL['rel_freq']].sum()
-                # len(count.loc[count.index.isin(row)][LABEL['rel_freq']]) / len(row)
+                # lambda row: count.loc[count.index.isin(row)][LABEL['rel_freq']].sum()
+                lambda row: len(count.loc[count.index.isin(row)][LABEL['rel_freq']]) / len(row)
             )
 
     #
