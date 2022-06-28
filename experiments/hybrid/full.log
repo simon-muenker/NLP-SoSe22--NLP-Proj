@@ -1,0 +1,54 @@
+> Loaded logger: ./experiments/hybrid/full.log
+> Setup PyTorch: seed(1), cuda(5)
+
+[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+> Load/Init from ./data/imdb.train.csv
+> f(__load) took: 0.4214 sec
+> f(__tokenize) took: 6.1804 sec
+> f(__ngram) took: 2.7354 sec
+> f(__ngram) took: 2.6027 sec
+> Load/Init from ./data/imdb.eval.csv
+> f(__load) took: 0.0579 sec
+> f(__tokenize) took: 1.5541 sec
+> f(__ngram) took: 4.3691 sec
+> f(__ngram) took: 1.0080 sec
+> Load/Init from ./data/imdb.test.csv
+> f(__load) took: 0.0605 sec
+> f(__tokenize) took: 1.7291 sec
+> f(__ngram) took: 1.0702 sec
+> f(__ngram) took: 1.1370 sec
+
+[--- LOAD COMPONENTS ---]
+> Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
+> f(__init__) took: 8.4238 sec
+
+[--- FEATURE PIPELINE ---]
+> Init Freq. Classifier, n-grams: ['1', '2']
+> Fit Freq. Classifier on ./data/imdb.train.csv
+> f(fit) took: 5.6361 sec
+> Predict with Freq. Classifier on ./data/imdb.train.csv
+> f(apply) took: 15.0585 sec
+> Predict with Freq. Classifier on ./data/imdb.eval.csv
+> f(apply) took: 7.4532 sec
+> Predict with Freq. Classifier on ./data/imdb.test.csv
+> f(apply) took: 7.3663 sec
+> Init BERT-Head (Base), trainable parameters: 197378
+> Init Neural Weighting (Feature), trainable parameters: 8
+> Init Neural Assemble (Base+Features), trainable parameters: 8
+
+[--- TRAIN -> ./data/imdb.train.csv ---]
+@001: 	loss(train)=0.2569 	loss(eval)=0.1697 	f1(train)=0.9125 	f1(eval)=0.9578 	duration(epoch)=0:09:42.566756
+@002: 	loss(train)=0.2664 	loss(eval)=0.1690 	f1(train)=0.9254 	f1(eval)=0.9582 	duration(epoch)=0:09:41.183977
+@003: 	loss(train)=0.2793 	loss(eval)=0.1831 	f1(train)=0.9266 	f1(eval)=0.9578 	duration(epoch)=0:09:40.603936
+@004: 	loss(train)=0.2779 	loss(eval)=0.1852 	f1(train)=0.9260 	f1(eval)=0.9587 	duration(epoch)=0:09:42.211527
+@005: 	loss(train)=0.2852 	loss(eval)=0.1495 	f1(train)=0.9255 	f1(eval)=0.9587 	duration(epoch)=0:09:42.556136
+> Load best model based on evaluation loss.
+> Init BERT-Head (Base), trainable parameters: 197378
+> Init Neural Weighting (Feature), trainable parameters: 8
+> Init Neural Assemble (Base+Features), trainable parameters: 8
+@005: 	loss(train)=0.2852 	loss(eval)=0.1495 	f1(train)=0.9255 	f1(eval)=0.9587 	duration(epoch)=0:09:42.556136
+
+[--- EVAL -> ./data/imdb.eval.csv ---]
+AVG           	 tp:     4753	 fp:      205 	 tn:     4753	 fn:      205	 pre=0.9587	 rec=0.9587	 f1=0.9587	 acc=0.9587
+negative      	 tp:     2335	 fp:      110 	 tn:     2418	 fn:       95	 pre=0.9550	 rec=0.9609	 f1=0.9579	 acc=0.9587
+positive      	 tp:     2418	 fp:       95 	 tn:     2335	 fn:      110	 pre=0.9622	 rec=0.9565	 f1=0.9593	 acc=0.9587
