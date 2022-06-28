@@ -32,7 +32,6 @@ class Main(Runner):
     #  -------- __collation_fn -----------
     #
     def __collation_fn(self, batch: list) -> tuple:
-        super().__collation_fn(batch)
         text: list = []
         label: list = []
         pipeline: list = []

@@ -17,7 +17,7 @@ class Model(ModelFrame):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.base = Base(in_size[0], out_size, config=config)
+        self.base = Base(in_size[0], out_size, config=config.copy())
         self.features = Features(in_size[1], out_size)
 
         self.drop = nn.Dropout(self.config["dropout"]).to(get_device())
