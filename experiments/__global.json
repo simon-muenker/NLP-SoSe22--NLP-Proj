@@ -31,7 +31,6 @@
   },
   "model": null,
   "trainer": {
-    "seed": 1,
     "epochs": 5,
     "shuffle": true,
     "batch_size": 4,
