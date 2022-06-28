@@ -9,7 +9,7 @@
     },
     "base": {
       "hid_size": 256,
-      "dropout": 0.3
+      "dropout": 0.4
     },
     "features": {
       "ngrams": {
