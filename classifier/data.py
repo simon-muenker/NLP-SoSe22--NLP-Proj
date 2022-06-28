@@ -79,9 +79,6 @@ class Data(Dataset):
             # convert to lowercase, trim
             sent: str = sent.lower().strip()
 
-            # remove html tags
-            sent: str = re.sub("(<[^>]+>)", '', sent)
-
             # remove non-alphabetical characters
             sent: str = re.sub('[^a-zA-Z]', ' ', sent)
 

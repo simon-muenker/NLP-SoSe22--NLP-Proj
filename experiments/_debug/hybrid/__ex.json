@@ -12,20 +12,9 @@
       "dropout": 0.2
     },
     "features": {
-      "group_label": "sentiment",
-      "polarities": [
-        "negative",
-        "positive"
-      ],
       "ngrams": {
-        "1": {
-          "pre_selection": 1024,
-          "shared": "remove"
-        },
-        "2": {
-          "pre_selection": 128,
-          "shared": "remove"
-        }
+        "1": 1024,
+        "2": 128
       }
     }
   }

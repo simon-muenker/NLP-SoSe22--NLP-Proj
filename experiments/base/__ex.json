@@ -1,9 +1,6 @@
 {
   "out_path": "./experiments/base/",
   "data": {
-    "paths": {
-      "train": "./data/imdb.train.csv"
-    },
     "config": {
       "postprocess": false
     }

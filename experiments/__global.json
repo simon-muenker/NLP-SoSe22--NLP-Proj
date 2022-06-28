@@ -5,7 +5,7 @@
   "out_path": null,
   "data": {
     "paths": {
-      "train": null,
+      "train": "./data/imdb.train.csv",
       "eval": "./data/imdb.eval.csv",
       "test": "./data/imdb.test.csv"
     },
@@ -23,7 +23,8 @@
       "postprocess": true,
       "ngrams": [
         1,
-        2
+        2,
+        3
       ],
       "remove_stopwords": true
     }

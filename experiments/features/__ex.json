@@ -1,26 +1,10 @@
 {
   "out_path": "./experiments/features/",
-  "data": {
-    "paths": {
-      "train": "./data/imdb.train.csv"
-    }
-  },
   "model": {
-    "group_label": "sentiment",
-    "polarities": [
-      "negative",
-      "positive"
-    ],
-    "ngrams": {
-      "1": {
-        "pre_selection": 1024,
-        "shared": "remove",
-        "post_selection": 512
-      },
-      "2": {
-        "pre_selection": 128,
-        "shared": "remove",
-        "post_selection": 64
+    "features": {
+      "ngrams": {
+        "1": 1024,
+        "2": 256
       }
     }
   }

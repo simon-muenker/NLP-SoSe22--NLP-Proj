@@ -1,9 +1,7 @@
 import torch
 
-from classifier import Runner
-from classifier.features.pipeline import Pipeline as Pipeline
+from classifier.features.__main__ import Main as Runner
 from .model import Model
-from .._neural import Encoder, Trainer
 from .._neural.util import get_device
 
 
@@ -14,53 +12,27 @@ class Main(Runner):
     def __init__(self):
         super().__init__()
 
-        # --- ---------------------------------
-        # --- load components
+    #  -------- __call__ -----------
+    #
+    def __call__(self, model=None, collation_fn=None):
 
-        # load encoding, classifier
-        self.encoder = Encoder(self.config['model']['encoding'])
-        self.pipeline = Pipeline(self.config['model']['features'])
-
-        # load model
-        self.model = Model(
+        model = Model(
             in_size=tuple([
-                self.encoder.dim,
+                int(self.encoder.dim),
                 len(self.pipeline.col_names)
             ]),
             out_size=len(self.data['train'].get_label_keys()),
             config=self.config['model']['base']
         )
 
-        # load trainer
-        self.trainer = Trainer(
-            self.model,
-            self.data,
-            self.collation_fn,
-            out_dir=self.config['out_path'],
-            config=self.config['trainer'],
-        )
-
-    #  -------- __call__ -----------
-    #
-    def __call__(self):
-
-        # fit, export pipeline
-        self.pipeline.fit(self.data['train'].data, label=self.data['train'].data_path)
-        self.pipeline.export(self.config['out_path'])
-
-        # apply pipeline
-        for data_label, dataset in self.data.items():
-            self.pipeline.apply(dataset.data, label=dataset.data_path)
-
-        # --- ---------------------------------
-        # --- train
-        self.trainer()
+        super(Runner, self).__call__(model, self.__collation_fn)
 
     #
     #
-    #  -------- collation_fn -----------
+    #  -------- __collation_fn -----------
     #
-    def collation_fn(self, batch: list) -> tuple:
+    def __collation_fn(self, batch: list) -> tuple:
+        super().__collation_fn(batch)
         text: list = []
         label: list = []
         pipeline: list = []
@@ -70,9 +42,10 @@ class Main(Runner):
             text.append(review)
             label.append(sentiment)
             pipeline.append(
-                torch.tensor(sample[[
-                    *self.pipeline.col_names,
-                ]].values, device=get_device())
+                torch.tensor(
+                    sample[self.pipeline.col_names].values,
+                    device=get_device()
+                )
                 .squeeze()
                 .float()
             )

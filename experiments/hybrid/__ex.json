@@ -1,10 +1,5 @@
 {
   "out_path": "./experiments/hybrid/",
-  "data": {
-    "paths": {
-      "train": "./data/imdb.train.csv"
-    }
-  },
   "model": {
     "encoding": {
       "model": "fabriceyhc/bert-base-uncased-imdb",
@@ -17,22 +12,9 @@
       "dropout": 0.3
     },
     "features": {
-      "group_label": "sentiment",
-      "polarities": [
-        "negative",
-        "positive"
-      ],
       "ngrams": {
-        "1": {
-          "pre_selection": 1024,
-          "shared": "remove",
-          "post_selection": 512
-        },
-        "2": {
-          "pre_selection": 128,
-          "shared": "remove",
-          "post_selection": 64
-        }
+        "1": 1024,
+        "2": 128
       }
     }
   }

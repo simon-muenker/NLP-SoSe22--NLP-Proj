@@ -21,9 +21,12 @@ class Model(ModelFrame):
         self.features = Features(in_size[1], out_size)
 
         self.drop = nn.Dropout(self.config["dropout"]).to(get_device())
-        self.output = nn.Linear(out_size * 2, out_size).to(get_device())
+        self.output = nn.Linear(out_size * 2, out_size, bias=False).to(get_device())
 
-        logging.info(f'> Init Neural Assemble (Base+Features), trainable parameters: {len(self)}')
+        logging.info(
+            f'> Init Neural Assemble (Base+Features), trainable parameters: '
+            f'{len(self) - (len(self.base) + len(self.features))}'
+        )
 
     #  -------- default_config -----------
     #

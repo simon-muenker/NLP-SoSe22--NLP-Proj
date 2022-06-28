@@ -2,10 +2,9 @@ import logging
 
 import torch
 
-from classifier import Runner, Metric
+from classifier import Runner
 from .model import Model
 from .pipeline import Pipeline
-from .._neural import Trainer
 from .._neural.util import get_device
 
 
@@ -14,44 +13,44 @@ class Main(Runner):
     #  -------- __init__ -----------
     #
     def __init__(self) -> None:
-        super(Runner).__init__()
-        self.metric = Metric()
-        self.pipeline = Pipeline(self.config['model'])
+        super().__init__()
 
-        self.model = Model(
-            len(self.pipeline.col_names),
-            len(self.data['train'].get_label_keys())
+        logging.info("\n[--- FEATURE PIPELINE ---]")
+        self.pipeline = Pipeline(
+            target_values=self.data['train'].get_label_keys(),
+            config=self.config['model']['features']
+
         )
 
-        # trainer
-        self.trainer = Trainer(
-            self.model,
-            self.data,
-            self.collation_fn,
-            out_dir=self.config['out_path'],
-            config=self.config['trainer'],
+        self.pipeline.fit(
+            self.data['train'].data,
+            target_label=self.data['train'].target_label,
+            log_label=self.data['train'].data_path
         )
 
-    #
-    #
-    #  -------- __call__ -----------
-    #
-    def __call__(self):
-        logging.info("\n[--- RUN ---]")
-
-        self.pipeline.fit(self.data['train'].data, label=self.data['train'].data_path)
         self.pipeline.export(self.config['out_path'])
 
         for data_label, dataset in self.data.items():
             self.pipeline.apply(dataset.data, label=dataset.data_path)
 
-        self.trainer()
+    #
+    #
+    #  -------- __call__ -----------
+    #
+    def __call__(self, model=None, collation_fn=None):
+
+        model = Model(
+            len(self.pipeline.col_names),
+            len(self.data['train'].get_label_keys())
+        )
+
+        super().__call__(model, self.__collation_fn)
 
     #
     #
-    #  -------- collation_fn -----------
+    #  -------- __collation_fn -----------
     #
-    def collation_fn(self, batch: list) -> tuple:
+    def __collation_fn(self, batch: list) -> tuple:
         label: list = []
         features: list = []
 
@@ -59,9 +58,10 @@ class Main(Runner):
         for sample, review, sentiment in batch:
             label.append(sentiment)
             features.append(
-                torch.tensor(sample[[
-                    *self.pipeline.col_names
-                ]].values, device=get_device())
+                torch.tensor(
+                    sample[self.pipeline.col_names].values,
+                    device=get_device()
+                )
                 .squeeze()
                 .float()
             )

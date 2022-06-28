@@ -20,7 +20,7 @@ class Model(ModelFrame):
             dropout=self.config["dropout"]
         )
 
-        logging.info(f'> Init BERT-Head (MLP), trainable parameters: {len(self)}')
+        logging.info(f'> Init BERT-Head (Base), trainable parameters: {len(self)}')
 
     #  -------- default_config -----------
     #

@@ -5,7 +5,7 @@ from typing import Dict
 import pandas as pd
 
 from classifier.util import timing
-from .group_counter import GroupCounter
+from .groupcounter import GroupCounter
 
 
 class Pipeline:
@@ -14,9 +14,13 @@ class Pipeline:
     #
     def __init__(
             self,
+            target_values: list,
             config: dict
     ) -> None:
+
+        self.target_values = target_values
         self.config = config
+
         self.polarity_counter: Dict[str, GroupCounter] = {}
 
         logging.info(f'> Init Freq. Classifier, n-grams: {list(self.config["ngrams"].keys())}')
@@ -24,15 +28,15 @@ class Pipeline:
     #  -------- fit -----------
     #
     @timing
-    def fit(self, data: pd.DataFrame, label: str = '***') -> None:
-        logging.info(f'> Fit Freq. Classifier on {label}')
+    def fit(self, data: pd.DataFrame, target_label: str, log_label: str = '***') -> None:
+        logging.info(f'> Fit Freq. Classifier on {log_label}')
 
-        for n in self.config['ngrams']:
+        for n, keep in self.config['ngrams'].items():
             self.polarity_counter[n] = GroupCounter(
                 data,
                 key_label=f'{n}-gram',
-                group_label=self.config["group_label"],
-                config=self.config["ngrams"][str(n)]
+                group_label=target_label,
+                keep=keep
             )
 
     #
@@ -61,8 +65,8 @@ class Pipeline:
             f'{n}-gram_{label}'
             for n, label in list(
                 itertools.product(
-                    self.config['ngrams'],
-                    self.config['polarities']
+                    self.polarity_counter.keys(),
+                    self.target_values
                 )
             )
         ]

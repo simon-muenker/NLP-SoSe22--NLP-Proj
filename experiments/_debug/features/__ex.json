@@ -1,19 +1,10 @@
 {
   "out_path": "./experiments/_debug/features/",
   "model": {
-    "group_label": "sentiment",
-    "polarities": [
-      "negative",
-      "positive"
-    ],
-    "ngrams": {
-      "1": {
-        "pre_selection": 1024,
-        "shared": "remove"
-      },
-      "2": {
-        "pre_selection": 128,
-        "shared": "remove"
+    "features": {
+      "ngrams": {
+        "1": 1024,
+        "2": 128
       }
     }
   }

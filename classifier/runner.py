@@ -5,11 +5,11 @@ from abc import abstractmethod
 
 import torch
 from pandarallel import pandarallel
+from torch import nn
 
 from classifier import Data
 from classifier.util import dict_merge, load_json
-
-pandarallel.initialize(progress_bar=True)
+from ._neural import Trainer, Encoder
 
 
 class Runner:
@@ -17,23 +17,42 @@ class Runner:
     #  -------- __init__ -----------
     #
     def __init__(self):
+
         # --- ---------------------------------
         # --- base setup
         self.config: dict = Runner.__load_config()
         Runner.__load_logger(f'{self.config["out_path"]}full.log')
         Runner.__setup_pytorch(self.config["seed"], self.config["cuda"])
 
+        pandarallel.initialize(progress_bar=False)
+
         # --- ---------------------------------
         # --- load data
         logging.info(f'\n[--- PREPARE DATA -> ({list(k for k in self.config["data"]["paths"].keys())}) ---]')
         self.data: dict = self.load_data()
 
+        # --- ---------------------------------
+        # --- load components
         logging.info('\n[--- LOAD COMPONENTS ---]')
+
+        # encoder
+        self.encoder = None
+        if self.config['model'].get('encoding', None):
+            self.encoder = Encoder(self.config['model']['encoding'])
 
     #  -------- __call__ -----------
     #
+    def __call__(self, model: nn.Module, collation_fn: callable) -> None:
+        Trainer(
+            model, self.data, collation_fn,
+            out_dir=self.config['out_path'],
+            config=self.config['trainer'],
+        )()
+
+    #  -------- __collation_fn -----------
+    #
     @abstractmethod
-    def __call__(self):
+    def __collation_fn(self, batch: list) -> tuple:
         pass
 
     #

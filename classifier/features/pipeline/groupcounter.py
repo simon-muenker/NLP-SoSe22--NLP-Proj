@@ -14,41 +14,19 @@ class GroupCounter:
     key_label: str
     group_label: str
 
-    config: dict = None
+    keep: int = 1024
+
     analysis: dict = None
 
     #  -------- __post_init__ -----------
     #
     def __post_init__(self):
-        # load default config file if is None
-        if self.config is None:
-            self.config = self.default_config
-
-        self.analysis: dict = self.__create()
-
-    #  -------- default_config -----------
-    #
-    @property
-    def default_config(self) -> dict:
-        return {
-            "pre_selection": 1024,
-            "shared": "remove"
-        }
-
-    #
-    #
-    #  -------- __create -----------
-    #
-    def __create(self) -> dict:
         gc = GroupCounter
-        analysis: dict
 
-        analysis = gc.__calc_abs_freq(self.data, self.key_label, self.group_label)
-        analysis = gc.__most_common(analysis, self.config['pre_selection'])
-        analysis = gc.__remove_shared(analysis)
-        analysis = gc.__calc_rel_freq(analysis)
-
-        return analysis
+        self.analysis = gc.__calc_abs_freq(self.data, self.key_label, self.group_label)
+        self.analysis = gc.__most_common(self.analysis, self.keep)
+        self.analysis = gc.__remove_shared(self.analysis)
+        self.analysis = gc.__calc_rel_freq(self.analysis)
 
     #  -------- predict -----------
     #
