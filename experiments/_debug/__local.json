@@ -6,7 +6,7 @@
       "test": "./data/imdb._debug.csv"
     },
     "trainer": {
-      "epochs": 4,
+      "epochs": 2,
       "shuffle": true,
       "batch_size": 2,
       "num_workers": 0,
