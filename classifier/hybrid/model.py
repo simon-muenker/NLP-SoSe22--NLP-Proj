@@ -19,8 +19,6 @@ class Model(ModelFrame):
 
         self.base = Base(in_size[0], out_size, config=config.copy())
         self.features = Features(in_size[1], out_size)
-
-        self.drop = nn.Dropout(self.config["dropout"]).to(get_device())
         self.output = nn.Linear(out_size * 2, out_size, bias=False).to(get_device())
 
         logging.info(
@@ -40,10 +38,8 @@ class Model(ModelFrame):
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         return self.output(
-            self.drop(
-                torch.cat([
-                    self.base(data[0]),
-                    self.features(data[1])
-                ], dim=1)
-            )
+            torch.cat([
+                self.base(data[0]),
+                self.features(data[1])
+            ], dim=1)
         )
