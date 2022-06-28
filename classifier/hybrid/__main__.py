@@ -1,21 +1,10 @@
-import logging
-
 import torch
 
 from classifier import Runner
-
 from classifier.features.pipeline import Pipeline as Pipeline
-from classifier.hybrid.model import Model as Network
-
-from .spacy_pipe import SpacyPipe
+from .model import Model
 from .._neural import Encoder, Trainer
 from .._neural.util import get_device
-
-DROP_COLS: list = [
-    '1-gram', '2-gram',
-    'sum_negative', 'sum_positive',
-    'prediction'
-]
 
 
 class Main(Runner):
@@ -28,19 +17,18 @@ class Main(Runner):
         # --- ---------------------------------
         # --- load components
 
-        # load encoding, classifier, spacy
+        # load encoding, classifier
         self.encoder = Encoder(self.config['model']['encoding'])
-        self.clss = Pipeline(self.config['model']['linguistic'])
-        self.spacy = SpacyPipe()
+        self.pipeline = Pipeline(self.config['model']['features'])
 
         # load model
-        self.model = Network(
+        self.model = Model(
             in_size=tuple([
                 self.encoder.dim,
-                len(self.clss.col_names) + len(self.spacy.col_names)
+                len(self.pipeline.col_names)
             ]),
             out_size=len(self.data['train'].get_label_keys()),
-            config=self.config['model']['neural']
+            config=self.config['model']['base']
         )
 
         # load trainer
@@ -55,25 +43,14 @@ class Main(Runner):
     #  -------- __call__ -----------
     #
     def __call__(self):
-        logging.info("\n[--- RUN ---]")
 
-        # --- ---------------------------------
-        # --- fit, save
-        self.clss.fit(self.data['train'].data, label=self.data['train'].data_path)
-        self.clss.save(self.config['out_path'])
+        # fit, export pipeline
+        self.pipeline.fit(self.data['train'].data, label=self.data['train'].data_path)
+        self.pipeline.export(self.config['out_path'])
 
+        # apply pipeline
         for data_label, dataset in self.data.items():
-            if data_label not in self.config["data"]["eval_on"]:
-                continue
-
-            # predict classifier
-            self.clss.predict(dataset.data, label=dataset.data_path)
-
-            # drop legacy columns
-            dataset.data.drop(columns=DROP_COLS, inplace=True)
-
-            # apply spacy pipeline
-            self.spacy.apply(dataset.data, 'review', label=dataset.data_path)
+            self.pipeline.apply(dataset.data, label=dataset.data_path)
 
         # --- ---------------------------------
         # --- train
@@ -86,16 +63,15 @@ class Main(Runner):
     def collation_fn(self, batch: list) -> tuple:
         text: list = []
         label: list = []
-        clss_pred: list = []
+        pipeline: list = []
 
         # collate data
         for sample, review, sentiment in batch:
             text.append(review)
             label.append(sentiment)
-            clss_pred.append(
+            pipeline.append(
                 torch.tensor(sample[[
-                    *self.clss.col_names,
-                    *self.spacy.col_names
+                    *self.pipeline.col_names,
                 ]].values, device=get_device())
                 .squeeze()
                 .float()
@@ -105,7 +81,7 @@ class Main(Runner):
         _, sent_embeds, _ = self.encoder(text, return_unpad=False)
 
         return (
-            (sent_embeds[:, 1], torch.stack(clss_pred)),
+            (sent_embeds[:, 1], torch.stack(pipeline)),
             torch.tensor(
                 [self.data['train'].encode_label(lb) for lb in label],
                 dtype=torch.long, device=get_device()

@@ -16,7 +16,7 @@
       "hid_size": 256,
       "dropout": 0.3
     },
-    "linguistic": {
+    "features": {
       "group_label": "sentiment",
       "polarities": [
         "negative",

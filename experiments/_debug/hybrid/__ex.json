@@ -7,11 +7,11 @@
         -1
       ]
     },
-    "neural": {
+    "base": {
       "hid_size": 256,
       "dropout": 0.2
     },
-    "linguistic": {
+    "features": {
       "group_label": "sentiment",
       "polarities": [
         "negative",
@@ -20,13 +20,11 @@
       "ngrams": {
         "1": {
           "pre_selection": 1024,
-          "shared": "remove",
-          "post_selection": 512
+          "shared": "remove"
         },
         "2": {
           "pre_selection": 128,
-          "shared": "remove",
-          "post_selection": 64
+          "shared": "remove"
         }
       }
     }

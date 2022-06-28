@@ -17,7 +17,7 @@ class Model(ModelFrame):
 
         self.net = nn.Linear(in_size, out_size, bias=False).to(get_device())
 
-        logging.info(f'> Init Neural Feature Weight, trainable parameters: {len(self)}')
+        logging.info(f'> Init Neural Weighting (Feature), trainable parameters: {len(self)}')
 
     #  -------- default_config -----------
     #

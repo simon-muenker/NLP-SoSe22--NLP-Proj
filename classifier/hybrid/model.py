@@ -4,7 +4,9 @@ from typing import Tuple
 import torch
 import torch.nn as nn
 
-from .._neural import ModelFrame, MLP
+from classifier.base.model import Model as Base
+from classifier.features.model import Model as Features
+from .._neural import ModelFrame
 from .._neural.util import get_device
 
 
@@ -15,28 +17,13 @@ class Model(ModelFrame):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.bertPred = MLP(
-            self.config["in_size"][0],
-            self.config['hid_size'],
-            self.config["out_size"],
-            dropout=self.config['dropout']
-        )
-
-        self.bertFeat = MLP(
-            self.config["in_size"][0],
-            self.config['hid_size'],
-            self.config["in_size"][1],
-            dropout=self.config['dropout']
-        )
+        self.base = Base(in_size[0], out_size, config=config)
+        self.features = Features(in_size[1], out_size)
 
         self.drop = nn.Dropout(self.config["dropout"]).to(get_device())
+        self.output = nn.Linear(out_size * 2, out_size).to(get_device())
 
-        self.output = nn.Linear(
-            self.config["in_size"][1] + self.config["out_size"],
-            self.config["out_size"]
-        ).to(get_device())
-
-        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)}')
+        logging.info(f'> Init Neural Assemble (Base+Features), trainable parameters: {len(self)}')
 
     #  -------- default_config -----------
     #
@@ -52,8 +39,8 @@ class Model(ModelFrame):
         return self.output(
             self.drop(
                 torch.cat([
-                    self.bertFeat(data[0]) * data[1],
-                    self.bertPred(data[0])
+                    self.base(data[0]),
+                    self.features(data[1])
                 ], dim=1)
             )
         )

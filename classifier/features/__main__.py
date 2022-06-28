@@ -14,7 +14,7 @@ class Main(Runner):
     #  -------- __init__ -----------
     #
     def __init__(self) -> None:
-        super().__init__()
+        super(Runner).__init__()
         self.metric = Metric()
         self.pipeline = Pipeline(self.config['model'])
 
@@ -40,16 +40,10 @@ class Main(Runner):
         logging.info("\n[--- RUN ---]")
 
         self.pipeline.fit(self.data['train'].data, label=self.data['train'].data_path)
-        self.pipeline.save(self.config['out_path'])
+        self.pipeline.export(self.config['out_path'])
 
-        # predict train, eval
-        logging.info(f'\n[--- EVAL -> {self.config["data"]["eval_on"]} ---]')
         for data_label, dataset in self.data.items():
-            if data_label not in self.config["data"]["eval_on"]:
-                continue
-
-            # predict dataset
-            self.pipeline.predict(dataset.data, label=dataset.data_path)
+            self.pipeline.apply(dataset.data, label=dataset.data_path)
 
         self.trainer()
 
