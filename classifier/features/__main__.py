@@ -1,7 +1,12 @@
 import logging
 
+import torch
+
 from classifier import Runner, Metric
 from .model import Model
+from .pipeline import Pipeline
+from .._neural import Trainer
+from .._neural.util import get_device
 
 
 class Main(Runner):
@@ -11,7 +16,21 @@ class Main(Runner):
     def __init__(self) -> None:
         super().__init__()
         self.metric = Metric()
-        self.model = Model(self.config['model'])
+        self.pipeline = Pipeline(self.config['model'])
+
+        self.model = Model(
+            len(self.pipeline.col_names),
+            len(self.data['train'].get_label_keys())
+        )
+
+        # trainer
+        self.trainer = Trainer(
+            self.model,
+            self.data,
+            self.collation_fn,
+            out_dir=self.config['out_path'],
+            config=self.config['trainer'],
+        )
 
     #
     #
@@ -20,26 +39,46 @@ class Main(Runner):
     def __call__(self):
         logging.info("\n[--- RUN ---]")
 
-        self.model.fit(self.data['train'].data, label=self.data['train'].data_path)
-        self.model.save(self.config['out_path'])
+        self.pipeline.fit(self.data['train'].data, label=self.data['train'].data_path)
+        self.pipeline.save(self.config['out_path'])
 
         # predict train, eval
         logging.info(f'\n[--- EVAL -> {self.config["data"]["eval_on"]} ---]')
         for data_label, dataset in self.data.items():
-
             if data_label not in self.config["data"]["eval_on"]:
                 continue
 
             # predict dataset
-            self.model.predict(dataset.data, label=dataset.data_path)
-            self.metric.reset()
-            self.metric.confusion_matrix(
-                dataset.get_label_keys(),
-                dataset.data['sentiment'],
-                dataset.data['prediction']
+            self.pipeline.predict(dataset.data, label=dataset.data_path)
+
+        self.trainer()
+
+    #
+    #
+    #  -------- collation_fn -----------
+    #
+    def collation_fn(self, batch: list) -> tuple:
+        label: list = []
+        features: list = []
+
+        # collate data
+        for sample, review, sentiment in batch:
+            label.append(sentiment)
+            features.append(
+                torch.tensor(sample[[
+                    *self.pipeline.col_names
+                ]].values, device=get_device())
+                .squeeze()
+                .float()
             )
-            self.metric.show()
-            self.metric.export(f'{self.config["out_path"]}metric.{data_label}')
+
+        return (
+            torch.stack(features),
+            torch.tensor(
+                [self.data['train'].encode_label(lb) for lb in label],
+                dtype=torch.long, device=get_device()
+            )
+        )
 
 
 #

@@ -28,5 +28,23 @@
       "remove_stopwords": true
     }
   },
-  "model": null
+  "model": null,
+  "trainer": {
+    "seed": 1,
+    "epochs": 5,
+    "shuffle": true,
+    "batch_size": 4,
+    "num_workers": 0,
+    "report_rate": 1,
+    "max_grad_norm": 2.0,
+    "optimizer": {
+      "lr": 1e-3,
+      "weight_decay": 1e-2,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-8
+    }
+  }
 }

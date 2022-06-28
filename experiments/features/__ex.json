@@ -3,13 +3,6 @@
   "data": {
     "paths": {
       "train": "./data/imdb.train.csv"
-    },
-    "config": {
-      "ngrams": [
-        1,
-        2
-      ],
-      "remove_stopwords": true
     }
   },
   "model": {

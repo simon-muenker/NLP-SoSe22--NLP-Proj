@@ -1,75 +1,31 @@
-import itertools
 import logging
-from typing import Dict
+from typing import Tuple, List
 
-import pandas as pd
+import torch
+import torch.nn as nn
 
-from classifier.util import timing
-from .group_counter import GroupCounter
+from .._neural import ModelFrame
+from .._neural.util import get_device
 
 
-class Model:
+class Model(ModelFrame):
 
     #  -------- __init__ -----------
     #
-    def __init__(
-            self,
-            config: dict
-    ) -> None:
-        self.config = config
-        self.polarity_counter: Dict[str, GroupCounter] = {}
+    def __init__(self, in_size: int, out_size: int, _: dict = None):
+        super().__init__(in_size, out_size, {})
 
-        logging.info(f'> Init Freq. Classifier, n-grams: {list(self.config["ngrams"].keys())}')
+        self.net = nn.Linear(in_size, out_size, bias=False).to(get_device())
 
-    #  -------- fit -----------
+        logging.info(f'> Init Neural Feature Weight, trainable parameters: {len(self)}')
+
+    #  -------- default_config -----------
     #
-    @timing
-    def fit(self, data: pd.DataFrame, label: str = '***') -> None:
-        logging.info(f'> Fit Freq. Classifier on {label}')
+    @staticmethod
+    def default_config() -> dict:
+        return {}
 
-        for n in self.config['ngrams']:
-            self.polarity_counter[n] = GroupCounter(
-                data,
-                key_label=f'{n}-gram',
-                group_label=self.config["group_label"],
-                config=self.config["ngrams"][str(n)]
-            )
-
+    #  -------- forward -----------
     #
-    #
-    #  -------- predict -----------
-    #
-    @timing
-    def predict(self, data: pd.DataFrame, label: str = '***') -> None:
-        logging.info(f'> Predict with Freq. Classifier on {label}')
-
-        # calculate the scores
-        for n, lookup in self.polarity_counter.items():
-            lookup.predict(data, f'{n}-gram')
-
-        # calculate sum for each label
-        for label in self.config['polarities']:
-            data[f"sum_{label}"] = data.filter(regex=f".*_{label}").sum(axis='columns')
-
-        # get highest label by sum
-        data['prediction'] = data.filter(regex=f"sum_.*").idxmax(axis="columns").str.replace('sum_', '')
-
-    #  -------- save -----------
-    #
-    def save(self, path: str):
-        for n, lookup in self.polarity_counter.items():
-            lookup.write(f'{path}{n}-gram-weights')
-
-    #  -------- property -----------
-    #
-    @property
-    def col_names(self):
-        return [
-            f'{n}-gram_{label}'
-            for n, label in list(
-                itertools.product(
-                    self.config['ngrams'],
-                    self.config['polarities']
-                )
-            )
-        ]
+    def forward(self, data: Tuple[List[torch.Tensor], List]) -> torch.Tensor:
+        return self.net(data)

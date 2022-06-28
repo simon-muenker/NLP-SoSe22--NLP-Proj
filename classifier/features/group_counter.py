@@ -32,8 +32,7 @@ class GroupCounter:
     def default_config(self) -> dict:
         return {
             "pre_selection": 1024,
-            "shared": "remove",
-            "post_selection": 512
+            "shared": "remove"
         }
 
     #
@@ -47,7 +46,6 @@ class GroupCounter:
         analysis = gc.__calc_abs_freq(self.data, self.key_label, self.group_label)
         analysis = gc.__most_common(analysis, self.config['pre_selection'])
         analysis = gc.__remove_shared(analysis)
-        analysis = gc.__most_common(analysis, self.config['post_selection'])
         analysis = gc.__calc_rel_freq(analysis)
 
         return analysis
@@ -58,6 +56,7 @@ class GroupCounter:
         for group, count in self.analysis.items():
             data[f'{label}_{group}'] = data[label].parallel_apply(
                 lambda row: count.loc[count.index.isin(row)][LABEL['rel_freq']].sum()
+                # len(count.loc[count.index.isin(row)][LABEL['rel_freq']]) / len(row)
             )
 
     #

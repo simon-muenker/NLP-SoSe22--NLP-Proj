@@ -1,14 +1,5 @@
 {
   "out_path": "./experiments/_debug/features/",
-  "data": {
-    "config": {
-      "ngrams": [
-        1,
-        2
-      ],
-      "remove_stopwords": true
-    }
-  },
   "model": {
     "group_label": "sentiment",
     "polarities": [
@@ -18,13 +9,11 @@
     "ngrams": {
       "1": {
         "pre_selection": 1024,
-        "shared": "remove",
-        "post_selection": 512
+        "shared": "remove"
       },
       "2": {
         "pre_selection": 128,
-        "shared": "remove",
-        "post_selection": 64
+        "shared": "remove"
       }
     }
   }

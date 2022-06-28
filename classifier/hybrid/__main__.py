@@ -4,7 +4,7 @@ import torch
 
 from classifier import Runner
 
-from classifier.features.model import Model as Classifier
+from classifier.features.pipeline import Pipeline as Pipeline
 from classifier.hybrid.model import Model as Network
 
 from .spacy_pipe import SpacyPipe
@@ -30,7 +30,7 @@ class Main(Runner):
 
         # load encoding, classifier, spacy
         self.encoder = Encoder(self.config['model']['encoding'])
-        self.clss = Classifier(self.config['model']['linguistic'])
+        self.clss = Pipeline(self.config['model']['linguistic'])
         self.spacy = SpacyPipe()
 
         # load model
