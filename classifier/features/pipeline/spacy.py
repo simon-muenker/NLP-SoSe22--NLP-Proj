@@ -5,8 +5,6 @@ import pandas as pd
 import spacy
 from spacytextblob.spacytextblob import SpacyTextBlob
 
-from classifier.util import timing
-
 
 @dataclass
 class SpacyPipe:
@@ -46,9 +44,7 @@ class SpacyPipe:
     #
     #  -------- apply -----------
     #
-    @timing
-    def apply(self, data: pd.DataFrame, col: str, label: str = '***'):
-        logging.info(f'> Apply Space Pipeline to: {label}')
+    def apply(self, data: pd.DataFrame, col: str):
 
         data[self.col_names] = pd.DataFrame.from_records([
             pd.Series([

@@ -1,4 +1,5 @@
 import logging
+from dataclasses import dataclass
 from typing import Dict
 
 import pandas as pd
@@ -8,18 +9,29 @@ from .groupcounter import GroupCounter
 from .spacy import SpacyPipe
 
 
+@dataclass
 class Pipeline:
+    target_label: str
+    target_values: list
+    config: dict
+
+    #  -------- default_config -----------
+    #
+    @property
+    def default_config(self) -> dict:
+        return {
+            'ngram_counter': {
+                '1': 256,
+                '2': 2048
+            },
+            'spacy_pipeline': SpacyPipe.default_config
+        }
 
     #  -------- __init__ -----------
     #
-    def __init__(
-            self,
-            target_values: list,
-            config: dict
-    ) -> None:
-
-        self.target_values = target_values
-        self.config = config
+    def __post_init__(self) -> None:
+        if self.config is None:
+            self.config = self.default_config
 
         if self.config.get("ngram_counter", None):
             self.ngram_counter: Dict[str, GroupCounter] = {}
@@ -32,15 +44,14 @@ class Pipeline:
     #  -------- fit -----------
     #
     @timing
-    def fit(self, data: pd.DataFrame, target_label: str, log_label: str = '***') -> None:
+    def fit(self, data: pd.DataFrame, log_label: str = '***') -> None:
+        logging.info(f'> Fit Pipeline {log_label} on (only N-Gram Group Counter)')
 
         if self.config.get("ngram_counter", None):
-            logging.info(f'> Fit N-Gram Group Counter on {log_label}')
             for n, keep in self.config['ngram_counter'].items():
                 self.ngram_counter[n] = GroupCounter(
-                    data,
-                    key_label=f'{n}-gram',
-                    group_label=target_label,
+                    data, key_label=f'{n}-gram',
+                    group_label=self.target_label,
                     keep=keep
                 )
 
@@ -50,7 +61,7 @@ class Pipeline:
     #
     @timing
     def apply(self, data: pd.DataFrame, label: str = '***') -> None:
-        logging.info(f'> Predict with Freq. Classifier on {label}')
+        logging.info(f'> Apply Feature Pipeline on {label}')
 
         # calculate the ngram_counter scores
         if self.config.get("ngram_counter", None):
@@ -59,7 +70,7 @@ class Pipeline:
 
         # apply spacy pipeline
         if self.config.get("spacy_pipeline", None):
-            self.spacy.apply(data, 'review', label=label)
+            self.spacy.apply(data, 'review')
 
     #  -------- export -----------
     #

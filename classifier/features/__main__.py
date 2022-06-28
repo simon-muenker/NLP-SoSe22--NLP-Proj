@@ -17,14 +17,13 @@ class Main(Runner):
 
         logging.info("\n[--- FEATURE PIPELINE ---]")
         self.pipeline = Pipeline(
+            target_label=self.data['train'].target_label,
             target_values=self.data['train'].get_label_keys(),
             config=self.config['model']['features']
-
         )
 
         self.pipeline.fit(
             self.data['train'].data,
-            target_label=self.data['train'].target_label,
             log_label=self.data['train'].data_path
         )
 
