@@ -6,13 +6,8 @@
   "data": {
     "paths": {
       "train": "./data/imdb.train.csv",
-      "eval": "./data/imdb.eval.csv",
       "test": "./data/imdb.test.csv"
     },
-    "eval_on": [
-      "train",
-      "eval"
-    ],
     "polarities": {
       "negative": 0,
       "positive": 1
