@@ -26,8 +26,8 @@
           "INTJ",
           "SYM"
         ],
-        "ents": "True",
-        "blob": "True",
+        "ents": true,
+        "blob": true,
         "disabled": []
       }
     }
