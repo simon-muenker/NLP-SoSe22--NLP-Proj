@@ -36,6 +36,7 @@ class Pipeline:
             self.config = self.default_config
 
         if self.config.get("ngram_counter", None):
+            logging.info(f'> Init N-Gram Group Counter, with: {list(self.config["ngram_counter"].items())}')
             self.ngram_counter: Dict[str, GroupCounter] = {}
 
         if self.config.get("spacy_pipeline", None):
@@ -43,8 +44,6 @@ class Pipeline:
 
         if self.config.get("nela_pipeline", None):
             self.nela = NELAPipe()
-
-        logging.info(f'> Init N-Gram Group Counter, with: {list(self.config["ngram_counter"].items())}')
 
     #  -------- fit -----------
     #
