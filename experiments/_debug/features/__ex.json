@@ -6,20 +6,7 @@
         "1": 256,
         "2": 2048
       },
-      "spacy_pipeline": {
-        "model": "en_core_web_sm",
-        "pos_tags": [
-          "NOUN",
-          "VERB",
-          "ADV",
-          "ADJ",
-          "INTJ",
-          "SYM"
-        ],
-        "ents": true,
-        "blob": true,
-        "disabled": []
-      }
+      "nela_pipeline": true
     }
   }
 }
