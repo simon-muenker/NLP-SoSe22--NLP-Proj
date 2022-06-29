@@ -37,7 +37,7 @@ class NELAPipe:
             vector, labels = self.pipeline.extract_all(row)
             return pd.Series(vector, index=labels)
 
-        data[self.col_names] = data[col].apply(__apply)
+        data[self.col_names] = data[col].parallel_apply(__apply)
 
     #  -------- col_names -----------
     #
