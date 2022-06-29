@@ -9,3 +9,4 @@ requests>=2.28.0
 beautifulsoup4>=4.11.1
 spacy>=3.3.1
 spacytextblob>=4.0.0
+nela_features>=3.0.1

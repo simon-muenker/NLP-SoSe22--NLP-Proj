@@ -26,7 +26,6 @@ class Main(Runner):
             self.data['train'].data,
             log_label=self.data['train'].data_path
         )
-
         self.pipeline.export(self.config['out_path'])
 
         for data_label, dataset in self.data.items():

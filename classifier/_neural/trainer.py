@@ -27,9 +27,9 @@ class Trainer:
         self.state: dict = {
             'epoch': [],
             'loss_train': [],
-            'loss_test': [],
+            'loss_eval': [],
             'f1_train': [],
-            'f1_test': [],
+            'f1_eval': [],
             'duration': [],
         }
 
@@ -72,7 +72,7 @@ class Trainer:
         logging.info(f'\n[--- TRAIN -> {self.data["train"].data_path} ---]')
 
         saved_model_epoch: int = 0
-        saved_test_metric: tuple = ()
+        saved_eval_metric: tuple = ()
 
         # --- epoch loop
         try:
@@ -98,9 +98,9 @@ class Trainer:
                 # --- ---------------------------------
                 # --- begin test
                 self.metric.reset()
-                loss_test: float = 0.0
+                loss_eval: float = 0.0
                 for idx, batch in load_iterator(
-                        self.data['test'],
+                        self.data['eval'],
                         collate_fn=self.collation_fn,
                         batch_size=self.config["batch_size"],
                         shuffle=self.config["shuffle"],
@@ -108,24 +108,24 @@ class Trainer:
                         desc=f"Eval, epoch: {epoch:03}",
                         disable=epoch % self.config["report_rate"] != 0
                 ):
-                    loss_test = self._test(batch, idx, loss_test)
-                f1_test: float = self.metric.f_score()
+                    loss_eval = self._eval(batch, idx, loss_eval)
+                f1_eval: float = self.metric.f_score()
 
                 # --- ---------------------------------
                 # --- update state
                 self.state["epoch"].append(epoch)
                 self.state["loss_train"].append(loss_train)
-                self.state["loss_test"].append(loss_test)
+                self.state["loss_eval"].append(loss_eval)
                 self.state["f1_train"].append(f1_train)
-                self.state["f1_test"].append(f1_test)
+                self.state["f1_eval"].append(f1_eval)
                 self.state["duration"].append(datetime.now() - time_begin)
 
                 # --- ---------------------------------
                 # --- save if is best model
-                if self.state["f1_test"][-1] >= max(n for n in self.state["f1_test"] if n > 0):
+                if self.state["f1_eval"][-1] >= max(n for n in self.state["f1_eval"] if n > 0):
                     saved_model_epoch = self.state["epoch"][-1]
                     self.model.save(self.out_dir + "model.bin")
-                    saved_test_metric = self.metric.save()
+                    saved_eval_metric = self.metric.save()
 
                 # --- ---------------------------------
                 # --- log to user
@@ -145,8 +145,8 @@ class Trainer:
 
         # --- ---------------------------------
         # --- test
-        logging.info(f'\n[--- EVAL -> {self.data["test"].data_path} ---]')
-        self.metric.load(saved_test_metric)
+        logging.info(f'\n[--- EVAL -> {self.data["eval"].data_path} ---]')
+        self.metric.load(saved_eval_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
         self.metric.export(f'{self.out_dir}metric.test', decoding=self.data['train'].decode_label)
 
@@ -186,15 +186,15 @@ class Trainer:
 
     #
     #
-    #  -------- _test -----------
+    #  -------- _eval -----------
     #
-    def _test(self, batch: tuple, batch_id: int, loss_test: float) -> float:
+    def _eval(self, batch: tuple, batch_id: int, loss_eval: float) -> float:
         self.model.eval()
 
         loss, pred_labels = self.model.train_step(self.loss_fn, batch)
 
         # save loss, acc for statistics
-        loss_test += (loss.item() - loss_test) / (batch_id + 1)
+        loss_eval += (loss.item() - loss_eval) / (batch_id + 1)
 
         # reduce memory usage by deleting loss after calculation
         # https://discuss.pytorch.org/t/calling-loss-backward-reduce-memory-usage/2735
@@ -203,7 +203,7 @@ class Trainer:
         # calculate metric
         self._metric(batch, pred_labels)
 
-        return loss_test
+        return loss_eval
 
     #
     #
@@ -223,9 +223,9 @@ class Trainer:
         logging.info((
             f"@{epoch:03}: \t"
             f"loss(train)={self.state['loss_train'][epoch - 1]:2.4f} \t"
-            f"loss(test)={self.state['loss_test'][epoch - 1]:2.4f} \t"
+            f"loss(test)={self.state['loss_eval'][epoch - 1]:2.4f} \t"
             f"f1(train)={self.state['f1_train'][epoch - 1]:2.4f} \t"
-            f"f1(test)={self.state['f1_test'][epoch - 1]:2.4f} \t"
+            f"f1(test)={self.state['f1_eval'][epoch - 1]:2.4f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 

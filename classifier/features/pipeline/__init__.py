@@ -7,6 +7,7 @@ import pandas as pd
 from classifier.util import timing
 from .groupcounter import GroupCounter
 from .spacy import SpacyPipe
+from .nela import NELAPipe
 
 
 @dataclass
@@ -24,7 +25,8 @@ class Pipeline:
                 '1': 256,
                 '2': 2048
             },
-            'spacy_pipeline': SpacyPipe.default_config
+            'spacy_pipeline': SpacyPipe.default_config,
+            'nela_pipeline': True
         }
 
     #  -------- __init__ -----------
@@ -38,6 +40,9 @@ class Pipeline:
 
         if self.config.get("spacy_pipeline", None):
             self.spacy = SpacyPipe()
+
+        if self.config.get("nela_pipeline", None):
+            self.nela = NELAPipe()
 
         logging.info(f'> Init N-Gram Group Counter, with: {list(self.config["ngram_counter"].items())}')
 
@@ -72,6 +77,10 @@ class Pipeline:
         if self.config.get("spacy_pipeline", None):
             self.spacy.apply(data, 'review')
 
+        # apply spacy pipeline
+        if self.config.get("nela_pipeline", None):
+            self.nela.apply(data, 'review')
+
     #  -------- export -----------
     #
     def export(self, path: str):
@@ -90,5 +99,8 @@ class Pipeline:
 
         if self.config.get("spacy_pipeline", None):
             cols += self.spacy.col_names
+
+        if self.config.get("nela_pipeline", None):
+            cols += self.nela.col_names
 
         return cols
