@@ -14,7 +14,7 @@
     },
     "neural": {
       "hid_size": 256,
-      "dropout": 0.4
+      "dropout": 0.5
     }
   }
 }
