@@ -13,7 +13,7 @@ class MLP(nn.Module):
             in_size: int,
             hid_size: int,
             out_size: int,
-            dropout: float = 0.4
+            dropout: float = 0.5
     ):
         super().__init__()
 
