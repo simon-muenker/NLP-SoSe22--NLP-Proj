@@ -21,7 +21,8 @@ class MLP(nn.Module):
             nn.Dropout(p=dropout),
             nn.Linear(in_size, hid_size),
             nn.LeakyReLU(),
-            nn.Linear(hid_size, out_size)
+            nn.Linear(hid_size, out_size),
+            nn.LeakyReLU()
         ).to(get_device())
 
     #  -------- forward -----------
