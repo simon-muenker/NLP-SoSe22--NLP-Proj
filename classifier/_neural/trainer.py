@@ -148,7 +148,7 @@ class Trainer:
         logging.info(f'\n[--- EVAL -> {self.data["eval"].data_path} ---]')
         self.metric.load(saved_eval_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
-        self.metric.export(f'{self.out_dir}metric.test', decoding=self.data['train'].decode_label)
+        self.metric.export(f'{self.out_dir}metric.eval', decoding=self.data['train'].decode_label)
 
         return self.state
 
@@ -234,7 +234,7 @@ class Trainer:
     def _write_state(self) -> None:
         cols: list = list(self.state.keys())
 
-        with open(self.out_dir + 'train.csv', 'w') as output_file:
+        with open(self.out_dir + 'metric.epochs.csv', 'w') as output_file:
             writer = csv.writer(output_file, delimiter=',')
             writer.writerow(cols)
             writer.writerows(zip(*[self.state[c] for c in cols]))
