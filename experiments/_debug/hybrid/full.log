@@ -1,54 +1,48 @@
 > Loaded logger: ./experiments/_debug/hybrid/full.log
 > Setup PyTorch: seed(1), cuda(5)
 
-[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+[--- PREPARE DATA -> (['train', 'eval']) ---]
 > Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0033 sec
-> f(__tokenize) took: 0.2521 sec
-> f(__ngram) took: 0.1991 sec
-> f(__ngram) took: 0.1951 sec
+> f(__load) took: 0.0036 sec
+> f(__tokenize) took: 0.3265 sec
+> f(__ngram) took: 0.2610 sec
+> f(__ngram) took: 0.2653 sec
 > Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0044 sec
-> f(__tokenize) took: 0.1930 sec
-> f(__ngram) took: 0.2001 sec
-> f(__ngram) took: 0.2057 sec
-> Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0048 sec
-> f(__tokenize) took: 0.2165 sec
-> f(__ngram) took: 0.2238 sec
-> f(__ngram) took: 0.2026 sec
+> f(__load) took: 0.0046 sec
+> f(__tokenize) took: 0.2871 sec
+> f(__ngram) took: 0.2695 sec
+> f(__ngram) took: 0.2772 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.2915 sec
+> f(__init__) took: 8.5679 sec
 
 [--- FEATURE PIPELINE ---]
-> Init Freq. Classifier, n-grams: ['1', '2']
-> Fit Freq. Classifier on ./data/imdb._debug.csv
-> f(fit) took: 0.0187 sec
-> Predict with Freq. Classifier on ./data/imdb._debug.csv
-> f(apply) took: 2.7694 sec
-> Predict with Freq. Classifier on ./data/imdb._debug.csv
-> f(apply) took: 2.8824 sec
-> Predict with Freq. Classifier on ./data/imdb._debug.csv
-> f(apply) took: 2.7210 sec
-> Init BERT-Head (Base), trainable parameters: 197378
-> Init Neural Weighting (Feature), trainable parameters: 8
-> Init Neural Assemble (Base+Features), trainable parameters: 8
+> Init N-Gram Group Counter, with: [('1', 1024), ('2', 128)]
+> Init Spacy Pipeline: 'en_core_web_sm', with: ['tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner', 'spacytextblob']
+> Fit Pipeline ./data/imdb._debug.csv on (only N-Gram Group Counter)
+> f(fit) took: 0.0147 sec
+> Apply Feature Pipeline on ./data/imdb._debug.csv
+> f(apply) took: 5.4310 sec
+> Apply Feature Pipeline on ./data/imdb._debug.csv
+> f(apply) took: 5.3138 sec
+> Init BERT-Head (Base), trainable parameters: 36912
+> Init Neural Weighting (Feature), trainable parameters: 672
+> Init Neural Assemble (Base+Features), trainable parameters:98
 
 [--- TRAIN -> ./data/imdb._debug.csv ---]
-@001: 	loss(train)=0.2180 	loss(eval)=0.0652 	f1(train)=0.9250 	f1(eval)=0.9750 	duration(epoch)=0:00:01.254554
-@002: 	loss(train)=0.1806 	loss(eval)=0.0537 	f1(train)=0.9250 	f1(eval)=0.9750 	duration(epoch)=0:00:01.196673
-@003: 	loss(train)=0.1351 	loss(eval)=0.0478 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.180831
-@004: 	loss(train)=0.0490 	loss(eval)=0.0288 	f1(train)=0.9750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.197049
-@005: 	loss(train)=0.0692 	loss(eval)=0.0190 	f1(train)=0.9750 	f1(eval)=1.0000 	duration(epoch)=0:00:01.218050
+@001: 	loss(train)=0.7069 	loss(test)=0.6770 	f1(train)=0.3250 	f1(test)=0.3750 	duration(epoch)=0:00:01.087758
+@002: 	loss(train)=0.6805 	loss(test)=0.6583 	f1(train)=0.5000 	f1(test)=0.9250 	duration(epoch)=0:00:01.042784
+@003: 	loss(train)=0.6584 	loss(test)=0.6405 	f1(train)=0.7500 	f1(test)=0.9500 	duration(epoch)=0:00:01.038964
+@004: 	loss(train)=0.6417 	loss(test)=0.6200 	f1(train)=0.8250 	f1(test)=0.9500 	duration(epoch)=0:00:01.027447
+@005: 	loss(train)=0.6290 	loss(test)=0.5983 	f1(train)=0.8500 	f1(test)=0.9500 	duration(epoch)=0:00:01.038933
 > Load best model based on evaluation loss.
-> Init BERT-Head (Base), trainable parameters: 197378
-> Init Neural Weighting (Feature), trainable parameters: 8
-> Init Neural Assemble (Base+Features), trainable parameters: 8
-@005: 	loss(train)=0.0692 	loss(eval)=0.0190 	f1(train)=0.9750 	f1(eval)=1.0000 	duration(epoch)=0:00:01.218050
+> Init BERT-Head (Base), trainable parameters: 36912
+> Init Neural Weighting (Feature), trainable parameters: 672
+> Init Neural Assemble (Base+Features), trainable parameters:98
+@005: 	loss(train)=0.6290 	loss(test)=0.5983 	f1(train)=0.8500 	f1(test)=0.9500 	duration(epoch)=0:00:01.038933
 
 [--- EVAL -> ./data/imdb._debug.csv ---]
-AVG           	 tp:       40	 fp:        0 	 tn:       40	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
-negative      	 tp:       27	 fp:        0 	 tn:       13	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
-positive      	 tp:       13	 fp:        0 	 tn:       27	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
+AVG           	 tp:       38	 fp:        2 	 tn:       38	 fn:        2	 pre=0.9500	 rec=0.9500	 f1=0.9500	 acc=0.9500
+negative      	 tp:       25	 fp:        0 	 tn:       13	 fn:        2	 pre=1.0000	 rec=0.9259	 f1=0.9615	 acc=0.9500
+positive      	 tp:       13	 fp:        2 	 tn:       25	 fn:        0	 pre=0.8667	 rec=1.0000	 f1=0.9286	 acc=0.9500

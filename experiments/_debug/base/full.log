@@ -1,30 +1,28 @@
 > Loaded logger: ./experiments/_debug/base/full.log
 > Setup PyTorch: seed(1), cuda(5)
 
-[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+[--- PREPARE DATA -> (['train', 'eval']) ---]
 > Load/Init from ./data/imdb._debug.csv
 > f(__load) took: 0.0031 sec
 > Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0019 sec
-> Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0016 sec
+> f(__load) took: 0.0020 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.2044 sec
-> Init BERT-Head (Base), trainable parameters: 197378
+> f(__init__) took: 8.3681 sec
+> Init BERT-Head (Base), trainable parameters: 1538
 
 [--- TRAIN -> ./data/imdb._debug.csv ---]
-@001: 	loss(train)=0.1669 	loss(eval)=0.0295 	f1(train)=0.8750 	f1(eval)=0.9750 	duration(epoch)=0:00:01.163046
-@002: 	loss(train)=0.0254 	loss(eval)=0.0139 	f1(train)=0.9750 	f1(eval)=1.0000 	duration(epoch)=0:00:01.149023
-@003: 	loss(train)=0.0126 	loss(eval)=0.0064 	f1(train)=1.0000 	f1(eval)=1.0000 	duration(epoch)=0:00:01.114637
-@004: 	loss(train)=0.0064 	loss(eval)=0.0037 	f1(train)=1.0000 	f1(eval)=1.0000 	duration(epoch)=0:00:01.144031
-@005: 	loss(train)=0.0027 	loss(eval)=0.0021 	f1(train)=1.0000 	f1(eval)=1.0000 	duration(epoch)=0:00:01.117681
+@001: 	loss(train)=0.8076 	loss(test)=0.5877 	f1(train)=0.4000 	f1(test)=0.9750 	duration(epoch)=0:00:01.038559
+@002: 	loss(train)=0.6461 	loss(test)=0.4592 	f1(train)=0.5750 	f1(test)=0.9750 	duration(epoch)=0:00:00.989154
+@003: 	loss(train)=0.5850 	loss(test)=0.3671 	f1(train)=0.7000 	f1(test)=0.9750 	duration(epoch)=0:00:00.993615
+@004: 	loss(train)=0.4275 	loss(test)=0.2926 	f1(train)=0.8750 	f1(test)=0.9750 	duration(epoch)=0:00:00.991702
+@005: 	loss(train)=0.3579 	loss(test)=0.2341 	f1(train)=0.9500 	f1(test)=0.9750 	duration(epoch)=0:00:00.985890
 > Load best model based on evaluation loss.
-> Init BERT-Head (Base), trainable parameters: 197378
-@005: 	loss(train)=0.0027 	loss(eval)=0.0021 	f1(train)=1.0000 	f1(eval)=1.0000 	duration(epoch)=0:00:01.117681
+> Init BERT-Head (Base), trainable parameters: 1538
+@005: 	loss(train)=0.3579 	loss(test)=0.2341 	f1(train)=0.9500 	f1(test)=0.9750 	duration(epoch)=0:00:00.985890
 
 [--- EVAL -> ./data/imdb._debug.csv ---]
-AVG           	 tp:       40	 fp:        0 	 tn:       40	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
-negative      	 tp:       27	 fp:        0 	 tn:       13	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
-positive      	 tp:       13	 fp:        0 	 tn:       27	 fn:        0	 pre=1.0000	 rec=1.0000	 f1=1.0000	 acc=1.0000
+AVG           	 tp:       39	 fp:        1 	 tn:       39	 fn:        1	 pre=0.9750	 rec=0.9750	 f1=0.9750	 acc=0.9750
+negative      	 tp:       26	 fp:        0 	 tn:       13	 fn:        1	 pre=1.0000	 rec=0.9630	 f1=0.9811	 acc=0.9750
+positive      	 tp:       13	 fp:        1 	 tn:       26	 fn:        0	 pre=0.9286	 rec=1.0000	 f1=0.9630	 acc=0.9750
