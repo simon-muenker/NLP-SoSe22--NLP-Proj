@@ -19,9 +19,7 @@ class MLP(nn.Module):
 
         self.net = nn.Sequential(
             nn.Dropout(p=dropout),
-            nn.Linear(in_size, hid_size),
-            nn.LeakyReLU(),
-            nn.Linear(hid_size, out_size),
+            nn.Linear(in_size, out_size),
             nn.LeakyReLU()
         ).to(get_device())
 
