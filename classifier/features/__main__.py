@@ -39,7 +39,8 @@ class Main(Runner):
 
         model = Model(
             len(self.pipeline.col_names),
-            len(self.data['train'].get_label_keys())
+            len(self.data['train'].get_label_keys()),
+            config=self.config['model']
         )
 
         super().__call__(model, self.__collation_fn)

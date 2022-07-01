@@ -2,20 +2,21 @@ import logging
 from typing import Tuple, List
 
 import torch
-import torch.nn as nn
 
-from .._neural import ModelFrame
-from .._neural.util import get_device
+from .._neural import ModelFrame, Perceptron
 
 
 class Model(ModelFrame):
 
     #  -------- __init__ -----------
     #
-    def __init__(self, in_size: int, out_size: int, _: dict = None):
-        super().__init__(in_size, out_size, {})
+    def __init__(self, in_size: int, out_size: int, config: dict):
+        super().__init__(in_size, out_size, config)
 
-        self.net = nn.Linear(in_size, out_size, bias=False).to(get_device())
+        self.net = Perceptron(
+            in_size, out_size,
+            dropout=config["dropout"]
+        )
 
         logging.info(f'> Init Neural Weighting (Feature), trainable parameters: {len(self)}')
 
@@ -23,7 +24,9 @@ class Model(ModelFrame):
     #
     @staticmethod
     def default_config() -> dict:
-        return {}
+        return {
+            'dropout': 0.2
+        }
 
     #  -------- forward -----------
     #

@@ -8,10 +8,10 @@
       ]
     },
     "base": {
-      "hid_size": 256,
-      "dropout": 0.4
+      "dropout": 0.8
     },
     "features": {
+      "dropout": 0.1,
       "ngram_counter": {
         "1": 768,
         "2": 5120

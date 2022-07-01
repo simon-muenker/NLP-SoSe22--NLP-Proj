@@ -3,7 +3,7 @@ from typing import Tuple, List
 
 import torch
 
-from .._neural import ModelFrame, MLP
+from .._neural import ModelFrame, Perceptron
 
 
 class Model(ModelFrame):
@@ -13,11 +13,9 @@ class Model(ModelFrame):
     def __init__(self, in_size: int, out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.net = MLP(
-            self.config["in_size"],
-            self.config["hid_size"],
-            self.config["out_size"],
-            dropout=self.config["dropout"]
+        self.net = Perceptron(
+            in_size, out_size,
+            dropout=config["dropout"]
         )
 
         logging.info(f'> Init BERT-Head (Base), trainable parameters: {len(self)}')
@@ -27,8 +25,7 @@ class Model(ModelFrame):
     @staticmethod
     def default_config() -> dict:
         return {
-            "hid_size": 64,
-            "dropout": 0.2
+            "dropout": 0.5
         }
 
     #  -------- forward -----------

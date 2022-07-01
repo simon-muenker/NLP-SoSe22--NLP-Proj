@@ -2,12 +2,10 @@ import logging
 from typing import Tuple
 
 import torch
-import torch.nn as nn
 
 from classifier.base.model import Model as Base
 from classifier.features.model import Model as Features
-from .._neural import ModelFrame
-from .._neural.util import get_device
+from .._neural import ModelFrame, Perceptron
 
 
 class Model(ModelFrame):
@@ -19,12 +17,12 @@ class Model(ModelFrame):
 
         hid_size: int = 48
 
-        self.base = Base(in_size[0], hid_size, config=config.copy())
-        self.features = Features(in_size[1], hid_size)
-        self.output = nn.Linear(hid_size, out_size).to(get_device())
+        self.base = Base(in_size[0], hid_size, config=config['base'])
+        self.features = Features(in_size[1], hid_size, config=config['features'])
+        self.output = Perceptron(hid_size, out_size)
 
         logging.info(
-            f'> Init Neural Assemble (Base+Features), trainable parameters: '
+            f'> Init Neural Assemble (Base+Features), trainable parameters:'
             f'{len(self) - (len(self.base) + len(self.features))}'
         )
 

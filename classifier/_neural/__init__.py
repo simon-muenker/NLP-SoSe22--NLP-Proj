@@ -1,4 +1,4 @@
 from .encoder import Encoder
-from .mlp import MLP
+from .perceptron import Perceptron
 from .modelframe import ModelFrame
 from .trainer import Trainer

@@ -22,7 +22,7 @@ class Main(Runner):
                 len(self.pipeline.col_names)
             ]),
             out_size=len(self.data['train'].get_label_keys()),
-            config=self.config['model']['base']
+            config=self.config['model']
         )
 
         super(Runner, self).__call__(model, self.__collation_fn)
