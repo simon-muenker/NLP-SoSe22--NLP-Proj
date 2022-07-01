@@ -85,7 +85,7 @@ class Pipeline:
     def export(self, path: str):
         if self.config.get("ngram_counter", None):
             for n, gc in self.ngram_counter.items():
-                gc.write(f'{path}{n}-gram-weights')
+                gc.write(f'{path}features.{n}-gram.weights')
 
     #  -------- property -----------
     #
