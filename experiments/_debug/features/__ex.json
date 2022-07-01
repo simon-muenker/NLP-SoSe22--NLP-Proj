@@ -7,7 +7,14 @@
         "1": 256,
         "2": 2048
       },
-      "nela_pipeline": true
+      "nela_pipeline": {
+            "style": true,
+            "complexity": true,
+            "bias": true,
+            "affect": true,
+            "moral": true,
+            "event": true
+        }
     }
   }
 }
