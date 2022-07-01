@@ -96,7 +96,7 @@ class Trainer:
                 f1_train: float = self.metric.f_score()
 
                 # --- ---------------------------------
-                # --- begin test
+                # --- begin eval
                 self.metric.reset()
                 loss_eval: float = 0.0
                 for idx, batch in load_iterator(
@@ -144,7 +144,7 @@ class Trainer:
         self._write_state()
 
         # --- ---------------------------------
-        # --- test
+        # --- eval
         logging.info(f'\n[--- EVAL -> {self.data["eval"].data_path} ---]')
         self.metric.load(saved_eval_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
@@ -223,9 +223,9 @@ class Trainer:
         logging.info((
             f"@{epoch:03}: \t"
             f"loss(train)={self.state['loss_train'][epoch - 1]:2.4f} \t"
-            f"loss(test)={self.state['loss_eval'][epoch - 1]:2.4f} \t"
+            f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.4f} \t"
             f"f1(train)={self.state['f1_train'][epoch - 1]:2.4f} \t"
-            f"f1(test)={self.state['f1_eval'][epoch - 1]:2.4f} \t"
+            f"f1(eval)={self.state['f1_eval'][epoch - 1]:2.4f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
