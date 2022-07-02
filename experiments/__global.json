@@ -33,7 +33,7 @@
     "report_rate": 1,
     "max_grad_norm": 2.0,
     "optimizer": {
-      "lr": 1e-3,
+      "lr": 1e-2,
       "weight_decay": 1e-2,
       "betas": [
         0.9,
