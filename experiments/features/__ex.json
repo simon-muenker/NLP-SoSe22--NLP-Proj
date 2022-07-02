@@ -9,11 +9,11 @@
       },
       "nela_pipeline": {
         "style": true,
-        "complexity": true,
-        "bias": true,
-        "affect": true,
-        "moral": true,
-        "event": true
+        "complexity": false,
+        "bias": false,
+        "affect": false,
+        "moral": false,
+        "event": false
       }
     }
   }
