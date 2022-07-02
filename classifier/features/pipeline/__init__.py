@@ -26,7 +26,7 @@ class Pipeline:
                 '2': 2048
             },
             'spacy_pipeline': SpacyPipe.default_config,
-            'nela_pipeline': True
+            'nela_pipeline': NELAPipe.default_config
         }
 
     #  -------- __init__ -----------
@@ -40,10 +40,10 @@ class Pipeline:
             self.ngram_counter: Dict[str, GroupCounter] = {}
 
         if self.config.get("spacy_pipeline", None):
-            self.spacy = SpacyPipe()
+            self.spacy = SpacyPipe(self.config['spacy_pipeline'])
 
         if self.config.get("nela_pipeline", None):
-            self.nela = NELAPipe()
+            self.nela = NELAPipe(self.config['nela_pipeline'])
 
     #  -------- fit -----------
     #
