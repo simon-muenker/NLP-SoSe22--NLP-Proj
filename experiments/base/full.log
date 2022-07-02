@@ -3,26 +3,26 @@
 
 [--- PREPARE DATA -> (['train', 'eval']) ---]
 > Load/Init from ./data/imdb.train.csv
-> f(__load) took: 0.2779 sec
+> f(__load) took: 0.2831 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0286 sec
+> f(__load) took: 0.0313 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.2904 sec
+> f(__init__) took: 8.3731 sec
 > Init BERT-Head (Base), trainable parameters: 1538
 
 [--- TRAIN -> ./data/imdb.train.csv ---]
-@001: 	loss(train)=0.0562 	loss(test)=0.2612 	f1(train)=0.9837 	f1(test)=0.9262 	duration(epoch)=0:05:37.021390
-@002: 	loss(train)=0.0450 	loss(test)=0.2679 	f1(train)=0.9875 	f1(test)=0.9254 	duration(epoch)=0:05:39.056000
-@003: 	loss(train)=0.0434 	loss(test)=0.2809 	f1(train)=0.9875 	f1(test)=0.9214 	duration(epoch)=0:05:38.975878
-@004: 	loss(train)=0.0437 	loss(test)=0.2560 	f1(train)=0.9874 	f1(test)=0.9230 	duration(epoch)=0:05:38.812063
-@005: 	loss(train)=0.0441 	loss(test)=0.2430 	f1(train)=0.9876 	f1(test)=0.9206 	duration(epoch)=0:05:38.708671
+@001: 	loss(train)=0.0562 	loss(eval)=0.2341 	f1(train)=0.9837 	f1(eval)=0.9311 	duration(epoch)=0:05:36.589078
+@002: 	loss(train)=0.0450 	loss(eval)=0.2393 	f1(train)=0.9875 	f1(eval)=0.9319 	duration(epoch)=0:05:38.747255
+@003: 	loss(train)=0.0434 	loss(eval)=0.2491 	f1(train)=0.9875 	f1(eval)=0.9311 	duration(epoch)=0:05:38.668544
+@004: 	loss(train)=0.0437 	loss(eval)=0.2404 	f1(train)=0.9874 	f1(eval)=0.9311 	duration(epoch)=0:05:38.714698
+@005: 	loss(train)=0.0441 	loss(eval)=0.2228 	f1(train)=0.9876 	f1(eval)=0.9319 	duration(epoch)=0:05:38.638488
 > Load best model based on evaluation loss.
 > Init BERT-Head (Base), trainable parameters: 1538
-@001: 	loss(train)=0.0562 	loss(test)=0.2612 	f1(train)=0.9837 	f1(test)=0.9262 	duration(epoch)=0:05:37.021390
+@005: 	loss(train)=0.0441 	loss(eval)=0.2228 	f1(train)=0.9876 	f1(eval)=0.9319 	duration(epoch)=0:05:38.638488
 
 [--- EVAL -> ./data/imdb.eval.csv ---]
-AVG           	 tp:     2298	 fp:      183 	 tn:     2298	 fn:      183	 pre=0.9262	 rec=0.9262	 f1=0.9262	 acc=0.9262
-negative      	 tp:     2298	 fp:        0 	 tn:        0	 fn:      183	 pre=1.0000	 rec=0.9262	 f1=0.9617	 acc=0.9262
-positive      	 tp:        0	 fp:      183 	 tn:     2298	 fn:        0	 pre=0.0000	 rec=0.0000	 f1=0.0000	 acc=0.9262
+AVG           	 tp:     2312	 fp:      169 	 tn:     2312	 fn:      169	 pre=0.9319	 rec=0.9319	 f1=0.9319	 acc=0.9319
+negative      	 tp:     1118	 fp:       86 	 tn:     1194	 fn:       83	 pre=0.9286	 rec=0.9309	 f1=0.9297	 acc=0.9319
+positive      	 tp:     1194	 fp:       83 	 tn:     1118	 fn:       86	 pre=0.9350	 rec=0.9328	 f1=0.9339	 acc=0.9319

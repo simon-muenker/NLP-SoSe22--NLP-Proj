@@ -1,54 +1,48 @@
 > Loaded logger: ./experiments/hybrid/full.log
 > Setup PyTorch: seed(1), cuda(5)
 
-[--- PREPARE DATA -> (['train', 'eval', 'test']) ---]
+[--- PREPARE DATA -> (['train', 'eval']) ---]
 > Load/Init from ./data/imdb.train.csv
-> f(__load) took: 0.4210 sec
-> f(__tokenize) took: 6.2059 sec
-> f(__ngram) took: 2.6754 sec
-> f(__ngram) took: 2.5935 sec
+> f(__load) took: 0.2831 sec
+> f(__tokenize) took: 4.5587 sec
+> f(__ngram) took: 1.5986 sec
+> f(__ngram) took: 1.7971 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0579 sec
-> f(__tokenize) took: 1.6264 sec
-> f(__ngram) took: 3.9586 sec
-> f(__ngram) took: 1.0182 sec
-> Load/Init from ./data/imdb.test.csv
-> f(__load) took: 0.0588 sec
-> f(__tokenize) took: 1.6998 sec
-> f(__ngram) took: 1.0702 sec
-> f(__ngram) took: 1.1555 sec
+> f(__load) took: 0.0346 sec
+> f(__tokenize) took: 1.1047 sec
+> f(__ngram) took: 0.7603 sec
+> f(__ngram) took: 0.7952 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.5583 sec
+> f(__init__) took: 8.4418 sec
 
 [--- FEATURE PIPELINE ---]
-> Init Freq. Classifier, n-grams: ['1', '2']
-> Fit Freq. Classifier on ./data/imdb.train.csv
-> f(fit) took: 5.4311 sec
-> Predict with Freq. Classifier on ./data/imdb.train.csv
-> f(apply) took: 15.1713 sec
-> Predict with Freq. Classifier on ./data/imdb.eval.csv
-> f(apply) took: 7.5079 sec
-> Predict with Freq. Classifier on ./data/imdb.test.csv
-> f(apply) took: 7.4264 sec
-> Init BERT-Head (Base), trainable parameters: 197378
-> Init Neural Weighting (Feature), trainable parameters: 8
-> Init Neural Assemble (Base+Features), trainable parameters: 8
+> Init N-Gram Group Counter, with: [('1', 768), ('2', 5120)]
+> Init NELA Pipeline
+> Fit Pipeline ./data/imdb.train.csv on (only N-Gram Group Counter)
+> f(fit) took: 3.6442 sec
+> Apply Feature Pipeline on ./data/imdb.train.csv
+> f(apply) took: 227.4208 sec
+> Apply Feature Pipeline on ./data/imdb.eval.csv
+> f(apply) took: 30.8731 sec
+> Init BERT-Head (Base), trainable parameters: 1538
+> Init Neural Weighting (Feature), trainable parameters: 184
+> Init Neural Assemble (Base+Features), trainable parameters: 10
 
 [--- TRAIN -> ./data/imdb.train.csv ---]
-@001: 	loss(train)=0.1449 	loss(eval)=0.1349 	f1(train)=0.9570 	f1(eval)=0.9566 	duration(epoch)=0:09:42.393403
-@002: 	loss(train)=0.1658 	loss(eval)=0.1533 	f1(train)=0.9578 	f1(eval)=0.9578 	duration(epoch)=0:09:44.233392
-@003: 	loss(train)=0.1774 	loss(eval)=0.1811 	f1(train)=0.9592 	f1(eval)=0.9576 	duration(epoch)=0:09:42.506798
-@004: 	loss(train)=0.1783 	loss(eval)=0.1794 	f1(train)=0.9593 	f1(eval)=0.9582 	duration(epoch)=0:09:43.341789
-@005: 	loss(train)=0.1813 	loss(eval)=0.1605 	f1(train)=0.9595 	f1(eval)=0.9576 	duration(epoch)=0:09:42.117382
+@001: 	loss(train)=0.4024 	loss(eval)=0.2922 	f1(train)=0.8278 	f1(eval)=0.9266 	duration(epoch)=0:05:55.276054
+@002: 	loss(train)=0.3102 	loss(eval)=0.2821 	f1(train)=0.8610 	f1(eval)=0.9270 	duration(epoch)=0:05:58.554850
+@003: 	loss(train)=0.2626 	loss(eval)=0.2571 	f1(train)=0.8661 	f1(eval)=0.9262 	duration(epoch)=0:05:57.996361
+@004: 	loss(train)=0.2450 	loss(eval)=0.2272 	f1(train)=0.8636 	f1(eval)=0.9270 	duration(epoch)=0:05:57.725318
+@005: 	loss(train)=0.2337 	loss(eval)=0.2175 	f1(train)=0.8616 	f1(eval)=0.9274 	duration(epoch)=0:05:57.553143
 > Load best model based on evaluation loss.
-> Init BERT-Head (Base), trainable parameters: 197378
-> Init Neural Weighting (Feature), trainable parameters: 8
-> Init Neural Assemble (Base+Features), trainable parameters: 8
-@004: 	loss(train)=0.1783 	loss(eval)=0.1794 	f1(train)=0.9593 	f1(eval)=0.9582 	duration(epoch)=0:09:43.341789
+> Init BERT-Head (Base), trainable parameters: 1538
+> Init Neural Weighting (Feature), trainable parameters: 184
+> Init Neural Assemble (Base+Features), trainable parameters: 10
+@005: 	loss(train)=0.2337 	loss(eval)=0.2175 	f1(train)=0.8616 	f1(eval)=0.9274 	duration(epoch)=0:05:57.553143
 
 [--- EVAL -> ./data/imdb.eval.csv ---]
-AVG           	 tp:     4751	 fp:      207 	 tn:     4751	 fn:      207	 pre=0.9582	 rec=0.9582	 f1=0.9582	 acc=0.9582
-negative      	 tp:     2336	 fp:      113 	 tn:     2415	 fn:       94	 pre=0.9539	 rec=0.9613	 f1=0.9576	 acc=0.9582
-positive      	 tp:     2415	 fp:       94 	 tn:     2336	 fn:      113	 pre=0.9625	 rec=0.9553	 f1=0.9589	 acc=0.9582
+AVG           	 tp:     2301	 fp:      180 	 tn:     2301	 fn:      180	 pre=0.9274	 rec=0.9274	 f1=0.9274	 acc=0.9274
+negative      	 tp:     1100	 fp:       79 	 tn:     1201	 fn:      101	 pre=0.9330	 rec=0.9159	 f1=0.9244	 acc=0.9274
+positive      	 tp:     1201	 fp:      101 	 tn:     1100	 fn:       79	 pre=0.9224	 rec=0.9383	 f1=0.9303	 acc=0.9274
