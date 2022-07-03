@@ -2,7 +2,7 @@
   "out_path": "./experiments/_debug/features/",
   "model": {
     "features": {
-      "dropout": 0.2,
+      "dropout": 0.1,
       "ngram_counter": {
         "1": 256,
         "2": 2048
