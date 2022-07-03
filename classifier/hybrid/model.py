@@ -17,7 +17,7 @@ class Model(ModelFrame):
 
         self.base = Base(in_size[0], out_size, config=config['base'])
         self.features = Features(in_size[1], out_size, config=config['features'])
-        self.output = Perceptron(out_size * 2, out_size, dropout=0.0)
+        self.output = Perceptron(out_size * 2, out_size, dropout=config['ensemble']['dropout'])
 
         logging.info(
             f'> Init Neural Assemble (Base+Features), trainable parameters: '

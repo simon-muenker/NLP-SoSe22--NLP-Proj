@@ -11,7 +11,7 @@
       "dropout": 0.8
     },
     "features": {
-      "dropout": 0.1,
+      "dropout": 0.2,
       "ngram_counter": {
         "1": 768,
         "2": 5120
@@ -24,6 +24,9 @@
         "moral": true,
         "event": false
       }
+    },
+    "ensemble": {
+      "dropout": 0.1
     }
   }
 }
