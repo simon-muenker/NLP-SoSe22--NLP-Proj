@@ -3,46 +3,61 @@
 
 [--- PREPARE DATA -> (['train', 'eval']) ---]
 > Load/Init from ./data/imdb.train.csv
-> f(__load) took: 0.2831 sec
-> f(__tokenize) took: 4.5587 sec
-> f(__ngram) took: 1.5986 sec
-> f(__ngram) took: 1.7971 sec
+> f(__load) took: 0.2715 sec
+> f(__tokenize) took: 4.3906 sec
+> f(__ngram) took: 1.5142 sec
+> f(__ngram) took: 1.7040 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0346 sec
-> f(__tokenize) took: 1.1047 sec
-> f(__ngram) took: 0.7603 sec
-> f(__ngram) took: 0.7952 sec
+> f(__load) took: 0.0332 sec
+> f(__tokenize) took: 1.0200 sec
+> f(__ngram) took: 0.6915 sec
+> f(__ngram) took: 0.7454 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.4418 sec
+> f(__init__) took: 8.5573 sec
 
 [--- FEATURE PIPELINE ---]
 > Init N-Gram Group Counter, with: [('1', 768), ('2', 5120)]
 > Init NELA Pipeline
 > Fit Pipeline ./data/imdb.train.csv on (only N-Gram Group Counter)
-> f(fit) took: 3.6442 sec
+> f(fit) took: 3.6091 sec
 > Apply Feature Pipeline on ./data/imdb.train.csv
-> f(apply) took: 227.4208 sec
+> f(apply) took: 114.7344 sec
 > Apply Feature Pipeline on ./data/imdb.eval.csv
-> f(apply) took: 30.8731 sec
+> f(apply) took: 17.7882 sec
 > Init BERT-Head (Base), trainable parameters: 1538
-> Init Neural Weighting (Feature), trainable parameters: 184
+> Init Neural Weighting (Feature), trainable parameters: 66
 > Init Neural Assemble (Base+Features), trainable parameters: 10
 
 [--- TRAIN -> ./data/imdb.train.csv ---]
-@001: 	loss(train)=0.4024 	loss(eval)=0.2922 	f1(train)=0.8278 	f1(eval)=0.9266 	duration(epoch)=0:05:55.276054
-@002: 	loss(train)=0.3102 	loss(eval)=0.2821 	f1(train)=0.8610 	f1(eval)=0.9270 	duration(epoch)=0:05:58.554850
-@003: 	loss(train)=0.2626 	loss(eval)=0.2571 	f1(train)=0.8661 	f1(eval)=0.9262 	duration(epoch)=0:05:57.996361
-@004: 	loss(train)=0.2450 	loss(eval)=0.2272 	f1(train)=0.8636 	f1(eval)=0.9270 	duration(epoch)=0:05:57.725318
-@005: 	loss(train)=0.2337 	loss(eval)=0.2175 	f1(train)=0.8616 	f1(eval)=0.9274 	duration(epoch)=0:05:57.553143
+@001: 	loss(train)=0.0524 	loss(eval)=0.2260 	f1(train)=0.9851 	f1(eval)=0.9323 	duration(epoch)=0:06:04.773684
+@002: 	loss(train)=0.0462 	loss(eval)=0.2468 	f1(train)=0.9871 	f1(eval)=0.9303 	duration(epoch)=0:06:06.307601
+@003: 	loss(train)=0.0443 	loss(eval)=0.2521 	f1(train)=0.9872 	f1(eval)=0.9319 	duration(epoch)=0:06:06.965817
+@004: 	loss(train)=0.0452 	loss(eval)=0.2651 	f1(train)=0.9868 	f1(eval)=0.9311 	duration(epoch)=0:06:06.329957
+@005: 	loss(train)=0.0463 	loss(eval)=0.2451 	f1(train)=0.9874 	f1(eval)=0.9303 	duration(epoch)=0:06:08.122337
+@006: 	loss(train)=0.0445 	loss(eval)=0.2286 	f1(train)=0.9874 	f1(eval)=0.9307 	duration(epoch)=0:06:07.235610
+@007: 	loss(train)=0.0448 	loss(eval)=0.2289 	f1(train)=0.9868 	f1(eval)=0.9311 	duration(epoch)=0:06:07.865128
+@008: 	loss(train)=0.0449 	loss(eval)=0.3036 	f1(train)=0.9880 	f1(eval)=0.9311 	duration(epoch)=0:06:06.756539
+@009: 	loss(train)=0.0461 	loss(eval)=0.2312 	f1(train)=0.9868 	f1(eval)=0.9315 	duration(epoch)=0:06:08.135234
+@010: 	loss(train)=0.0443 	loss(eval)=0.2457 	f1(train)=0.9873 	f1(eval)=0.9323 	duration(epoch)=0:06:07.369139
+@011: 	loss(train)=0.0449 	loss(eval)=0.2387 	f1(train)=0.9877 	f1(eval)=0.9319 	duration(epoch)=0:06:08.116288
+@012: 	loss(train)=0.0450 	loss(eval)=0.2558 	f1(train)=0.9879 	f1(eval)=0.9319 	duration(epoch)=0:06:05.919636
+@013: 	loss(train)=0.0459 	loss(eval)=0.2534 	f1(train)=0.9874 	f1(eval)=0.9315 	duration(epoch)=0:06:06.372903
+@014: 	loss(train)=0.0444 	loss(eval)=0.2629 	f1(train)=0.9879 	f1(eval)=0.9315 	duration(epoch)=0:06:06.391254
+@015: 	loss(train)=0.0430 	loss(eval)=0.2552 	f1(train)=0.9878 	f1(eval)=0.9327 	duration(epoch)=0:06:06.658359
+@016: 	loss(train)=0.0445 	loss(eval)=0.2663 	f1(train)=0.9874 	f1(eval)=0.9323 	duration(epoch)=0:06:07.413067
+@017: 	loss(train)=0.0447 	loss(eval)=0.2666 	f1(train)=0.9880 	f1(eval)=0.9319 	duration(epoch)=0:06:07.085963
+@018: 	loss(train)=0.0449 	loss(eval)=0.2314 	f1(train)=0.9879 	f1(eval)=0.9323 	duration(epoch)=0:06:07.566060
+@019: 	loss(train)=0.0452 	loss(eval)=0.2790 	f1(train)=0.9882 	f1(eval)=0.9311 	duration(epoch)=0:06:06.956351
+@020: 	loss(train)=0.0449 	loss(eval)=0.2762 	f1(train)=0.9879 	f1(eval)=0.9315 	duration(epoch)=0:06:08.400125
 > Load best model based on evaluation loss.
 > Init BERT-Head (Base), trainable parameters: 1538
-> Init Neural Weighting (Feature), trainable parameters: 184
+> Init Neural Weighting (Feature), trainable parameters: 66
 > Init Neural Assemble (Base+Features), trainable parameters: 10
-@005: 	loss(train)=0.2337 	loss(eval)=0.2175 	f1(train)=0.8616 	f1(eval)=0.9274 	duration(epoch)=0:05:57.553143
+@015: 	loss(train)=0.0430 	loss(eval)=0.2552 	f1(train)=0.9878 	f1(eval)=0.9327 	duration(epoch)=0:06:06.658359
 
 [--- EVAL -> ./data/imdb.eval.csv ---]
-AVG           	 tp:     2301	 fp:      180 	 tn:     2301	 fn:      180	 pre=0.9274	 rec=0.9274	 f1=0.9274	 acc=0.9274
-negative      	 tp:     1100	 fp:       79 	 tn:     1201	 fn:      101	 pre=0.9330	 rec=0.9159	 f1=0.9244	 acc=0.9274
-positive      	 tp:     1201	 fp:      101 	 tn:     1100	 fn:       79	 pre=0.9224	 rec=0.9383	 f1=0.9303	 acc=0.9274
+AVG           	 tp:     2314	 fp:      167 	 tn:     2314	 fn:      167	 pre=0.9327	 rec=0.9327	 f1=0.9327	 acc=0.9327
+negative      	 tp:     1126	 fp:       92 	 tn:     1188	 fn:       75	 pre=0.9245	 rec=0.9376	 f1=0.9310	 acc=0.9327
+positive      	 tp:     1188	 fp:       75 	 tn:     1126	 fn:       92	 pre=0.9406	 rec=0.9281	 f1=0.9343	 acc=0.9327

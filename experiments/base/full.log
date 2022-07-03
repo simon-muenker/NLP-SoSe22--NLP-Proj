@@ -3,26 +3,41 @@
 
 [--- PREPARE DATA -> (['train', 'eval']) ---]
 > Load/Init from ./data/imdb.train.csv
-> f(__load) took: 0.2831 sec
+> f(__load) took: 0.2689 sec
 > Load/Init from ./data/imdb.eval.csv
-> f(__load) took: 0.0313 sec
+> f(__load) took: 0.0289 sec
 
 [--- LOAD COMPONENTS ---]
 > Init Encoder: 'fabriceyhc/bert-base-uncased-imdb'
-> f(__init__) took: 8.3731 sec
+> f(__init__) took: 8.4025 sec
 > Init BERT-Head (Base), trainable parameters: 1538
 
 [--- TRAIN -> ./data/imdb.train.csv ---]
-@001: 	loss(train)=0.0562 	loss(eval)=0.2341 	f1(train)=0.9837 	f1(eval)=0.9311 	duration(epoch)=0:05:36.589078
-@002: 	loss(train)=0.0450 	loss(eval)=0.2393 	f1(train)=0.9875 	f1(eval)=0.9319 	duration(epoch)=0:05:38.747255
-@003: 	loss(train)=0.0434 	loss(eval)=0.2491 	f1(train)=0.9875 	f1(eval)=0.9311 	duration(epoch)=0:05:38.668544
-@004: 	loss(train)=0.0437 	loss(eval)=0.2404 	f1(train)=0.9874 	f1(eval)=0.9311 	duration(epoch)=0:05:38.714698
-@005: 	loss(train)=0.0441 	loss(eval)=0.2228 	f1(train)=0.9876 	f1(eval)=0.9319 	duration(epoch)=0:05:38.638488
+@001: 	loss(train)=0.0793 	loss(eval)=0.4121 	f1(train)=0.9845 	f1(eval)=0.9323 	duration(epoch)=0:05:47.370332
+@002: 	loss(train)=0.0952 	loss(eval)=0.4953 	f1(train)=0.9861 	f1(eval)=0.9327 	duration(epoch)=0:05:49.647570
+@003: 	loss(train)=0.1029 	loss(eval)=0.4434 	f1(train)=0.9857 	f1(eval)=0.9307 	duration(epoch)=0:05:49.762074
+@004: 	loss(train)=0.1000 	loss(eval)=0.4929 	f1(train)=0.9865 	f1(eval)=0.9327 	duration(epoch)=0:05:49.680481
+@005: 	loss(train)=0.1096 	loss(eval)=0.5972 	f1(train)=0.9862 	f1(eval)=0.9311 	duration(epoch)=0:05:49.851378
+@006: 	loss(train)=0.1077 	loss(eval)=0.4144 	f1(train)=0.9862 	f1(eval)=0.9331 	duration(epoch)=0:05:49.493454
+@007: 	loss(train)=0.1083 	loss(eval)=0.5434 	f1(train)=0.9868 	f1(eval)=0.9319 	duration(epoch)=0:05:49.903791
+@008: 	loss(train)=0.1150 	loss(eval)=0.4835 	f1(train)=0.9860 	f1(eval)=0.9323 	duration(epoch)=0:05:49.802597
+@009: 	loss(train)=0.1011 	loss(eval)=0.4698 	f1(train)=0.9864 	f1(eval)=0.9315 	duration(epoch)=0:05:49.705109
+@010: 	loss(train)=0.1052 	loss(eval)=0.3291 	f1(train)=0.9867 	f1(eval)=0.9315 	duration(epoch)=0:05:49.969677
+@011: 	loss(train)=0.1133 	loss(eval)=0.5610 	f1(train)=0.9868 	f1(eval)=0.9315 	duration(epoch)=0:05:50.352759
+@012: 	loss(train)=0.1091 	loss(eval)=0.4905 	f1(train)=0.9869 	f1(eval)=0.9323 	duration(epoch)=0:05:49.948278
+@013: 	loss(train)=0.1111 	loss(eval)=0.5395 	f1(train)=0.9865 	f1(eval)=0.9311 	duration(epoch)=0:05:50.187991
+@014: 	loss(train)=0.1208 	loss(eval)=0.5046 	f1(train)=0.9869 	f1(eval)=0.9323 	duration(epoch)=0:05:49.999633
+@015: 	loss(train)=0.1036 	loss(eval)=0.5645 	f1(train)=0.9862 	f1(eval)=0.9323 	duration(epoch)=0:05:49.515507
+@016: 	loss(train)=0.1142 	loss(eval)=0.2822 	f1(train)=0.9874 	f1(eval)=0.9315 	duration(epoch)=0:05:50.017530
+@017: 	loss(train)=0.1137 	loss(eval)=0.4720 	f1(train)=0.9861 	f1(eval)=0.9323 	duration(epoch)=0:05:50.081596
+@018: 	loss(train)=0.1148 	loss(eval)=0.4004 	f1(train)=0.9864 	f1(eval)=0.9327 	duration(epoch)=0:05:49.560724
+@019: 	loss(train)=0.1143 	loss(eval)=0.3712 	f1(train)=0.9876 	f1(eval)=0.9327 	duration(epoch)=0:05:49.412969
+@020: 	loss(train)=0.1056 	loss(eval)=0.3731 	f1(train)=0.9866 	f1(eval)=0.9327 	duration(epoch)=0:05:49.393412
 > Load best model based on evaluation loss.
 > Init BERT-Head (Base), trainable parameters: 1538
-@005: 	loss(train)=0.0441 	loss(eval)=0.2228 	f1(train)=0.9876 	f1(eval)=0.9319 	duration(epoch)=0:05:38.638488
+@006: 	loss(train)=0.1077 	loss(eval)=0.4144 	f1(train)=0.9862 	f1(eval)=0.9331 	duration(epoch)=0:05:49.493454
 
 [--- EVAL -> ./data/imdb.eval.csv ---]
-AVG           	 tp:     2312	 fp:      169 	 tn:     2312	 fn:      169	 pre=0.9319	 rec=0.9319	 f1=0.9319	 acc=0.9319
-negative      	 tp:     1118	 fp:       86 	 tn:     1194	 fn:       83	 pre=0.9286	 rec=0.9309	 f1=0.9297	 acc=0.9319
-positive      	 tp:     1194	 fp:       83 	 tn:     1118	 fn:       86	 pre=0.9350	 rec=0.9328	 f1=0.9339	 acc=0.9319
+AVG           	 tp:     2315	 fp:      166 	 tn:     2315	 fn:      166	 pre=0.9331	 rec=0.9331	 f1=0.9331	 acc=0.9331
+negative      	 tp:     1120	 fp:       85 	 tn:     1195	 fn:       81	 pre=0.9295	 rec=0.9326	 f1=0.9310	 acc=0.9331
+positive      	 tp:     1195	 fp:       81 	 tn:     1120	 fn:       85	 pre=0.9365	 rec=0.9336	 f1=0.9351	 acc=0.9331
