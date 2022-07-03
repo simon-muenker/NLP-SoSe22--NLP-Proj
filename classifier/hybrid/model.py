@@ -15,9 +15,11 @@ class Model(ModelFrame):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.base = Base(in_size[0], out_size, config=config['base'])
-        self.features = Features(in_size[1], out_size, config=config['features'])
-        self.output = Perceptron(out_size * 2, out_size, dropout=config['ensemble']['dropout'])
+        hid_size: int = 32
+
+        self.base = Base(in_size[0], int(hid_size / 2), config=config['base'])
+        self.features = Features(in_size[1], int(hid_size / 2), config=config['features'])
+        self.output = Perceptron(hid_size, out_size, dropout=config['ensemble']['dropout'])
 
         logging.info(
             f'> Init Neural Assemble (Base+Features), trainable parameters: '
