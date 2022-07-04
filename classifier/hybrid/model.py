@@ -15,11 +15,9 @@ class Model(ModelFrame):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        hid_size: int = 32
-
-        self.base = Base(in_size[0], int(hid_size / 2), config=config['base'])
-        self.features = Features(in_size[1], int(hid_size / 2), config=config['features'])
-        self.output = Perceptron(hid_size, out_size, dropout=config['ensemble']['dropout'])
+        self.base = Base(in_size[0], config['ensemble']['size'], config=config['base'])
+        self.features = Features(in_size[1], config['ensemble']['size'], config=config['features'])
+        self.output = Perceptron(config['ensemble']['size'], out_size, dropout=config['ensemble']['dropout'])
 
         logging.info(
             f'> Init Neural Assemble (Base+Features), trainable parameters: '
@@ -31,14 +29,22 @@ class Model(ModelFrame):
     @staticmethod
     def default_config() -> dict:
         return {
-
+            'base': Base.default_config(),
+            'features': Features.default_config(),
+            'ensemble': {
+                'size': 32,
+                'dropout': 0.2,
+            }
         }
 
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         return self.output(
-            torch.concat([
-                self.base(data[0]), self.features(data[1])
-            ], dim=1)
+            self.base(data[0]) * self.features(data[1])
         )
+        # return self.output(
+        #     torch.concat([
+        #         self.base(data[0]), self.features(data[1])
+        #     ], dim=1)
+        # )

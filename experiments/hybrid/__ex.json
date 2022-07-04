@@ -26,6 +26,7 @@
       }
     },
     "ensemble": {
+      "size": 32,
       "dropout": 0.1
     }
   }
