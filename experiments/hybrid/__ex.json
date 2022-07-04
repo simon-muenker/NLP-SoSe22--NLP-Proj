@@ -11,7 +11,7 @@
       "dropout": 0.8
     },
     "features": {
-      "dropout": 0.1,
+      "dropout": 0.4,
       "ngram_counter": {
         "1": 768,
         "2": 5120
@@ -27,7 +27,7 @@
     },
     "ensemble": {
       "size": 32,
-      "dropout": 0.1
+      "dropout": 0.4
     }
   }
 }
