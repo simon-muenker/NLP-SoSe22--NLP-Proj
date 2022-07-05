@@ -41,7 +41,7 @@ class Model(ModelFrame):
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
         return self.output(
-            self.base(data[0]) * self.features(data[1])
+            self.base(data[0]) + self.features(data[1])
         )
         # return self.output(
         #     torch.concat([
