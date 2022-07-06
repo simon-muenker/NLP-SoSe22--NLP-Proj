@@ -2,7 +2,7 @@
   "out_path": "./experiments/_debug/hybrid/",
   "model": {
     "encoding": {
-      "model": "fabriceyhc/bert-base-uncased-imdb",
+      "model": "bert-base-uncased",
       "layers": [
         -1
       ]
