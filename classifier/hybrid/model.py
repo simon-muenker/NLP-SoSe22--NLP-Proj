@@ -15,9 +15,9 @@ class Model(ModelFrame):
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.base = Base(in_size[0], config['ensemble']['size'], config=config['base'])
-        self.features = Features(in_size[1], config['ensemble']['size'], config=config['features'])
-        self.output = Perceptron(config['ensemble']['size'], out_size, dropout=config['ensemble']['dropout'])
+        self.base = Base(in_size[0], out_size, config=config['base'])
+        self.features = Features(in_size[1], out_size, config=config['features'])
+        self.output = Perceptron(out_size, out_size, dropout=config['ensemble']['dropout'])
 
         logging.info(
             f'> Init Neural Assemble (Base+Features), trainable parameters: '
@@ -32,7 +32,6 @@ class Model(ModelFrame):
             'base': Base.default_config(),
             'features': Features.default_config(),
             'ensemble': {
-                'size': 32,
                 'dropout': 0.2,
             }
         }
