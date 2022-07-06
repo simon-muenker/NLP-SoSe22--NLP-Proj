@@ -8,7 +8,7 @@
       ]
     },
     "base": {
-      "dropout": 0.8
+      "dropout": 0.2
     },
     "features": {
       "dropout": 0.2,
