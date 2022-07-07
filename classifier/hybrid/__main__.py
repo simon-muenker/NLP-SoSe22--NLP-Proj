@@ -1,19 +1,8 @@
-import logging
-
 import torch
 
-from classifier.hybrid import Model as Network
-from classifier.hybrid import SpacyPipe
-from classifier.lib import Runner
-from classifier.lib.neural import Encoding, Trainer
-from classifier.lib.neural.util import get_device
-from classifier.linguistic import Model as Classifier
-
-DROP_COLS: list = [
-    '1-gram', '2-gram',
-    'sum_negative', 'sum_positive',
-    'prediction'
-]
+from classifier.features.__main__ import Main as Runner
+from .model import Model
+from .._neural.util import get_device
 
 
 class Main(Runner):
@@ -23,87 +12,48 @@ class Main(Runner):
     def __init__(self):
         super().__init__()
 
-        # --- ---------------------------------
-        # --- load components
-
-        # load encoding, classifier, spacy
-        self.encoding = Encoding(self.config['model']['encoding'])
-        self.clss = Classifier(self.config['model']['linguistic'])
-        self.spacy = SpacyPipe()
-
-        # load network
-        self.net = Network(
-            in_size=tuple([
-                self.encoding.dim,
-                len(self.clss.col_names) + len(self.spacy.col_names)
-            ]),
-            out_size=len(self.data['train'].get_label_keys()),
-            config=self.config['model']['neural']
-        )
-
-        # load trainer
-        self.trainer = Trainer(
-            self.net,
-            self.data,
-            self.collation_fn,
-            out_dir=self.config['out_path'],
-            config=self.config['trainer'],
-        )
-
     #  -------- __call__ -----------
     #
-    def __call__(self):
-        logging.info("\n[--- RUN ---]")
+    def __call__(self, model=None, collation_fn=None):
 
-        # --- ---------------------------------
-        # --- fit, save
-        self.clss.fit(self.data['train'].data, label=self.data['train'].data_path)
-        self.clss.save(self.config['out_path'])
+        model = Model(
+            in_size=tuple([
+                int(self.encoder.dim),
+                len(self.pipeline.col_names)
+            ]),
+            out_size=len(self.data['train'].get_label_keys()),
+            config=self.config['model']
+        )
 
-        for data_label, dataset in self.data.items():
-            if data_label not in self.config["data"]["eval_on"]:
-                continue
-
-            # predict classifier
-            self.clss.predict(dataset.data, label=dataset.data_path)
-
-            # drop legacy columns
-            dataset.data.drop(columns=DROP_COLS, inplace=True)
-
-            # apply spacy pipeline
-            self.spacy.apply(dataset.data, 'review', label=dataset.data_path)
-
-        # --- ---------------------------------
-        # --- train
-        self.trainer()
+        super(Runner, self).__call__(model, self.__collation_fn)
 
     #
     #
-    #  -------- collation_fn -----------
+    #  -------- __collation_fn -----------
     #
-    def collation_fn(self, batch: list) -> tuple:
+    def __collation_fn(self, batch: list) -> tuple:
         text: list = []
         label: list = []
-        clss_pred: list = []
+        pipeline: list = []
 
         # collate data
         for sample, review, sentiment in batch:
             text.append(review)
             label.append(sentiment)
-            clss_pred.append(
-                torch.tensor(sample[[
-                    *self.clss.col_names,
-                    *self.spacy.col_names
-                ]].values, device=get_device())
+            pipeline.append(
+                torch.tensor(
+                    sample[self.pipeline.col_names].values,
+                    device=get_device()
+                )
                 .squeeze()
                 .float()
             )
 
         # embed text
-        _, sent_embeds, _ = self.encoding(text, return_unpad=False)
+        _, sent_embeds, _ = self.encoder(text, return_unpad=False)
 
         return (
-            (sent_embeds[:, 1], torch.stack(clss_pred)),
+            (sent_embeds[:, 1], torch.stack(pipeline)),
             torch.tensor(
                 [self.data['train'].encode_label(lb) for lb in label],
                 dtype=torch.long, device=get_device()

@@ -5,14 +5,9 @@
   "out_path": null,
   "data": {
     "paths": {
-      "train": null,
-      "eval": "./data/imdb.eval.csv",
-      "test": "./data/imdb.test.csv"
+      "train": "./data/imdb.train.csv",
+      "eval": "./data/imdb.eval.csv"
     },
-    "eval_on": [
-      "train",
-      "eval"
-    ],
     "polarities": {
       "negative": 0,
       "positive": 1
@@ -23,10 +18,28 @@
       "postprocess": true,
       "ngrams": [
         1,
-        2
+        2,
+        3
       ],
       "remove_stopwords": true
     }
   },
-  "model": null
+  "model": null,
+  "trainer": {
+    "epochs": 20,
+    "shuffle": true,
+    "batch_size": 32,
+    "num_workers": 0,
+    "report_rate": 1,
+    "max_grad_norm": 2.0,
+    "optimizer": {
+      "lr": 1e-2,
+      "weight_decay": 1e-4,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-8
+    }
+  }
 }

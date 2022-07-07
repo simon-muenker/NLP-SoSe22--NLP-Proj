@@ -1,0 +1,57 @@
+> Loaded logger: ./experiments/features/full.log
+> Setup PyTorch: seed(1), cuda(5)
+
+[--- PREPARE DATA -> (['train', 'eval']) ---]
+> Load/Init from ./data/imdb.train.csv
+> f(__load) took: 0.2684 sec
+> f(__tokenize) took: 4.5443 sec
+> f(__ngram) took: 1.5473 sec
+> f(__ngram) took: 1.6935 sec
+> Load/Init from ./data/imdb.eval.csv
+> f(__load) took: 0.0306 sec
+> f(__tokenize) took: 1.0266 sec
+> f(__ngram) took: 0.7156 sec
+> f(__ngram) took: 0.9234 sec
+
+[--- LOAD COMPONENTS ---]
+
+[--- FEATURE PIPELINE ---]
+> Init N-Gram Group Counter, with: [('1', 768), ('2', 5120)]
+> Init NELA Pipeline
+> Fit Pipeline ./data/imdb.train.csv on (only N-Gram Group Counter)
+> f(fit) took: 3.6237 sec
+> Apply Feature Pipeline on ./data/imdb.train.csv
+> f(apply) took: 134.7845 sec
+> Apply Feature Pipeline on ./data/imdb.eval.csv
+> f(apply) took: 17.1348 sec
+> Init Neural Weighting (Feature), trainable parameters: 66
+
+[--- TRAIN -> ./data/imdb.train.csv ---]
+@001: 	loss(train)=0.5733 	loss(eval)=0.4816 	f1(train)=0.6987 	f1(eval)=0.7977 	duration(epoch)=0:00:19.239772
+@002: 	loss(train)=0.4926 	loss(eval)=0.4440 	f1(train)=0.7631 	f1(eval)=0.8118 	duration(epoch)=0:00:19.117478
+@003: 	loss(train)=0.4734 	loss(eval)=0.4298 	f1(train)=0.7768 	f1(eval)=0.8065 	duration(epoch)=0:00:19.064760
+@004: 	loss(train)=0.4657 	loss(eval)=0.4175 	f1(train)=0.7766 	f1(eval)=0.8178 	duration(epoch)=0:00:19.236603
+@005: 	loss(train)=0.4601 	loss(eval)=0.4118 	f1(train)=0.7816 	f1(eval)=0.8206 	duration(epoch)=0:00:19.258786
+@006: 	loss(train)=0.4541 	loss(eval)=0.4055 	f1(train)=0.7835 	f1(eval)=0.8235 	duration(epoch)=0:00:19.330351
+@007: 	loss(train)=0.4546 	loss(eval)=0.4023 	f1(train)=0.7827 	f1(eval)=0.8271 	duration(epoch)=0:00:19.312506
+@008: 	loss(train)=0.4452 	loss(eval)=0.4015 	f1(train)=0.7903 	f1(eval)=0.8218 	duration(epoch)=0:00:19.267948
+@009: 	loss(train)=0.4450 	loss(eval)=0.3986 	f1(train)=0.7891 	f1(eval)=0.8287 	duration(epoch)=0:00:19.342398
+@010: 	loss(train)=0.4410 	loss(eval)=0.3958 	f1(train)=0.7929 	f1(eval)=0.8360 	duration(epoch)=0:00:19.273811
+@011: 	loss(train)=0.4383 	loss(eval)=0.3947 	f1(train)=0.7976 	f1(eval)=0.8331 	duration(epoch)=0:00:19.295530
+@012: 	loss(train)=0.4331 	loss(eval)=0.3920 	f1(train)=0.7980 	f1(eval)=0.8380 	duration(epoch)=0:00:19.396957
+@013: 	loss(train)=0.4306 	loss(eval)=0.3921 	f1(train)=0.7984 	f1(eval)=0.8347 	duration(epoch)=0:00:19.721030
+@014: 	loss(train)=0.4266 	loss(eval)=0.3950 	f1(train)=0.7990 	f1(eval)=0.8279 	duration(epoch)=0:00:19.345434
+@015: 	loss(train)=0.4280 	loss(eval)=0.3924 	f1(train)=0.8027 	f1(eval)=0.8299 	duration(epoch)=0:00:19.318256
+@016: 	loss(train)=0.4256 	loss(eval)=0.3919 	f1(train)=0.8001 	f1(eval)=0.8307 	duration(epoch)=0:00:19.276828
+@017: 	loss(train)=0.4193 	loss(eval)=0.3930 	f1(train)=0.8077 	f1(eval)=0.8247 	duration(epoch)=0:00:19.350568
+@018: 	loss(train)=0.4235 	loss(eval)=0.3864 	f1(train)=0.8027 	f1(eval)=0.8376 	duration(epoch)=0:00:19.345184
+@019: 	loss(train)=0.4171 	loss(eval)=0.3840 	f1(train)=0.8072 	f1(eval)=0.8388 	duration(epoch)=0:00:19.262204
+@020: 	loss(train)=0.4152 	loss(eval)=0.3827 	f1(train)=0.8102 	f1(eval)=0.8372 	duration(epoch)=0:00:19.337787
+> Load best model based on evaluation loss.
+> Init Neural Weighting (Feature), trainable parameters: 66
+@019: 	loss(train)=0.4171 	loss(eval)=0.3840 	f1(train)=0.8072 	f1(eval)=0.8388 	duration(epoch)=0:00:19.262204
+
+[--- EVAL -> ./data/imdb.eval.csv ---]
+AVG           	 tp:     2081	 fp:      400 	 tn:     2081	 fn:      400	 pre=0.8388	 rec=0.8388	 f1=0.8388	 acc=0.8388
+negative      	 tp:      946	 fp:      145 	 tn:     1135	 fn:      255	 pre=0.8671	 rec=0.7877	 f1=0.8255	 acc=0.8388
+positive      	 tp:     1135	 fp:      255 	 tn:      946	 fn:      145	 pre=0.8165	 rec=0.8867	 f1=0.8502	 acc=0.8388

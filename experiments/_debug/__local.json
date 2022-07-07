@@ -2,8 +2,7 @@
   "data": {
     "paths": {
       "train": "./data/imdb._debug.csv",
-      "eval": "./data/imdb._debug.csv",
-      "test": "./data/imdb._debug.csv"
+      "eval": "./data/imdb._debug.csv"
     }
   }
 }

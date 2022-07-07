@@ -2,45 +2,50 @@ import logging
 from typing import Tuple
 
 import torch
-import torch.nn as nn
 
-from classifier.lib.neural import Model as AbsModel
-from classifier.lib.neural.util import get_device
-from classifier.transformer import Model as BERTHead
+from classifier.base.model import Model as Base
+from classifier.features.model import Model as Features
+from .._neural import ModelFrame, Perceptron
 
 
-class Model(AbsModel, nn.Module):
+class Model(ModelFrame):
 
     #  -------- init -----------
     #
     def __init__(self, in_size: Tuple[int], out_size: int, config: dict):
         super().__init__(in_size, out_size, config)
 
-        self.embeds = BERTHead(
-                self.config["in_size"][0],
-                self.config["in_size"][1],
-                self.config.copy()
-            ).to(get_device())
+        hid_size: int = 48
 
-        self.cross_bias = nn.Parameter(torch.zeros(self.config["in_size"][1])).to(get_device())
+        self.base = Base(in_size[0], hid_size, config=config['base'])
+        self.features = Features(in_size[1], hid_size, config=config['features'])
+        self.output = Perceptron(hid_size, out_size, dropout=config['ensemble']['dropout'])
 
-        self.output = nn.Linear(
-            self.config["in_size"][1],
-            self.config["out_size"]
-        ).to(get_device())
-
-        logging.info(f'> Init Neural Assemble (MLP), trainable parameters: {len(self)- len(self.embeds)}')
+        logging.info(
+            f'> Init Neural Assemble (Base+Features), trainable parameters: '
+            f'{len(self) - (len(self.base) + len(self.features))}'
+        )
 
     #  -------- default_config -----------
     #
     @staticmethod
     def default_config() -> dict:
         return {
-            "embeds": BERTHead.default_config(),
-            "linguistic": None,
+            'base': Base.default_config(),
+            'features': Features.default_config(),
+            'ensemble': {
+                'dropout': 0.2,
+            }
         }
 
     #  -------- forward -----------
     #
     def forward(self, data: Tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor:
-        return self.output((self.embeds(data[0]) * data[1]).add(self.cross_bias))
+        return self.output(
+            self.base(data[0]) * self.features(data[1])
+        )
+        # return self.output(
+        #     torch.concat([
+        #         self.base(data[0]), self.features(data[1])
+        #     ], dim=1)
+        # )

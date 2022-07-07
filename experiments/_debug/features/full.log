@@ -1,0 +1,42 @@
+> Loaded logger: ./experiments/_debug/features/full.log
+> Setup PyTorch: seed(1), cuda(5)
+
+[--- PREPARE DATA -> (['train', 'eval']) ---]
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0036 sec
+> f(__tokenize) took: 0.3304 sec
+> f(__ngram) took: 0.2615 sec
+> f(__ngram) took: 0.2543 sec
+> Load/Init from ./data/imdb._debug.csv
+> f(__load) took: 0.0038 sec
+> f(__tokenize) took: 0.2796 sec
+> f(__ngram) took: 0.2981 sec
+> f(__ngram) took: 0.2752 sec
+
+[--- LOAD COMPONENTS ---]
+
+[--- FEATURE PIPELINE ---]
+> Init N-Gram Group Counter, with: [('1', 256), ('2', 2048)]
+> Init NELA Pipeline
+> Fit Pipeline ./data/imdb._debug.csv on (only N-Gram Group Counter)
+> f(fit) took: 0.0256 sec
+> Apply Feature Pipeline on ./data/imdb._debug.csv
+> f(apply) took: 2.9869 sec
+> Apply Feature Pipeline on ./data/imdb._debug.csv
+> f(apply) took: 2.6333 sec
+> Init Neural Weighting (Feature), trainable parameters: 184
+
+[--- TRAIN -> ./data/imdb._debug.csv ---]
+@001: 	loss(train)=8.8494 	loss(test)=8.9404 	f1(train)=0.3250 	f1(test)=0.3250 	duration(epoch)=0:00:01.137737
+@002: 	loss(train)=8.2857 	loss(test)=8.7139 	f1(train)=0.3250 	f1(test)=0.3250 	duration(epoch)=0:00:01.112322
+@003: 	loss(train)=8.9840 	loss(test)=8.4876 	f1(train)=0.3000 	f1(test)=0.3250 	duration(epoch)=0:00:01.105932
+@004: 	loss(train)=8.4339 	loss(test)=8.2612 	f1(train)=0.3500 	f1(test)=0.3250 	duration(epoch)=0:00:01.090869
+@005: 	loss(train)=7.9781 	loss(test)=8.0349 	f1(train)=0.3500 	f1(test)=0.3250 	duration(epoch)=0:00:01.092795
+> Load best model based on evaluation loss.
+> Init Neural Weighting (Feature), trainable parameters: 184
+@005: 	loss(train)=7.9781 	loss(test)=8.0349 	f1(train)=0.3500 	f1(test)=0.3250 	duration(epoch)=0:00:01.092795
+
+[--- EVAL -> ./data/imdb._debug.csv ---]
+AVG           	 tp:       13	 fp:       27 	 tn:       13	 fn:       27	 pre=0.3250	 rec=0.3250	 f1=0.3250	 acc=0.3250
+negative      	 tp:        0	 fp:        0 	 tn:       13	 fn:       27	 pre=0.0000	 rec=0.0000	 f1=0.0000	 acc=0.3250
+positive      	 tp:       13	 fp:       27 	 tn:        0	 fn:        0	 pre=0.3250	 rec=1.0000	 f1=0.4906	 acc=0.3250

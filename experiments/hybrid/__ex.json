@@ -1,0 +1,32 @@
+{
+  "out_path": "./experiments/hybrid/",
+  "model": {
+    "encoding": {
+      "model": "bert-base-uncased",
+      "layers": [
+        -1
+      ]
+    },
+    "base": {
+      "dropout": 0.2
+    },
+    "features": {
+      "dropout": 0.2,
+      "ngram_counter": {
+        "1": 768,
+        "2": 5120
+      },
+      "nela_pipeline": {
+        "style": false,
+        "complexity": false,
+        "bias": true,
+        "affect": true,
+        "moral": true,
+        "event": false
+      }
+    },
+    "ensemble": {
+      "dropout": 0.0
+    }
+  }
+}

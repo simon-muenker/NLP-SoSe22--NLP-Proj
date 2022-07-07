@@ -1,0 +1,19 @@
+{
+  "out_path": "./experiments/_debug/base/",
+  "data": {
+    "config": {
+      "postprocess": false
+    }
+  },
+  "model": {
+    "encoding": {
+      "model": "bert-base-uncased",
+      "layers": [
+        -1
+      ]
+    },
+    "neural": {
+      "dropout": 0.2
+    }
+  }
+}
