@@ -7,8 +7,7 @@
         -1
       ]
     },
-    "base": {
-      "hid_size": 256,
+    "neural": {
       "dropout": 0.2
     },
     "features": {
