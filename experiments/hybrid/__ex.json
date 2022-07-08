@@ -4,7 +4,7 @@
     "encoding": {
       "model": "bert-base-uncased",
       "layers": [
-        -1
+        -2
       ]
     },
     "base": {
