@@ -66,9 +66,10 @@ class Encoder:
     #
     @torch.no_grad()
     def contextualize(self, ids: torch.Tensor, masks: torch.Tensor) -> torch.Tensor:
+        logits = self.model.forward(ids, masks)
+
         return torch.stack(
-            [self.model.forward(ids, masks).hidden_states[i]
-             for i in self.config["layers"]]
+            [logits.hidden_states[i] for i in self.config["layers"]]
         ).sum(0).squeeze()
 
     #  -------- ids_to_tokens -----------
