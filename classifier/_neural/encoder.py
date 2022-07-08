@@ -47,8 +47,8 @@ class Encoder:
         encoding = self.tokenizer(batch, padding=True, truncation=True)
 
         tokens: List[List[str]] = [self.ids_to_tokens(ids) for ids in encoding['input_ids']]
-        ids: torch.Tensor = torch.tensor(encoding['input_ids'], device=get_device()).long()
-        masks: torch.Tensor = torch.tensor(encoding['attention_mask'], device=get_device()).short()
+        ids: torch.Tensor = torch.tensor(encoding['input_ids'], dtype=torch.long, device=get_device())
+        masks: torch.Tensor = torch.tensor(encoding['attention_mask'], dtype=torch.short, device=get_device())
         ctes: torch.Tensor = self.contextualize(ids, masks)
 
         if return_unpad:
@@ -66,11 +66,18 @@ class Encoder:
     #
     @torch.no_grad()
     def contextualize(self, ids: torch.Tensor, masks: torch.Tensor) -> torch.Tensor:
-        logits = self.model.forward(ids, masks)
-
-        return torch.stack(
-            [logits.hidden_states[i] for i in self.config["layers"]]
-        ).sum(0).squeeze()
+        return torch.index_select(
+            torch.stack(
+                self.model.forward(ids, masks).hidden_states,
+                dim=1
+            ),
+            dim=1,
+            index=torch.tensor(
+                self.config["layers"],
+                dtype=torch.int32,
+                device=get_device()
+            )
+        ).sum(1).squeeze()
 
     #  -------- ids_to_tokens -----------
     #

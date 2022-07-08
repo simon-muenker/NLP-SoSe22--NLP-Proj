@@ -9,7 +9,7 @@
     "encoding": {
       "model": "bert-base-uncased",
       "layers": [
-        -2
+        10
       ]
     },
     "neural": {
