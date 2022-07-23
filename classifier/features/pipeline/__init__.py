@@ -24,7 +24,6 @@ class Pipeline:
                 '1': 256,
                 '2': 2048
             },
-            'spacy_pipeline': SpacyPipe.default_config,
             'nela_pipeline': NELAPipe.default_config
         }
 
