@@ -4,26 +4,11 @@ from typing import Tuple, List, Union
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
 
-from classifier.util import timing
+from classifier.util import timing, dict_merge
 from .util import get_device, unpad
 
 
 class Encoder:
-
-    #  -------- __init__ -----------
-    #
-    @timing
-    def __init__(self, config: dict = None):
-        logging.set_verbosity_error()
-
-        if config is None:
-            config = self.default_config()
-
-        self.config = config
-
-        logger.info(f'> Init Encoder: \'{self.config["model"]}\'')
-        self.tokenizer = AutoTokenizer.from_pretrained(self.config["model"])
-        self.model = AutoModel.from_pretrained(self.config["model"], output_hidden_states=True).to(get_device())
 
     #  -------- default_config -----------
     #
@@ -33,6 +18,19 @@ class Encoder:
             "model": "bert-base-uncased",
             "layers": [-1]
         }
+
+    #  -------- __init__ -----------
+    #
+    @timing
+    def __init__(self, user_config: dict = None):
+        logging.set_verbosity_error()
+
+        self.config: dict = Encoder.default_config()
+        dict_merge(self.config, user_config)
+
+        logger.info(f'> Init Encoder: \'{self.config["model"]}\'')
+        self.tokenizer = AutoTokenizer.from_pretrained(self.config["model"])
+        self.model = AutoModel.from_pretrained(self.config["model"], output_hidden_states=True).to(get_device())
 
     #
     #

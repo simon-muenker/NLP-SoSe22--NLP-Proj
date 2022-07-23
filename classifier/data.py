@@ -7,8 +7,7 @@ import pandas as pd
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
-from classifier.util import timing
-
+from classifier.util import timing, dict_merge
 
 LABEL: dict = {
     'token': '1-gram',
@@ -25,28 +24,27 @@ class Data(Dataset):
     target_label: str
 
     data_language: str = 'english'
-    config: dict = None
+    user_config: dict = field(default_factory=dict)
 
     stop_words: list = field(default_factory=list)
 
     #  -------- default_config -----------
     #
-    @property
-    def default_config(self) -> dict:
+    @staticmethod
+    def default_config() -> dict:
         return {
-            "postprocess": True,
-            "ngrams": [1, 2],
-            "remove_stopwords": True
+            'postprocess': True,
+            'ngrams': [1, 2, 3],
+            'remove_stopwords': True
         }
 
     #  -------- __post_init__ -----------
     #
     def __post_init__(self):
+        self.config = Data.default_config()
+        dict_merge(self.config, self.user_config)
+
         logging.info(f'> Load/Init from {self.data_path}')
-
-        if self.config is None:
-            self.config = self.default_config
-
         self.data: pd.DataFrame = Data.__load(self.data_path)
 
         if self.config['remove_stopwords']:

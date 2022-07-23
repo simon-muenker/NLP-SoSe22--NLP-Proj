@@ -2,19 +2,22 @@
   "out_path": "./experiments/_debug/features/",
   "model": {
     "features": {
-      "dropout": 0.2,
       "ngram_counter": {
         "1": 256,
         "2": 2048
       },
       "nela_pipeline": {
-            "style": true,
-            "complexity": true,
-            "bias": true,
-            "affect": true,
-            "moral": true,
-            "event": true
-        }
+        "style": true,
+        "complexity": true,
+        "bias": true,
+        "affect": true,
+        "moral": true,
+        "event": true
+      }
+    },
+    "neural": {
+      "name": "nGrams+NeLa Weighting (Features)",
+      "dropout": 0.2
     }
   }
 }

@@ -1,7 +1,6 @@
 import torch
 
 from classifier.features.__main__ import Main as Runner
-from .model import Model
 from .._neural.util import get_device
 
 
@@ -14,18 +13,13 @@ class Main(Runner):
 
     #  -------- __call__ -----------
     #
-    def __call__(self, model=None, collation_fn=None):
-
-        model = Model(
-            in_size=tuple([
-                int(self.encoder.dim),
-                len(self.pipeline.col_names)
-            ]),
-            out_size=len(self.data['train'].get_label_keys()),
-            config=self.config['model']
+    def __call__(self, *args) -> None:
+        super(
+            type(self).__bases__[0], self
+        ).__call__(
+            int(self.encoder.dim) + len(self.pipeline.col_names),
+            self.__collation_fn
         )
-
-        super(Runner, self).__call__(model, self.__collation_fn)
 
     #
     #
@@ -36,7 +30,7 @@ class Main(Runner):
         label: list = []
         pipeline: list = []
 
-        # collate data
+        # collate features
         for sample, review, sentiment in batch:
             text.append(review)
             label.append(sentiment)
@@ -49,11 +43,13 @@ class Main(Runner):
                 .float()
             )
 
-        # embed text
+        # compute embeddings
         _, sent_embeds, _ = self.encoder(text, return_unpad=False)
 
         return (
-            (sent_embeds[:, 1], torch.stack(pipeline)),
+            torch.concat([
+                sent_embeds[:, 1], torch.stack(pipeline)
+            ], dim=1),
             torch.tensor(
                 [self.data['train'].encode_label(lb) for lb in label],
                 dtype=torch.long, device=get_device()

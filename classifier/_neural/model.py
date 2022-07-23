@@ -1,40 +1,50 @@
+import logging
 from abc import abstractmethod
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 import torch
 import torch.nn as nn
 
+from classifier.util import dict_merge
 from .util import get_device
 
 
-class ModelFrame(nn.Module):
-
-    #  -------- init -----------
-    #
-    def __init__(self, in_size: Union[Tuple, int], out_size: int, config: dict):
-        super().__init__()
-
-        if config is None:
-            config = self.default_config()
-
-        self.config = config
-        self.config["in_size"] = in_size
-        self.config["out_size"] = out_size
-
-        self.to(get_device())
+class Model(nn.Module):
 
     #  -------- default_config -----------
     #
     @staticmethod
-    @abstractmethod
     def default_config() -> dict:
-        pass
+        return {
+            "name": "Dropout->Dense->Softmax",
+            "in_size": 64,
+            "out_size": 2,
+            "dropout": 0.4,
+        }
+
+    #  -------- init -----------
+    #
+    def __init__(self, user_config: dict = None):
+        super().__init__()
+        self.config: dict = Model.default_config()
+        dict_merge(self.config, user_config)
+
+        self.net = nn.Sequential(
+            nn.Dropout(p=self.config["dropout"]),
+            nn.Linear(
+                self.config["in_size"],
+                self.config["out_size"]
+            ),
+            nn.Softmax(dim=0)
+        ).to(get_device())
+
+        logging.info(f'> Init {self.config["name"]}, trainable parameters: {len(self)}')
 
     #  -------- forward -----------
     #
     @abstractmethod
     def forward(self, data: Tuple[List[torch.Tensor], List]) -> torch.Tensor:
-        pass
+        return self.net(data)
 
     #
     #
@@ -75,14 +85,10 @@ class ModelFrame(nn.Module):
     #
     @classmethod
     def load(cls, path: str) -> nn.Module:
-        data = torch.load(path, map_location=get_device())
+        save_state = torch.load(path, map_location=get_device())
 
-        model: nn.Module = cls(
-            data["config"]["in_size"],
-            data["config"]["out_size"],
-            data["config"]
-        ).to(get_device())
-        model.load_state_dict(data["state_dict"])
+        model: nn.Module = cls(save_state["config"]).to(get_device())
+        model.load_state_dict(save_state["state_dict"])
 
         return model
 

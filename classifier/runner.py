@@ -5,14 +5,31 @@ from abc import abstractmethod
 
 import torch
 from pandarallel import pandarallel
-from torch import nn
 
 from classifier import Data
 from classifier.util import dict_merge, load_json
-from ._neural import Trainer, Encoder
+from ._neural import Trainer, Encoder, Model
 
 
 class Runner:
+
+    #  -------- default_config -----------
+    #
+    @staticmethod
+    def default_config() -> dict:
+        return {
+            'seed': 1,
+            'cuda': 0,
+            'debug': False,
+            'out_path': './__',
+            'data': {
+                'config': Data.default_config()
+            },
+            'model': {
+                'neural': Model.default_config(),
+            },
+            'trainer': Trainer.default_config()
+        }
 
     #  -------- __init__ -----------
     #
@@ -20,7 +37,9 @@ class Runner:
 
         # --- ---------------------------------
         # --- base setup
-        self.config: dict = Runner.__load_config()
+        self.config: dict = Runner.default_config()
+        dict_merge(self.config, Runner.__load_config())
+
         Runner.__load_logger(f'{self.config["out_path"]}full.log')
         Runner.__setup_pytorch(self.config["seed"], self.config["cuda"])
 
@@ -42,11 +61,16 @@ class Runner:
 
     #  -------- __call__ -----------
     #
-    def __call__(self, model: nn.Module, collation_fn: callable) -> None:
+    def __call__(self, neural_in_size: int, collation_fn: callable) -> None:
+        self.config['model']['neural']['in_size'] = neural_in_size
+        self.config['model']['neural']['out_size'] = len(self.data['train'].get_label_keys())
+
+        model = Model(self.config['model']['neural'])
+
         Trainer(
             model, self.data, collation_fn,
             out_dir=self.config['out_path'],
-            config=self.config['trainer'],
+            user_config=self.config['trainer'],
         )()
 
     #  -------- __collation_fn -----------
@@ -66,7 +90,7 @@ class Runner:
                 polarities=self.config['data']['polarities'],
                 data_label=self.config['data']['data_label'],
                 target_label=self.config['data']['target_label'],
-                config=self.config['data']['config']
+                user_config=self.config['data']['config']
             ) for name, path in self.config['data']['paths'].items()
         }
 
@@ -79,11 +103,11 @@ class Runner:
         # get console arguments, config file
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            "-C",
-            dest="config",
+            '-C',
+            dest='config',
             nargs='+',
             required=True,
-            help="define multiple config.json files witch are combined during runtime (overwriting is possible)"
+            help='define multiple config.json files witch are combined during runtime (overwriting is possible)'
         )
         args = parser.parse_args()
 
@@ -102,9 +126,9 @@ class Runner:
     def __load_logger(path: str, debug: bool = False) -> None:
         logging.basicConfig(
             level=logging.INFO if not debug else logging.DEBUG,
-            format="%(message)s",
+            format='%(message)s',
             handlers=[
-                logging.FileHandler(path, mode="w"),
+                logging.FileHandler(path, mode='w'),
                 logging.StreamHandler()
             ]
         )

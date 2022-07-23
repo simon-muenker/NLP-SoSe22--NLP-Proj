@@ -7,9 +7,6 @@
         10
       ]
     },
-    "neural": {
-      "dropout": 0.2
-    },
     "features": {
       "dropout": 0.2,
       "ngram_counter": {
@@ -25,8 +22,9 @@
         "event": true
       }
     },
-    "ensemble": {
-      "dropout": 0.0
+    "neural": {
+      "name": "Base+Features Concatenation (Hybrid)",
+      "dropout": 0.2
     }
   }
 }

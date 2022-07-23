@@ -13,6 +13,7 @@
       ]
     },
     "neural": {
+      "name": "BERT-Head (Base)",
       "dropout": 0.2
     }
   }

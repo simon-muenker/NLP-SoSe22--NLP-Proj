@@ -3,7 +3,6 @@ import logging
 import torch
 
 from classifier import Runner
-from .model import Model
 from .pipeline import Pipeline
 from .._neural.util import get_device
 
@@ -31,19 +30,10 @@ class Main(Runner):
         for data_label, dataset in self.data.items():
             self.pipeline.apply(dataset.data, label=dataset.data_path)
 
-    #
-    #
     #  -------- __call__ -----------
     #
-    def __call__(self, model=None, collation_fn=None):
-
-        model = Model(
-            len(self.pipeline.col_names),
-            len(self.data['train'].get_label_keys()),
-            config=self.config['model']['features']
-        )
-
-        super().__call__(model, self.__collation_fn)
+    def __call__(self, *args) -> None:
+        super().__call__(len(self.pipeline.col_names), self.__collation_fn)
 
     #
     #

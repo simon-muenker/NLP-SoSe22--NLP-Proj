@@ -1,7 +1,6 @@
 import torch
 
 from classifier import Runner
-from .model import Model
 from .._neural.util import get_device
 
 
@@ -14,15 +13,8 @@ class Main(Runner):
 
     #  -------- __call__ -----------
     #
-    def __call__(self, model=None, collation_fn=None):
-
-        model = Model(
-            in_size=self.encoder.dim,
-            out_size=len(self.data['train'].get_label_keys()),
-            config=self.config['model']['neural']
-        )
-
-        super().__call__(model, self.__collation_fn)
+    def __call__(self, *args) -> None:
+        super().__call__(self.encoder.dim, self.__collation_fn)
 
     #
     #
