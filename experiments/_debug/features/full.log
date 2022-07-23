@@ -2,16 +2,20 @@
 > Setup PyTorch: seed(1), cuda(5)
 
 [--- PREPARE DATA -> (['train', 'eval']) ---]
-> Load/Init from ./data/imdb._debug.csv
-> f(__load) took: 0.0033 sec
-> f(__tokenize) took: 0.3082 sec
-> f(__ngram) took: 0.2823 sec
-> f(__ngram) took: 0.2761 sec
-> Load/Init from ./data/imdb._debug.csv
 > f(__load) took: 0.0035 sec
-> f(__tokenize) took: 0.2937 sec
-> f(__ngram) took: 0.2816 sec
-> f(__ngram) took: 0.2862 sec
+> Load/Init from ./data/imdb._debug.csv
+  Number of Samples: 40 
+  Memory Usage: 0.0729 MB
+> f(__tokenize) took: 0.3833 sec
+> f(__ngram) took: 0.2814 sec
+> f(__ngram) took: 0.2835 sec
+> f(__load) took: 0.0107 sec
+> Load/Init from ./data/imdb._debug.csv
+  Number of Samples: 40 
+  Memory Usage: 0.0729 MB
+> f(__tokenize) took: 0.2794 sec
+> f(__ngram) took: 0.2605 sec
+> f(__ngram) took: 0.2867 sec
 
 [--- LOAD COMPONENTS ---]
 
@@ -19,44 +23,50 @@
 > Init N-Gram Group Counter, with: [('1', 256), ('2', 2048)]
 > Init NELA Pipeline
 > Fit Pipeline ./data/imdb._debug.csv on (only N-Gram Group Counter)
-> f(fit) took: 0.0243 sec
+> f(fit) took: 0.0229 sec
 > Apply Feature Pipeline on ./data/imdb._debug.csv
-> f(apply) took: 2.8358 sec
+> f(apply) took: 2.7951 sec
 > Apply Feature Pipeline on ./data/imdb._debug.csv
-> f(apply) took: 2.6583 sec
-> Init nGrams+NeLa Weighting (Features), trainable parameters: 184
+> f(apply) took: 2.7389 sec
+> Init nGrams+NeLa Weighting (Features)
+  Trainable parameters: 184
+  Input Dimension: 91
+  Output Dimension: 2
 
 [--- TRAIN -> ./data/imdb._debug.csv ---]
-@001: 	loss(train)=0.7098 	loss(eval)=0.6726 	f1(train)=0.7250 	f1(eval)=0.7250 	duration(epoch)=0:00:00.093155
-@002: 	loss(train)=0.6979 	loss(eval)=0.6835 	f1(train)=0.7250 	f1(eval)=0.7250 	duration(epoch)=0:00:00.063860
-@003: 	loss(train)=0.6931 	loss(eval)=0.6932 	f1(train)=0.7500 	f1(eval)=0.7500 	duration(epoch)=0:00:00.063809
-@004: 	loss(train)=0.6954 	loss(eval)=0.6936 	f1(train)=0.7000 	f1(eval)=0.7500 	duration(epoch)=0:00:00.063257
-@005: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.8000 	f1(eval)=0.7000 	duration(epoch)=0:00:00.063833
-@006: 	loss(train)=0.6921 	loss(eval)=0.6832 	f1(train)=0.7000 	f1(eval)=0.7250 	duration(epoch)=0:00:00.063113
-@007: 	loss(train)=0.6947 	loss(eval)=0.6930 	f1(train)=0.6750 	f1(eval)=0.7250 	duration(epoch)=0:00:00.063456
-@008: 	loss(train)=0.6931 	loss(eval)=0.6932 	f1(train)=0.6500 	f1(eval)=0.6750 	duration(epoch)=0:00:00.067302
-@009: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.063083
-@010: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.6750 	f1(eval)=0.7250 	duration(epoch)=0:00:00.063084
-@011: 	loss(train)=0.6931 	loss(eval)=0.6956 	f1(train)=0.7000 	f1(eval)=0.6750 	duration(epoch)=0:00:00.062370
-@012: 	loss(train)=0.6935 	loss(eval)=0.6918 	f1(train)=0.6750 	f1(eval)=0.7250 	duration(epoch)=0:00:00.062199
-@013: 	loss(train)=0.6931 	loss(eval)=0.6911 	f1(train)=0.6750 	f1(eval)=0.7250 	duration(epoch)=0:00:00.067325
-@014: 	loss(train)=0.6898 	loss(eval)=0.6931 	f1(train)=0.7250 	f1(eval)=0.7000 	duration(epoch)=0:00:00.061662
-@015: 	loss(train)=0.6934 	loss(eval)=0.6931 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.062058
-@016: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.7000 	f1(eval)=0.7250 	duration(epoch)=0:00:00.062133
-@017: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.7000 	f1(eval)=0.7000 	duration(epoch)=0:00:00.061408
-@018: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.7000 	f1(eval)=0.7250 	duration(epoch)=0:00:00.062186
-@019: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.7000 	f1(eval)=0.7250 	duration(epoch)=0:00:00.064192
-@020: 	loss(train)=0.6931 	loss(eval)=0.6930 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.061909
-@021: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.062200
-@022: 	loss(train)=0.6931 	loss(eval)=0.6930 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.061735
-@023: 	loss(train)=0.6932 	loss(eval)=0.6932 	f1(train)=0.7000 	f1(eval)=0.6500 	duration(epoch)=0:00:00.061898
-@024: 	loss(train)=0.6930 	loss(eval)=0.6931 	f1(train)=0.7250 	f1(eval)=0.6500 	duration(epoch)=0:00:00.061684
-@025: 	loss(train)=0.6931 	loss(eval)=0.6931 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.061697
+@001: 	loss(train)=8.1961 	loss(eval)=2.3879 	f1(train)=0.3250 	f1(eval)=0.3250 	duration(epoch)=0:00:00.075551
+@002: 	loss(train)=3.1137 	loss(eval)=2.6579 	f1(train)=0.3250 	f1(eval)=0.6750 	duration(epoch)=0:00:00.060821
+@003: 	loss(train)=3.8531 	loss(eval)=4.4651 	f1(train)=0.5500 	f1(eval)=0.7000 	duration(epoch)=0:00:00.060392
+@004: 	loss(train)=3.2554 	loss(eval)=1.7037 	f1(train)=0.7500 	f1(eval)=0.6750 	duration(epoch)=0:00:00.060232
+@005: 	loss(train)=1.2145 	loss(eval)=0.8862 	f1(train)=0.6000 	f1(eval)=0.5000 	duration(epoch)=0:00:00.059507
+@006: 	loss(train)=1.3562 	loss(eval)=1.0398 	f1(train)=0.4500 	f1(eval)=0.6250 	duration(epoch)=0:00:00.060009
+@007: 	loss(train)=0.7542 	loss(eval)=0.8082 	f1(train)=0.6500 	f1(eval)=0.7000 	duration(epoch)=0:00:00.059285
+@008: 	loss(train)=0.7178 	loss(eval)=0.5172 	f1(train)=0.7250 	f1(eval)=0.6750 	duration(epoch)=0:00:00.059081
+@009: 	loss(train)=0.6839 	loss(eval)=0.6575 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:00.062826
+@010: 	loss(train)=0.5997 	loss(eval)=0.7705 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:00.059017
+@011: 	loss(train)=0.8755 	loss(eval)=0.5250 	f1(train)=0.7000 	f1(eval)=0.6750 	duration(epoch)=0:00:00.059156
+@012: 	loss(train)=0.7094 	loss(eval)=0.5234 	f1(train)=0.6750 	f1(eval)=0.6750 	duration(epoch)=0:00:00.059137
+@013: 	loss(train)=0.6056 	loss(eval)=0.7438 	f1(train)=0.7000 	f1(eval)=0.6750 	duration(epoch)=0:00:00.058961
+@014: 	loss(train)=0.5555 	loss(eval)=0.7481 	f1(train)=0.7000 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058831
+@015: 	loss(train)=0.6933 	loss(eval)=0.5415 	f1(train)=0.7250 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058753
+@016: 	loss(train)=0.5835 	loss(eval)=0.5636 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058559
+@017: 	loss(train)=0.5505 	loss(eval)=0.5955 	f1(train)=0.7000 	f1(eval)=0.7000 	duration(epoch)=0:00:00.059069
+@018: 	loss(train)=0.7903 	loss(eval)=0.8281 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058971
+@019: 	loss(train)=0.8265 	loss(eval)=0.5668 	f1(train)=0.6250 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058574
+@020: 	loss(train)=0.7121 	loss(eval)=0.6179 	f1(train)=0.7000 	f1(eval)=0.6750 	duration(epoch)=0:00:00.062465
+@021: 	loss(train)=0.5206 	loss(eval)=0.5821 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058486
+@022: 	loss(train)=0.6023 	loss(eval)=0.4886 	f1(train)=0.7000 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058401
+@023: 	loss(train)=0.5320 	loss(eval)=0.6423 	f1(train)=0.7000 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058562
+@024: 	loss(train)=0.7771 	loss(eval)=0.5891 	f1(train)=0.7500 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058555
+@025: 	loss(train)=0.7513 	loss(eval)=0.5231 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058473
 > Load best model based on evaluation loss.
-> Init nGrams+NeLa Weighting (Features), trainable parameters: 184
-@004: 	loss(train)=0.6954 	loss(eval)=0.6936 	f1(train)=0.7000 	f1(eval)=0.7500 	duration(epoch)=0:00:00.063257
+> Init nGrams+NeLa Weighting (Features)
+  Trainable parameters: 184
+  Input Dimension: 91
+  Output Dimension: 2
+@025: 	loss(train)=0.7513 	loss(eval)=0.5231 	f1(train)=0.6750 	f1(eval)=0.7000 	duration(epoch)=0:00:00.058473
 
 [--- EVAL -> ./data/imdb._debug.csv ---]
-AVG           	 tp:       30	 fp:       10 	 tn:       30	 fn:       10	 pre=0.7500	 rec=0.7500	 f1=0.7500	 acc=0.7500
-negative      	 tp:       27	 fp:       10 	 tn:        3	 fn:        0	 pre=0.7297	 rec=1.0000	 f1=0.8437	 acc=0.7500
-positive      	 tp:        3	 fp:        0 	 tn:       27	 fn:       10	 pre=1.0000	 rec=0.2308	 f1=0.3750	 acc=0.7500
+AVG           	 tp:       28	 fp:       12 	 tn:       28	 fn:       12	 pre=0.7000	 rec=0.7000	 f1=0.7000	 acc=0.7000
+negative      	 tp:       27	 fp:       12 	 tn:        1	 fn:        0	 pre=0.6923	 rec=1.0000	 f1=0.8182	 acc=0.7000
+positive      	 tp:        1	 fp:        0 	 tn:       27	 fn:       12	 pre=1.0000	 rec=0.0769	 f1=0.1429	 acc=0.7000
