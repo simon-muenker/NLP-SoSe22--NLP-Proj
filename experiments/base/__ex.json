@@ -13,10 +13,5 @@
       "name": "BERT-Head (Base)",
       "dropout": 0.2
     }
-  },
-  "trainer": {
-    "optimizer": {
-      "lr": 1e-3
-    }
   }
 }
