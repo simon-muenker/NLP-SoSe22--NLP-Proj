@@ -10,11 +10,11 @@
         "2": 128
       },
       "nela_pipeline": {
-        "style": false,
-        "complexity": false,
+        "style": true,
+        "complexity": true,
         "bias": true,
         "affect": true,
-        "moral": true,
+        "moral": false,
         "event": false
       }
     },

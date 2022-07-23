@@ -11,8 +11,8 @@
         "complexity": true,
         "bias": true,
         "affect": true,
-        "moral": true,
-        "event": true
+        "moral": false,
+        "event": false
       }
     },
     "neural": {
