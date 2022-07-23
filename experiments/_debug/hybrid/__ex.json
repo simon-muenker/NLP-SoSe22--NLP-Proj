@@ -19,8 +19,7 @@
       }
     },
     "neural": {
-      "name": "Base+Features Concatenation (Hybrid)",
-      "dropout": 0.2
+      "name": "Base+Features Concatenation (Hybrid)"
     }
   }
 }

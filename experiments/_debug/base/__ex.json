@@ -10,8 +10,7 @@
       "model": "bert-base-uncased"
     },
     "neural": {
-      "name": "BERT-Head (Base)",
-      "dropout": 0.2
+      "name": "BERT-Head (Base)"
     }
   }
 }

@@ -16,8 +16,7 @@
       }
     },
     "neural": {
-      "name": "nGrams+NeLa Weighting (Features)",
-      "dropout": 0.2
+      "name": "nGrams+NeLa Weighting (Features)"
     }
   }
 }
