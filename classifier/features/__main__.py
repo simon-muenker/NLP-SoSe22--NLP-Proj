@@ -29,6 +29,9 @@ class Main(Runner):
 
         for data_label, dataset in self.data.items():
             self.pipeline.apply(dataset.data, label=dataset.data_path)
+            dataset.data[[dataset.target_label, *self.pipeline.col_names]].to_csv(
+                f'{self.config["out_path"]}features.{data_label}.csv'
+            )
 
     #  -------- __call__ -----------
     #
