@@ -48,7 +48,9 @@ class Main(Runner):
 
         return (
             torch.concat([
-                sent_embeds[:, 1], torch.stack(pipeline)
+                # sent_embeds[:, 1], extract CLS
+                torch.mean(sent_embeds, dim=1),
+                torch.stack(pipeline)
             ], dim=1),
             torch.tensor(
                 [self.data['train'].encode_label(lb) for lb in label],
