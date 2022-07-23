@@ -6,7 +6,6 @@ import pandas as pd
 
 from classifier.util import timing
 from .groupcounter import GroupCounter
-from .spacy import SpacyPipe
 from .nela import NELAPipe
 
 
@@ -39,9 +38,6 @@ class Pipeline:
             logging.info(f'> Init N-Gram Group Counter, with: {list(self.config["ngram_counter"].items())}')
             self.ngram_counter: Dict[str, GroupCounter] = {}
 
-        if self.config.get("spacy_pipeline", None):
-            self.spacy = SpacyPipe(self.config['spacy_pipeline'])
-
         if self.config.get("nela_pipeline", None):
             self.nela = NELAPipe(self.config['nela_pipeline'])
 
@@ -73,10 +69,6 @@ class Pipeline:
                 gc.predict(data)
 
         # apply spacy pipeline
-        if self.config.get("spacy_pipeline", None):
-            self.spacy.apply(data, 'review')
-
-        # apply spacy pipeline
         if self.config.get("nela_pipeline", None):
             self.nela.apply(data, 'review')
 
@@ -95,9 +87,6 @@ class Pipeline:
 
         if self.config.get("ngram_counter", None):
             cols += sum([pc.col_names for pc in self.ngram_counter.values()], [])
-
-        if self.config.get("spacy_pipeline", None):
-            cols += self.spacy.col_names
 
         if self.config.get("nela_pipeline", None):
             cols += self.nela.col_names
