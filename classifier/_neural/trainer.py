@@ -33,8 +33,8 @@ class Trainer:
             'report_rate': 1,
             'max_grad_norm': 2.0,
             'optimizer': {
-                'lr': 1e-2,
-                'weight_decay': 1e-4,
+                'lr': 1e-3,
+                'weight_decay': 1e-02,
                 'betas': [
                     0.9,
                     0.999
