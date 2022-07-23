@@ -34,7 +34,7 @@ class Trainer:
             'max_grad_norm': 2.0,
             'optimizer': {
                 'lr': 1e-3,
-                'weight_decay': 1e-02,
+                'weight_decay': 1e-2,
                 'betas': [
                     0.9,
                     0.999
