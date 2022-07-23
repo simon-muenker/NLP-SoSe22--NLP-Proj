@@ -56,7 +56,7 @@ class Runner:
 
         # encoder
         self.encoder = None
-        if self.config['model'].get('encoding', None):
+        if self.config['model'].get('encoding', False):
             self.encoder = Encoder(self.config['model']['encoding'])
 
     #  -------- __call__ -----------

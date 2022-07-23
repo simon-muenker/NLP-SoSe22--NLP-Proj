@@ -2,10 +2,7 @@
   "out_path": "./experiments/_debug/hybrid/",
   "model": {
     "encoding": {
-      "model": "bert-base-uncased",
-      "layers": [
-        10
-      ]
+      "model": "bert-base-uncased"
     },
     "features": {
       "dropout": 0.2,

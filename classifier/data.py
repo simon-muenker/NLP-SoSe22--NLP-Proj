@@ -44,8 +44,12 @@ class Data(Dataset):
         self.config = Data.default_config()
         dict_merge(self.config, self.user_config)
 
-        logging.info(f'> Load/Init from {self.data_path}')
         self.data: pd.DataFrame = Data.__load(self.data_path)
+        logging.info((
+            f'> Load/Init from {self.data_path}\n'
+            f'  Number of Samples: {len(self)} \n'
+            f'  Memory Usage: {self.data.memory_usage(deep=True).sum() / (1024.0 * 1024.0):2.4f} MB'
+        ))
 
         if self.config['remove_stopwords']:
             self.stop_words = list(nltk.corpus.stopwords.words(self.data_language))

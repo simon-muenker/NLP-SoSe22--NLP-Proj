@@ -16,7 +16,7 @@ class Encoder:
     def default_config() -> dict:
         return {
             "model": "bert-base-uncased",
-            "layers": [-1]
+            "layers": [10]
         }
 
     #  -------- __init__ -----------

@@ -7,10 +7,7 @@
   },
   "model": {
     "encoding": {
-      "model": "bert-base-uncased",
-      "layers": [
-        10
-      ]
+      "model": "bert-base-uncased"
     },
     "neural": {
       "name": "BERT-Head (Base)",

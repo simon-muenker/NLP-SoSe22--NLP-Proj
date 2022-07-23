@@ -16,7 +16,7 @@ class Model(nn.Module):
     @staticmethod
     def default_config() -> dict:
         return {
-            "name": "Dropout->Dense->Softmax",
+            "name": "Dropout->Dense->ELU",
             "in_size": 64,
             "out_size": 2,
             "dropout": 0.4,
@@ -35,10 +35,15 @@ class Model(nn.Module):
                 self.config["in_size"],
                 self.config["out_size"]
             ),
-            nn.Softmax(dim=0)
+            nn.ELU()
         ).to(get_device())
 
-        logging.info(f'> Init {self.config["name"]}, trainable parameters: {len(self)}')
+        logging.info((
+            f'> Init {self.config["name"]}\n'
+            f'  Trainable parameters: {len(self)}\n'
+            f'  Input Dimension: {self.config["in_size"]}\n'
+            f'  Output Dimension: {self.config["out_size"]}'
+        ))
 
     #  -------- forward -----------
     #
