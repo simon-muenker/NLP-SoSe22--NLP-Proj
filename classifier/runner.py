@@ -9,6 +9,7 @@ from pandarallel import pandarallel
 from classifier import Data
 from classifier.util import dict_merge, load_json
 from ._neural import Trainer, Encoder, Model
+from ._neural.util import get_device
 
 
 class Runner:
@@ -59,6 +60,9 @@ class Runner:
         if self.config['model'].get('encoding', False):
             self.encoder = Encoder(self.config['model']['encoding'])
 
+            for _, dataset in self.data.items():
+                self.encoder.df_encode(dataset.data, col=dataset.data_label, label=dataset.data_path)
+
     #  -------- __call__ -----------
     #
     def __call__(self, neural_in_size: int, collation_fn: callable) -> None:
@@ -93,6 +97,27 @@ class Runner:
                 user_config=self.config['data']['config']
             ) for name, path in self.config['data']['paths'].items()
         }
+
+    #
+    #
+    #  -------- collate_target_label -----------
+    #
+    def collate_target_label(self, batch: list) -> torch.Tensor:
+        return torch.tensor(
+            [self.data['train'].encode_label(lb) for lb in
+             [sample[self.data['train'].target_label].values[0] for sample in batch]],
+            dtype=torch.long, device=get_device()
+        )
+
+    #
+    #
+    #  -------- collate_encoder -----------
+    #
+    def collate_encoder(self, batch: list) -> torch.Tensor:
+        return torch.stack([
+            sample[self.encoder.col_name].values[0]
+            for sample in batch
+        ])
 
     #
     #

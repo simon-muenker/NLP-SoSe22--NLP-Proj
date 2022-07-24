@@ -139,11 +139,7 @@ class Data(Dataset):
     #  -------- __getitem__ -----------
     #
     def __getitem__(self, idx) -> T_co:
-        return (
-            self.data.iloc[[idx]],
-            self.data[self.data_label][idx],
-            self.data[self.target_label][idx]
-        )
+        return self.data.iloc[[idx]]
 
     #  -------- __len__ -----------
     #

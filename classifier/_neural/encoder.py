@@ -1,6 +1,8 @@
 import logging as logger
+from itertools import chain
 from typing import Tuple, List, Union
 
+import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
 
@@ -77,6 +79,35 @@ class Encoder:
             )
         ).sum(1).squeeze()
 
+    #  -------- df_encode -----------
+    #
+    @timing
+    def df_encode(self, data: pd.DataFrame, col: str, batch_size: int = 4, label: str = '***'):
+        logger.info(f'> Encode {label}')
+
+        #  -------- __apply -----------
+        #
+        def __apply(idx: int, form: str = 'mean') -> List[torch.Tensor]:
+            _, batch_embeds, _ = self(
+                list(
+                    data.loc[
+                        data.index[idx:idx + batch_size],
+                        col
+                    ].values
+                ), return_unpad=False)
+
+            if form == 'cls':
+                return torch.unbind(batch_embeds[:, 1])
+
+            if form == 'mean':
+                return torch.unbind(torch.mean(batch_embeds, dim=1))
+
+        data[self.col_name] = list(
+            chain.from_iterable(
+                list(__apply(i) for i in range(0, len(data), batch_size))
+            )
+        )
+
     #  -------- ids_to_tokens -----------
     #
     def ids_to_tokens(self, ids: torch.Tensor) -> List[str]:
@@ -102,3 +133,9 @@ class Encoder:
     #
     def __len__(self) -> int:
         return self.model.config.to_dict()['vocab_size']
+
+    #  -------- col_name -----------
+    #
+    @property
+    def col_name(self):
+        return 'prediction'

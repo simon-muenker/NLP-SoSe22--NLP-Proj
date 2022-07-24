@@ -1,7 +1,4 @@
-import torch
-
 from classifier import Runner
-from .._neural.util import get_device
 
 
 class Main(Runner):
@@ -21,25 +18,9 @@ class Main(Runner):
     #  -------- __collation_fn -----------
     #
     def __collation_fn(self, batch: list) -> tuple:
-        text: list = []
-        label: list = []
-
-        # collate data
-        for _, review, sentiment in batch:
-            text.append(review)
-            label.append(sentiment)
-
-        # embed text
-        _, sent_embeds, _ = self.encoder(text, return_unpad=False)
-
-        # extract only first embeddings (CLS); transform labels
         return (
-            # sent_embeds[:, 1], extract CLS
-            torch.mean(sent_embeds, dim=1),
-            torch.tensor(
-                [self.data['train'].encode_label(lb) for lb in label],
-                dtype=torch.long, device=get_device()
-            )
+            self.collate_encoder(batch),
+            self.collate_target_label(batch)
         )
 
 

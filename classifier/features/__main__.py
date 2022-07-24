@@ -43,28 +43,26 @@ class Main(Runner):
     #  -------- __collation_fn -----------
     #
     def __collation_fn(self, batch: list) -> tuple:
-        label: list = []
-        features: list = []
+        return (
+            self.collate_features(batch),
+            self.collate_target_label(batch)
+        )
 
-        # collate data
-        for sample, review, sentiment in batch:
-            label.append(sentiment)
-            features.append(
+    #
+    #
+    #  -------- collate_features -----------
+    #
+    def collate_features(self, batch: list) -> torch.Tensor:
+        return torch.stack([
+            (
                 torch.tensor(
                     sample[self.pipeline.col_names].values,
                     device=get_device()
                 )
                 .squeeze()
                 .float()
-            )
-
-        return (
-            torch.stack(features),
-            torch.tensor(
-                [self.data['train'].encode_label(lb) for lb in label],
-                dtype=torch.long, device=get_device()
-            )
-        )
+            ) for sample in batch
+        ])
 
 
 #
