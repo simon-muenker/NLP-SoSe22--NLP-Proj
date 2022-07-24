@@ -2,6 +2,7 @@ import logging as logger
 from itertools import chain
 from typing import Tuple, List, Union
 
+import numpy as np
 import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
@@ -82,31 +83,20 @@ class Encoder:
     #  -------- df_encode -----------
     #
     @timing
-    def df_encode(self, data: pd.DataFrame, col: str, batch_size: int = 4, label: str = '***'):
+    def df_encode(self, data: pd.DataFrame, col: str, form: str = 'mean', batch_size: int = 32, label: str = '***'):
         logger.info(f'> Encode {label}')
+        embeds: list = []
 
-        #  -------- __apply -----------
-        #
-        def __apply(idx: int, form: str = 'mean') -> List[torch.Tensor]:
-            _, batch_embeds, _ = self(
-                list(
-                    data.loc[
-                        data.index[idx:idx + batch_size],
-                        col
-                    ].values
-                ), return_unpad=False)
+        for _, group in data.groupby(np.arange(len(data)) // batch_size):
+            _, batch_embeds, _ = self(list(group[col].values), return_unpad=False)
 
             if form == 'cls':
-                return torch.unbind(batch_embeds[:, 1].cpu())
+                embeds.extend(torch.unbind(batch_embeds[:, 1].cpu()))
 
             if form == 'mean':
-                return torch.unbind(torch.mean(batch_embeds, dim=1).cpu())
+                embeds.extend(torch.unbind(torch.mean(batch_embeds, dim=1).cpu()))
 
-        data[self.col_name] = list(
-            chain.from_iterable(
-                list(__apply(i) for i in range(0, len(data), batch_size))
-            )
-        )
+        data[self.col_name] = embeds
 
     #  -------- ids_to_tokens -----------
     #
