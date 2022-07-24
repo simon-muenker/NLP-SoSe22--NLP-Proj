@@ -16,11 +16,12 @@ class Model(nn.Module):
     @staticmethod
     def default_config() -> dict:
         return {
-            "name": "Dense(In, In)->Dropout->ELU->Dense(In, Out)->ELU",
+            "name": ("MLP:Dense(in_size, in_size * hid_ratio)->Dropout->ELU"
+                     "->Dense(in_size * hid_ratio, out_size)->ELU"),
             "in_size": 64,
             "hid_ratio": 0.5,
             "out_size": 2,
-            "dropout": 0.4,
+            "dropout": 0.0,
         }
 
     #  -------- init -----------
