@@ -33,6 +33,11 @@ class Model(nn.Module):
             nn.Dropout(p=self.config["dropout"]),
             nn.Linear(
                 self.config["in_size"],
+                self.config["in_size"]
+            ),
+            nn.ELU(),
+            nn.Linear(
+                self.config["in_size"],
                 self.config["out_size"]
             ),
             nn.ELU()
