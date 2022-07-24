@@ -5,10 +5,11 @@ from typing import Tuple, List, Union
 import numpy as np
 import pandas as pd
 import torch
+from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel, logging
 
-from classifier.util import timing, dict_merge
-from .util import get_device, unpad
+from classifier.util import timing, dict_merge, byte_to_mb
+from .util import get_device, unpad, memory_usage
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -33,9 +34,14 @@ class Encoder:
         self.config: dict = Encoder.default_config()
         dict_merge(self.config, user_config)
 
-        logger.info(f'> Init Encoder: \'{self.config["model"]}\'')
         self.tokenizer = AutoTokenizer.from_pretrained(self.config["model"])
         self.model = AutoModel.from_pretrained(self.config["model"], output_hidden_states=True).to(get_device())
+
+        logger.info((
+            f'> Init Encoder: \'{self.config["model"]}\'\n'
+            f'  Memory Usage: {byte_to_mb(memory_usage(self.model))}'
+        ))
+
 
     #
     #
@@ -86,10 +92,12 @@ class Encoder:
     #
     @timing
     def df_encode(self, data: pd.DataFrame, col: str, form: str = 'mean', batch_size: int = 32, label: str = '***'):
-        logger.info(f'> Encode {label}')
         embeds: list = []
 
-        for _, group in data.groupby(np.arange(len(data)) // batch_size):
+        for _, group in tqdm(
+                data.groupby(np.arange(len(data)) // batch_size),
+                leave=False, desc=f'Encode {label}'
+        ):
             _, batch_embeds, _ = self(list(group[col].values), return_unpad=False)
 
             if form == 'cls':

@@ -54,3 +54,11 @@ def dict_merge(dct, merge_dct):
             dict_merge(dct[k], merge_dct[k])
         else:
             dct[k] = merge_dct[k]
+
+
+#
+#
+#  -------- byte_to_mb -----------
+#
+def byte_to_mb(byte: int) -> str:
+    return f'{byte / (1024.0 * 1024.0):2.4f} MB'

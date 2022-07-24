@@ -48,3 +48,14 @@ def load_iterator(
         desc=desc,
         disable=disable,
     ))
+
+
+#
+#
+#  -------- load_iterator -----------
+#
+def memory_usage(model: torch.nn.Module) -> int:
+    return sum([
+        sum([param.nelement() * param.element_size() for param in model.parameters()]),
+        sum([buf.nelement() * buf.element_size() for buf in model.buffers()])
+    ])

@@ -26,11 +26,11 @@ class Trainer:
     @staticmethod
     def default_config() -> dict:
         return {
-            'epochs': 25,
+            'epochs': 100,
             'shuffle': True,
             'batch_size': 32,
             'num_workers': 0,
-            'report_rate': 1,
+            'report_rate': 5,
             'max_grad_norm': 2.0,
             'optimizer': {
                 'lr': 1e-3,

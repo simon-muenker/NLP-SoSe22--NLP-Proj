@@ -7,7 +7,7 @@ import torch
 from pandarallel import pandarallel
 
 from classifier import Data
-from classifier.util import dict_merge, load_json
+from classifier.util import dict_merge, load_json, byte_to_mb
 from ._neural import Trainer, Encoder, Model
 from ._neural.util import get_device
 
@@ -62,6 +62,7 @@ class Runner:
 
             for _, dataset in self.data.items():
                 self.encoder.df_encode(dataset.data, col=dataset.data_label, label=dataset.data_path)
+                logging.info(f'> Memory Usage (w/ Embeds): {byte_to_mb(dataset.data.memory_usage(deep=True).sum())}')
 
     #  -------- __call__ -----------
     #

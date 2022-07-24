@@ -5,8 +5,8 @@ from typing import List, Tuple
 import torch
 import torch.nn as nn
 
-from classifier.util import dict_merge
-from .util import get_device
+from classifier.util import dict_merge, byte_to_mb
+from .util import get_device, memory_usage
 
 
 class Model(nn.Module):
@@ -40,6 +40,7 @@ class Model(nn.Module):
 
         logging.info((
             f'> Init {self.config["name"]}\n'
+            f'  Memory Usage: {byte_to_mb(memory_usage(self))}\n'
             f'  Trainable parameters: {len(self)}\n'
             f'  Input Dimension: {self.config["in_size"]}\n'
             f'  Output Dimension: {self.config["out_size"]}'

@@ -7,7 +7,7 @@ import pandas as pd
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
-from classifier.util import timing, dict_merge
+from classifier.util import timing, dict_merge, byte_to_mb
 
 LABEL: dict = {
     'token': '1-gram',
@@ -48,7 +48,7 @@ class Data(Dataset):
         logging.info((
             f'> Load/Init from {self.data_path}\n'
             f'  Number of Samples: {len(self)} \n'
-            f'  Memory Usage: {self.data.memory_usage(deep=True).sum() / (1024.0 * 1024.0):2.4f} MB'
+            f'  Memory Usage: {byte_to_mb(self.data.memory_usage(deep=True).sum())}'
         ))
 
         if self.config['remove_stopwords']:
