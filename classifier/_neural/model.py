@@ -19,7 +19,7 @@ class Model(nn.Module):
             "name": "Dense(In, In)->Dropout->ELU->Dense(In, Out)->ELU",
             "in_size": 64,
             "out_size": 2,
-            "dropout": 0.0,
+            "dropout": 0.4,
         }
 
     #  -------- init -----------
