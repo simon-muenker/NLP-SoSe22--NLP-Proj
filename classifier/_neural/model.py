@@ -16,10 +16,10 @@ class Model(nn.Module):
     @staticmethod
     def default_config() -> dict:
         return {
-            "name": "Dropout->Dense->ELU",
+            "name": "Dense(In, In)->Dropout->ELU->Dense(In, Out)->ELU",
             "in_size": 64,
             "out_size": 2,
-            "dropout": 0.0,
+            "dropout": 0.2,
         }
 
     #  -------- init -----------
@@ -30,11 +30,11 @@ class Model(nn.Module):
         dict_merge(self.config, user_config)
 
         self.net = nn.Sequential(
-            nn.Dropout(p=self.config["dropout"]),
             nn.Linear(
                 self.config["in_size"],
                 self.config["in_size"]
             ),
+            nn.Dropout(p=self.config["dropout"]),
             nn.ELU(),
             nn.Linear(
                 self.config["in_size"],
