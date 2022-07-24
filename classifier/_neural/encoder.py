@@ -1,5 +1,5 @@
 import logging as logger
-from itertools import chain
+import os
 from typing import Tuple, List, Union
 
 import numpy as np
@@ -9,6 +9,8 @@ from transformers import AutoTokenizer, AutoModel, logging
 
 from classifier.util import timing, dict_merge
 from .util import get_device, unpad
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 class Encoder:
