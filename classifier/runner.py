@@ -117,7 +117,7 @@ class Runner:
         return torch.stack([
             sample[self.encoder.col_name].values[0]
             for sample in batch
-        ])
+        ]).to(get_device())
 
     #
     #
