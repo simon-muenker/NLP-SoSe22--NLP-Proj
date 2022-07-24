@@ -32,12 +32,12 @@ class Model(nn.Module):
         self.net = nn.Sequential(
             nn.Linear(
                 self.config["in_size"],
-                self.config["in_size"]
+                int(self.config["in_size"] * 0.5)
             ),
             nn.Dropout(p=self.config["dropout"]),
             nn.ELU(),
             nn.Linear(
-                self.config["in_size"],
+                int(self.config["in_size"] / 0.5),
                 self.config["out_size"]
             ),
             nn.ELU()
