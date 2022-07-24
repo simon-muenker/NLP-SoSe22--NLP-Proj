@@ -19,7 +19,7 @@ class Model(nn.Module):
             "name": ("MLP:Dense(in_size, in_size * hid_ratio)->Dropout->ELU"
                      "->Dense(in_size * hid_ratio, out_size)->ELU"),
             "in_size": 64,
-            "hid_ratio": 0.20,
+            "hid_ratio": 0.1,
             "out_size": 2,
             "dropout": 0.0,
         }
