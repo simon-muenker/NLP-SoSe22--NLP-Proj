@@ -97,10 +97,10 @@ class Encoder:
                 ), return_unpad=False)
 
             if form == 'cls':
-                return torch.unbind(batch_embeds[:, 1])
+                return torch.unbind(batch_embeds[:, 1].cpu())
 
             if form == 'mean':
-                return torch.unbind(torch.mean(batch_embeds, dim=1))
+                return torch.unbind(torch.mean(batch_embeds, dim=1).cpu())
 
         data[self.col_name] = list(
             chain.from_iterable(
