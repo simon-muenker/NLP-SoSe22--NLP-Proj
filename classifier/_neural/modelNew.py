@@ -19,6 +19,7 @@ class SelectorPerceptron(nn.Module):
                      "->Dense(in_size * hid_ratio, out_size)->ELU"),
             "in_size": 64,
             "out_size": 2,
+            "dropout": 0.4,
         }
 
     #  -------- init -----------
@@ -29,6 +30,7 @@ class SelectorPerceptron(nn.Module):
         dict_merge(self.config, user_config)
 
         self.perceptron = nn.Sequential(
+            nn.Dropout(p=self.config["dropout"]),
             nn.Linear(
                 self.config["in_size"],
                 self.config["in_size"]
@@ -37,6 +39,7 @@ class SelectorPerceptron(nn.Module):
         ).to(get_device())
 
         self.selector = nn.Sequential(
+            nn.Dropout(p=self.config["dropout"]),
             nn.Linear(
                 self.config["in_size"],
                 self.config["out_size"]
