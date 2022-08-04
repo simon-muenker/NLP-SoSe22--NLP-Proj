@@ -17,7 +17,7 @@ class Main(Runner):
 
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
-            self.match(dataset)
+            self.match(dataset, col="")
             print(dataset)
             exit()
 
