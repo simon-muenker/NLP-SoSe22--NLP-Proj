@@ -8,7 +8,7 @@ from pandarallel import pandarallel
 
 from classifier import Data
 from classifier.util import dict_merge, load_json, byte_to_mb
-from ._neural import Trainer, Encoder, Model, SelectorPerceptron
+from ._neural import Trainer, Encoder, Model
 from ._neural.util import get_device
 
 
@@ -70,8 +70,7 @@ class Runner:
         self.config['model']['neural']['in_size'] = neural_in_size
         self.config['model']['neural']['out_size'] = len(self.data['train'].get_label_keys())
 
-        # model = Model(self.config['model']['neural'])
-        model = SelectorPerceptron(self.config['model']['neural'])
+        model = Model(self.config['model']['neural'])
 
         Trainer(
             model, self.data, collation_fn,
