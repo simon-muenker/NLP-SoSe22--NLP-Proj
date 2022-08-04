@@ -43,27 +43,27 @@ python3 -m $classifier.base -C ./global.json ./model.json
 #### Config:
 ToDo
 
-## Results (preliminary)
+## Results on eval (preliminary)
 
 ### Base
 ```bash
-AVG           	 tp:     1826	 fp:      655 	 tn:     1826	 fn:      655	 pre=0.7360	 rec=0.7360	 f1=0.7360	 acc=0.7360
-negative      	 tp:      891	 fp:      345 	 tn:      935	 fn:      310	 pre=0.7209	 rec=0.7419	 f1=0.7312	 acc=0.7360
-positive      	 tp:      935	 fp:      310 	 tn:      891	 fn:      345	 pre=0.7510	 rec=0.7305	 f1=0.7406	 acc=0.7360
+AVG           	 tp:     2023	 fp:      219 	 tn:     2023	 fn:      219	 pre=0.9023	 rec=0.9023	 f1=0.9023	 acc=0.9023
+negative      	 tp:      925	 fp:      132 	 tn:     1098	 fn:       87	 pre=0.8751	 rec=0.9140	 f1=0.8942	 acc=0.9023
+positive      	 tp:     1098	 fp:       87 	 tn:      925	 fn:      132	 pre=0.9266	 rec=0.8927	 f1=0.9093	 acc=0.9023
 ```
 
 ### Features
 ```bash
-AVG           	 tp:     2081	 fp:      400 	 tn:     2081	 fn:      400	 pre=0.8388	 rec=0.8388	 f1=0.8388	 acc=0.8388
-negative      	 tp:      946	 fp:      145 	 tn:     1135	 fn:      255	 pre=0.8671	 rec=0.7877	 f1=0.8255	 acc=0.8388
-positive      	 tp:     1135	 fp:      255 	 tn:      946	 fn:      145	 pre=0.8165	 rec=0.8867	 f1=0.8502	 acc=0.8388
+AVG           	 tp:     1947	 fp:      295 	 tn:     1947	 fn:      295	 pre=0.8684	 rec=0.8684	 f1=0.8684	 acc=0.8684
+negative      	 tp:      862	 fp:      145 	 tn:     1085	 fn:      150	 pre=0.8560	 rec=0.8518	 f1=0.8539	 acc=0.8684
+positive      	 tp:     1085	 fp:      150 	 tn:      862	 fn:      145	 pre=0.8785	 rec=0.8821	 f1=0.8803	 acc=0.8684
 ```
 
 ### Hybrid
 ```bash
-AVG           	 tp:     2138	 fp:      343 	 tn:     2138	 fn:      343	 pre=0.8617	 rec=0.8617	 f1=0.8617	 acc=0.8617
-negative      	 tp:     1040	 fp:      182 	 tn:     1098	 fn:      161	 pre=0.8511	 rec=0.8659	 f1=0.8584	 acc=0.8617
-positive      	 tp:     1098	 fp:      161 	 tn:     1040	 fn:      182	 pre=0.8721	 rec=0.8578	 f1=0.8649	 acc=0.8617
+AVG           	 tp:     2025	 fp:      217 	 tn:     2025	 fn:      217	 pre=0.9032	 rec=0.9032	 f1=0.9032	 acc=0.9032
+negative      	 tp:      903	 fp:      108 	 tn:     1122	 fn:      109	 pre=0.8932	 rec=0.8923	 f1=0.8927	 acc=0.9032
+positive      	 tp:     1122	 fp:      109 	 tn:      903	 fn:      108	 pre=0.9115	 rec=0.9122	 f1=0.9118	 acc=0.9032
 ```
 
 ## Credits:
