@@ -12,8 +12,8 @@ class Main(Runner):
         super().__init__()
 
         # load and encode metacritic information
-        self.metacritic = pd.read_csv(self.config['hybrid']['metacritic_path'])
-        self.encoder.df_encode(self.metacritic, col='summary', label=self.config['hybrid']['metacritic_path'])
+        self.metacritic = pd.read_csv(self.config['model']['hybrid']['metacritic_path'])
+        self.encoder.df_encode(self.metacritic, col='summary', label=self.config['model']['hybrid']['metacritic_path'])
 
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
