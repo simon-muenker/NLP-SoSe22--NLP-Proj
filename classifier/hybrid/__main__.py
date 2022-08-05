@@ -2,6 +2,7 @@ import pandas as pd
 import torch
 
 from classifier.features.__main__ import Main as Runner
+from classifier.util import timing
 
 
 class Main(Runner):
@@ -18,6 +19,7 @@ class Main(Runner):
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
+            print(dataset)
             dataset[['sentiment', 'metacritic']].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
             exit()
 
@@ -48,6 +50,7 @@ class Main(Runner):
     #
     #  -------- match -----------
     #
+    @timing
     def match(self, data: pd.DataFrame) -> None:
         pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float()
 
