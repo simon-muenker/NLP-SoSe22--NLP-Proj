@@ -17,8 +17,8 @@ class Main(Runner):
 
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
-            self.match(dataset, col="")
-            print(dataset)
+            self.match(dataset)
+            dataset.to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
             exit()
 
     #  -------- __call__ -----------
@@ -48,13 +48,20 @@ class Main(Runner):
     #
     #  -------- match -----------
     #
-    def match(self, data: pd.DataFrame, col: str) -> None:
-        pool = torch.stack(self.metacritic['prediction'].tolist()).float()
+    def match(self, data: pd.DataFrame) -> None:
+        pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float()
 
-        data["metacritic"] = data['prediction'].parallel_apply(
-            lambda vector: self.metacritic.iloc[
-                torch.norm(pool - vector.unsqueeze(0), dim=1).argmin().item()
-            ]['metascore'])
+        data["metacritic"] = data.parallel_apply(
+            lambda row: self.metacritic.iloc[
+                torch.norm(
+                    pool - row[self.encoder.col_name].unsqueeze(0),
+                    dim=1
+                )
+                .argmin()
+                .item()
+            ]['metascore'],
+            axis=1
+        )
 
 
 #
