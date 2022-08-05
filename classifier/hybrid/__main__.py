@@ -58,7 +58,6 @@ class Main(Runner):
                     sample[['metacritic']].values,
                     device=get_device()
                 )
-                .squeeze()
                 .float()
             ) for sample in batch
         ])
