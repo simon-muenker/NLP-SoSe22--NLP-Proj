@@ -31,8 +31,8 @@ class Main(Runner):
         super(
             type(self).__bases__[0], self
         ).__call__(
-            # IMDb & metacritic embedding + features pipeline (variable) + META_COLS
-            2 * int(self.encoder.dim) + len(self.pipeline.col_names) + len(META_COLS),
+            # IMDb embedding + features pipeline (variable) + META_COLS
+            int(self.encoder.dim) + len(self.pipeline.col_names) + len(META_COLS),
             self.__collation_fn
         )
 
