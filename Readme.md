@@ -3,14 +3,9 @@ Warning: The following make calls are only available with OSX/LINUX. If you use 
 
 ## Install
 ```bash
-### to install and download the spacy/textblob pipelines use:
+### to install the requirements (make, pip):
 make install
-
-### manually install and download:
 pip install -r requirements.txt
-
-python -m spacy download en_core_web_sm
-python -m textblob.download_corpora
 ```
 
 ## Usage

@@ -42,7 +42,6 @@ class Encoder:
             f'  Memory Usage: {byte_to_mb(memory_usage(self.model))}'
         ))
 
-
     #
     #
     #  -------- batch_encode -----------

@@ -30,7 +30,7 @@ class Main(Runner):
         super(
             type(self).__bases__[0], self
         ).__call__(
-            int(self.encoder.dim) + len(self.pipeline.col_names),
+            int(self.encoder.dim) + len(self.pipeline.col_names) + 1,
             self.__collation_fn
         )
 
@@ -42,10 +42,28 @@ class Main(Runner):
         return (
             torch.concat([
                 self.collate_encoder(batch),
-                self.collate_features(batch)
+                self.collate_features(batch),
+                self.collate_hybrid(batch)
             ], dim=1),
             self.collate_target_label(batch)
         )
+
+    #
+    #
+    #  -------- collate_hybrid -----------
+    #
+    @staticmethod
+    def collate_hybrid(batch: list) -> torch.Tensor:
+        return torch.stack([
+            (
+                torch.tensor(
+                    sample[['metacritic']].values,
+                    device=get_device()
+                )
+                .squeeze()
+                .float()
+            ) for sample in batch
+        ])
 
     #
     #

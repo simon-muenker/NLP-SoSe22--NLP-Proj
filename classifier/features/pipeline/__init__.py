@@ -67,7 +67,7 @@ class Pipeline:
             for n, gc in self.ngram_counter.items():
                 gc.predict(data)
 
-        # apply spacy pipeline
+        # apply nela pipeline
         if self.config.get("nela_pipeline", False):
             self.nela.apply(data, 'review')
 

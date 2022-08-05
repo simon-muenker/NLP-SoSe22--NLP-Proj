@@ -38,7 +38,7 @@ class Trainer:
                 'betas': [
                     0.9,
                     0.999
-                ],
+                  ],
                 'eps': 1e-8
             }
         }

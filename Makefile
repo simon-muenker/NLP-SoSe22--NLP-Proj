@@ -12,15 +12,9 @@ hybrid_path = ./experiments/hybrid
 # --- --- ---
 
 #
-# install, download
+# install
 install:
 	@python3 -m pip install -r requirements.txt
-	@make download
-
-download:
-	@python -m spacy download en_core_web_sm
-	@python -m textblob.download_corpora
-
 
 # --- --- ---
 
