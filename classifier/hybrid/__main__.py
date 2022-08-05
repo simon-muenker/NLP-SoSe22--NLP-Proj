@@ -56,7 +56,7 @@ class Main(Runner):
     #
     def collate_hybrid(self, batch: list) -> torch.Tensor:
 
-        print(self.metacritic.iloc[batch.iloc[0][META_ID]][[self.encoder.col_name, *META_COLS]].values)
+        print(self.metacritic.iloc[batch[0][META_ID]][[self.encoder.col_name, *META_COLS]].values)
         exit()
 
         return torch.stack([
