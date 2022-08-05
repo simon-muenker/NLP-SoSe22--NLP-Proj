@@ -9,7 +9,7 @@
       "metacritic_path": "./data/metacritic.formatted.csv"
     },
     "neural": {
-      "name": "Base+Features Concatenation (Hybrid)"
+      "name": "Base+Features+MetaMatcher Concatenation (Hybrid)"
     }
   }
 }
