@@ -33,11 +33,11 @@ class Pipeline:
         if self.config is None:
             self.config = self.default_config
 
-        if self.config.get("ngram_counter", None):
+        if self.config.get("ngram_counter", False):
             logging.info(f'> Init N-Gram Group Counter, with: {list(self.config["ngram_counter"].items())}')
             self.ngram_counter: Dict[str, GroupCounter] = {}
 
-        if self.config.get("nela_pipeline", None):
+        if self.config.get("nela_pipeline", False):
             self.nela = NELAPipe(self.config['nela_pipeline'])
 
     #  -------- fit -----------
@@ -46,7 +46,7 @@ class Pipeline:
     def fit(self, data: pd.DataFrame, log_label: str = '***') -> None:
         logging.info(f'> Fit Pipeline {log_label} on (only N-Gram Group Counter)')
 
-        if self.config.get("ngram_counter", None):
+        if self.config.get("ngram_counter", False):
             for n, keep in self.config['ngram_counter'].items():
                 self.ngram_counter[n] = GroupCounter(
                     data, key_label=f'{n}-gram',
@@ -63,18 +63,18 @@ class Pipeline:
         logging.info(f'> Apply Feature Pipeline on {label}')
 
         # calculate the ngram_counter scores
-        if self.config.get("ngram_counter", None):
+        if self.config.get("ngram_counter", False):
             for n, gc in self.ngram_counter.items():
                 gc.predict(data)
 
         # apply spacy pipeline
-        if self.config.get("nela_pipeline", None):
+        if self.config.get("nela_pipeline", False):
             self.nela.apply(data, 'review')
 
     #  -------- export -----------
     #
     def export(self, path: str):
-        if self.config.get("ngram_counter", None):
+        if self.config.get("ngram_counter", False):
             for n, gc in self.ngram_counter.items():
                 gc.write(f'{path}pipeline.{n}-gram.weights')
 
@@ -84,10 +84,10 @@ class Pipeline:
     def col_names(self):
         cols: list = []
 
-        if self.config.get("ngram_counter", None):
+        if self.config.get("ngram_counter", False):
             cols += sum([pc.col_names for pc in self.ngram_counter.values()], [])
 
-        if self.config.get("nela_pipeline", None):
+        if self.config.get("nela_pipeline", False):
             cols += self.nela.col_names
 
         return cols
