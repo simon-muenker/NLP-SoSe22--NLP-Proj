@@ -18,7 +18,7 @@ class Main(Runner):
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset)
-            dataset.to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
+            dataset[['sentiment', 'metacritic']].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
             exit()
 
     #  -------- __call__ -----------
