@@ -12,7 +12,6 @@ from time import time
 #  -------- load_json -----------
 #
 def load_json(path: str) -> dict:
-    """Load JSON file."""
     with open(path) as data:
         return json.load(data)
 
@@ -38,10 +37,11 @@ def timing(f):
 #  -------- dict_merge -----------
 #
 def dict_merge(dct, merge_dct):
-    """ Recursive dict merge. Inspired by :meth:``dict.update()``, instead of
+    """
+    Recursive dict merge. Inspired by :meth:``dict.update()``, instead of
     updating only top-level keys, dict_merge recourses down into dicts nested
-    to an arbitrary depth, updating keys. The ``merge_dct`` is merged into
-    ``dct``.
+    to an arbitrary depth, updating keys. The ``merge_dct`` is merged into ``dct``.
+
     :param dct: dict onto which the merge is executed
     :param merge_dct: dct merged into dct
     :return: None
@@ -61,4 +61,4 @@ def dict_merge(dct, merge_dct):
 #  -------- byte_to_mb -----------
 #
 def byte_to_mb(byte: int) -> str:
-    return f'{byte / (1024.0 * 1024.0):2.4f} MB'
+    return f'{byte / (1024.0 ** 2):2.4f} MB'

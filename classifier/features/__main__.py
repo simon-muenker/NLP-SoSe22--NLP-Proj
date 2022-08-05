@@ -14,7 +14,7 @@ class Main(Runner):
     def __init__(self) -> None:
         super().__init__()
 
-        logging.info("\n[--- FEATURE PIPELINE ---]")
+        logging.info('\n[--- FEATURE PIPELINE ---]')
         self.pipeline = Pipeline(
             target_label=self.data['train'].target_label,
             target_values=self.data['train'].get_label_keys(),
@@ -69,5 +69,5 @@ class Main(Runner):
 #
 #  -------- __main__ -----------
 #
-if __name__ == "__main__":
+if __name__ == '__main__':
     Main()()

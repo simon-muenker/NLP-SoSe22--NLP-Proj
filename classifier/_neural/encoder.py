@@ -11,7 +11,7 @@ from transformers import AutoTokenizer, AutoModel, logging
 from classifier.util import timing, dict_merge, byte_to_mb
 from .util import get_device, unpad, memory_usage
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 
 class Encoder:
@@ -21,8 +21,8 @@ class Encoder:
     @staticmethod
     def default_config() -> dict:
         return {
-            "model": "bert-base-uncased",
-            "layers": [10]
+            'model': 'bert-base-uncased',
+            'layers': [10]
         }
 
     #  -------- __init__ -----------
@@ -34,8 +34,8 @@ class Encoder:
         self.config: dict = Encoder.default_config()
         dict_merge(self.config, user_config)
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.config["model"])
-        self.model = AutoModel.from_pretrained(self.config["model"], output_hidden_states=True).to(get_device())
+        self.tokenizer = AutoTokenizer.from_pretrained(self.config['model'])
+        self.model = AutoModel.from_pretrained(self.config['model'], output_hidden_states=True).to(get_device())
 
         logger.info((
             f'> Init Encoder: \'{self.config["model"]}\'\n'
@@ -81,7 +81,7 @@ class Encoder:
             ),
             dim=1,
             index=torch.tensor(
-                self.config["layers"],
+                self.config['layers'],
                 dtype=torch.int32,
                 device=get_device()
             )

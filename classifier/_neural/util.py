@@ -10,7 +10,7 @@ from tqdm import tqdm
 #  -------- get_device -----------
 #
 def get_device() -> str:
-    return f"cuda:{torch.cuda.current_device()}" if torch.cuda.is_available() else "cpu"
+    return f'cuda:{torch.cuda.current_device()}' if torch.cuda.is_available() else 'cpu'
 
 
 #

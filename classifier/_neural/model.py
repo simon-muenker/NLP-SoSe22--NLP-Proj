@@ -16,12 +16,12 @@ class Model(nn.Module):
     @staticmethod
     def default_config() -> dict:
         return {
-            "name": ("MLP:Dense(in_size, in_size * hid_ratio)->Dropout->ELU"
-                     "->Dense(in_size * hid_ratio, out_size)->ELU"),
-            "in_size": 64,
-            "hid_ratio": 1.0,
-            "out_size": 2,
-            "dropout": 0.4,
+            'name': ('MLP:Dense(in_size, in_size * hid_ratio)->Dropout->ELU'
+                     '->Dense(in_size * hid_ratio, out_size)->ELU'),
+            'in_size': 64,
+            'hid_ratio': 1.0,
+            'out_size': 2,
+            'dropout': 0.4,
         }
 
     #  -------- init -----------
@@ -33,14 +33,14 @@ class Model(nn.Module):
 
         self.net = nn.Sequential(
             nn.Linear(
-                self.config["in_size"],
-                int(self.config["in_size"] * self.config["hid_ratio"])
+                self.config['in_size'],
+                int(self.config['in_size'] * self.config['hid_ratio'])
             ),
-            nn.Dropout(p=self.config["dropout"]),
+            nn.Dropout(p=self.config['dropout']),
             nn.ELU(),
             nn.Linear(
-                int(self.config["in_size"] * self.config["hid_ratio"]),
-                self.config["out_size"]
+                int(self.config['in_size'] * self.config['hid_ratio']),
+                self.config['out_size']
             ),
             nn.ELU()
         ).to(get_device())
@@ -88,8 +88,8 @@ class Model(nn.Module):
     def save(self, path: str) -> None:
         torch.save(
             {
-                "config": self.config,
-                "state_dict": self.state_dict()
+                'config': self.config,
+                'state_dict': self.state_dict()
             },
             path,
         )
@@ -100,8 +100,8 @@ class Model(nn.Module):
     def load(cls, path: str) -> nn.Module:
         save_state = torch.load(path, map_location=get_device())
 
-        model: nn.Module = cls(save_state["config"]).to(get_device())
-        model.load_state_dict(save_state["state_dict"])
+        model: nn.Module = cls(save_state['config']).to(get_device())
+        model.load_state_dict(save_state['state_dict'])
 
         return model
 

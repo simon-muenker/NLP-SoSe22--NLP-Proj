@@ -100,5 +100,5 @@ class Main(Runner):
 #
 #  -------- __main__ -----------
 #
-if __name__ == "__main__":
+if __name__ == '__main__':
     Main()()

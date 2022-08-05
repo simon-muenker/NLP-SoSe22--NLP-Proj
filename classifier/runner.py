@@ -169,10 +169,9 @@ class Runner:
         if not torch.cuda.is_available():
             cuda = None
 
-        else:
-            # set cuda to last device
-            if cuda == -1 or cuda > torch.cuda.device_count():
-                cuda = torch.cuda.device_count() - 1
+        # set cuda to last device
+        elif cuda == -1 or cuda > torch.cuda.device_count():
+            cuda = torch.cuda.device_count() - 1
 
         # make pytorch computations deterministic
         logging.info(f'> Setup PyTorch: seed({seed}), cuda({cuda})')
