@@ -55,7 +55,7 @@ class Main(Runner):
     def match(self, data: pd.DataFrame) -> None:
         pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float().to(get_device())
 
-        data["metacritic"] = data.parallel_apply(
+        data["metacritic"] = data.apply(
             lambda row: self.metacritic.iloc[
                 torch.norm(
                     pool - row[self.encoder.col_name].to(get_device()).unsqueeze(0),
