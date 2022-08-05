@@ -5,6 +5,9 @@ from classifier.features.__main__ import Main as Runner
 from classifier.util import timing
 from .._neural.util import get_device
 
+META_ID: str = 'metacritic_id'
+META_COLS: list = ['metascore', 'userscore']
+
 
 class Main(Runner):
 
@@ -20,7 +23,7 @@ class Main(Runner):
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
-            dataset.data[['sentiment', 'metacritic']].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
+            dataset.data[[dataset.target_label, META_ID]].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
 
     #  -------- __call__ -----------
     #
@@ -28,7 +31,8 @@ class Main(Runner):
         super(
             type(self).__bases__[0], self
         ).__call__(
-            int(self.encoder.dim) + len(self.pipeline.col_names) + 1,
+            # IMDb & metacritic embedding + features pipeline (variable) + META_COLS
+            2 * int(self.encoder.dim) + len(self.pipeline.col_names) + len(META_COLS),
             self.__collation_fn
         )
 
@@ -50,14 +54,15 @@ class Main(Runner):
     #
     #  -------- collate_hybrid -----------
     #
-    @staticmethod
-    def collate_hybrid(batch: list) -> torch.Tensor:
+    def collate_hybrid(self, batch: list) -> torch.Tensor:
         return torch.stack([
             (
                 torch.tensor(
-                    sample['metacritic'].values,
+                    self.metacritic.iloc[sample[META_ID]][
+                        [self.encoder.col_name, *META_COLS]].values,
                     device=get_device()
                 )
+                .squeeze()
                 .float()
             ) for sample in batch
         ])
@@ -70,15 +75,13 @@ class Main(Runner):
     def match(self, data: pd.DataFrame) -> None:
         pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float().to(get_device())
 
-        data["metacritic"] = data.apply(
-            lambda row: self.metacritic.iloc[
-                torch.norm(
-                    pool - row[self.encoder.col_name].to(get_device()).unsqueeze(0),
-                    dim=1
-                )
-                .argmin()
-                .item()
-            ]['metascore'],
+        data[META_ID] = data.apply(
+            lambda row: torch.norm(
+                pool - row[self.encoder.col_name].to(get_device()).unsqueeze(0),
+                dim=1
+            )
+            .argmin()
+            .item(),
             axis=1
         )
 

@@ -4,16 +4,7 @@
     "encoding": {
       "model": "bert-base-uncased"
     },
-    "features": {
-      "nela_pipeline": {
-        "style": false,
-        "complexity": false,
-        "bias": false,
-        "affect": false,
-        "moral": false,
-        "event": false
-      }
-    },
+    "features": {},
     "hybrid": {
       "metacritic_path": "./data/metacritic.formatted.csv"
     },
