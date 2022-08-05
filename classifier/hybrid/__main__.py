@@ -45,26 +45,37 @@ class Main(Runner):
             torch.concat([
                 self.collate_encoder(batch),
                 self.collate_features(batch),
-                self.collate_hybrid(batch)
+                self.collate_meta_features(batch),
+                self.collate_meta_encoder(batch)
             ], dim=1),
             self.collate_target_label(batch)
         )
 
     #
     #
-    #  -------- collate_hybrid -----------
+    #  -------- collate_meta_features -----------
     #
-    def collate_hybrid(self, batch: list) -> torch.Tensor:
+    def collate_meta_features(self, batch: list) -> torch.Tensor:
         return torch.stack([
             (
                 torch.tensor(
-                    self.metacritic.iloc[sample[META_ID]][[self.encoder.col_name]].values,
+                    self.metacritic.iloc[sample[META_ID]][META_COLS].values,
                     device=get_device()
                 )
                 .squeeze()
                 .float()
             ) for sample in batch
         ])
+
+    #
+    #
+    #  -------- collate_meta_encoder -----------
+    #
+    def collate_meta_encoder(self, batch: list) -> torch.Tensor:
+        return torch.stack([
+            self.metacritic.iloc[sample[META_ID]][self.encoder.col_name].values[0]
+            for sample in batch
+        ]).to(get_device())
 
     #
     #
