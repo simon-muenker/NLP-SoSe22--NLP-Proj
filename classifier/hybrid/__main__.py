@@ -3,6 +3,7 @@ import torch
 
 from classifier.features.__main__ import Main as Runner
 from classifier.util import timing
+from .._neural.util import get_device
 
 
 class Main(Runner):
@@ -52,12 +53,12 @@ class Main(Runner):
     #
     @timing
     def match(self, data: pd.DataFrame) -> None:
-        pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float()
+        pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float().to(get_device())
 
         data["metacritic"] = data.parallel_apply(
             lambda row: self.metacritic.iloc[
                 torch.norm(
-                    pool - row[self.encoder.col_name].unsqueeze(0),
+                    pool - row[self.encoder.col_name].to(get_device()).unsqueeze(0),
                     dim=1
                 )
                 .argmin()
