@@ -5,8 +5,8 @@
       "model": "bert-base-uncased"
     },
     "features": {},
-    "hybrid": {
-      "metacritic_path": "./data/metacritic.formatted.csv"
+    "metacritic": {
+      "path": "./data/metacritic.formatted.csv"
     },
     "neural": {
       "name": "Base+Features+MetaMatcher Concatenation (Hybrid)"

@@ -18,8 +18,8 @@
         "event": false
       }
     },
-    "hybrid": {
-      "metacritic_path": "./data/metacritic._debug.csv"
+    "metacritic": {
+      "path": "./data/metacritic._debug.csv"
     },
     "neural": {
       "name": "Base+Features+MetaMatcher Concatenation (Hybrid)"

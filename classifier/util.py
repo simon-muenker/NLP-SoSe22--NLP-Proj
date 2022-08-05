@@ -39,7 +39,7 @@ def timing(f):
 #
 def dict_merge(dct, merge_dct):
     """ Recursive dict merge. Inspired by :meth:``dict.update()``, instead of
-    updating only top-level keys, dict_merge recurses down into dicts nested
+    updating only top-level keys, dict_merge recourses down into dicts nested
     to an arbitrary depth, updating keys. The ``merge_dct`` is merged into
     ``dct``.
     :param dct: dict onto which the merge is executed
