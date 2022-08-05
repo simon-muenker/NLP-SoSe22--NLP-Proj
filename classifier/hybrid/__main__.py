@@ -55,9 +55,10 @@ class Main(Runner):
         return torch.stack([
             (
                 torch.tensor(
-                    sample[['metacritic']].values,
+                    sample['metacritic'].values,
                     device=get_device()
                 )
+                .squeeze()
                 .float()
             ) for sample in batch
         ])
