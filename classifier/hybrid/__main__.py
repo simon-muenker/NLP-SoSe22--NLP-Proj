@@ -21,7 +21,7 @@ class Main(Runner):
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
             print(dataset.data)
-            dataset[['sentiment', 'metacritic']].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
+            dataset.data[['sentiment', 'metacritic']].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
             exit()
 
     #  -------- __call__ -----------
