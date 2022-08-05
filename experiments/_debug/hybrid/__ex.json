@@ -19,7 +19,7 @@
       }
     },
     "hybrid": {
-      "metacritic_path": "./data/metacritic.formatted.csv"
+      "metacritic_path": "./data/metacritic._debug.csv"
     },
     "neural": {
       "name": "Base+Features Concatenation (Hybrid)"
