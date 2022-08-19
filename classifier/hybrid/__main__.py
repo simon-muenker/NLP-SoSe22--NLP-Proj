@@ -1,14 +1,12 @@
-import numpy as np
 import pandas as pd
 import torch
-from tqdm import tqdm
 
 from classifier.features.__main__ import Main as Runner
 from classifier.util import timing
 from .._neural.util import get_device
 
 META_ID: str = 'metacritic_id'
-META_VALUES: str = 'metacritic_values'
+META_PRED: str = 'metacritic_prediction'
 
 META_DATA: str = 'review'
 META_TARGET: list = ['grade']
@@ -29,7 +27,7 @@ class Main(Runner):
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
 
-            dataset.data[[dataset.target_label, META_VALUES, META_ID]].to_csv(
+            dataset.data[[dataset.target_label, META_PRED, META_ID]].to_csv(
                 f'{self.config["out_path"]}{data_label}.matcher.log'
             )
 
@@ -74,7 +72,7 @@ class Main(Runner):
     def collate_meta_features(batch: list) -> torch.Tensor:
         return torch.stack([
             torch.tensor(
-                sample[META_VALUES].values[0],
+                sample[META_PRED].values[0],
                 device=get_device()
             )
             .squeeze()
@@ -111,7 +109,7 @@ class Main(Runner):
             axis=1
         )
 
-        data[META_VALUES] = data.apply(
+        data[META_PRED] = data.apply(
             lambda row: self.metacritic.iloc[row[META_ID]][META_TARGET],
             axis=1
         )
