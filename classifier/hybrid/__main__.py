@@ -29,10 +29,6 @@ class Main(Runner):
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
 
-            dataset.data[META_VALUES] = dataset.data.apply(
-                lambda sample: self.metacritic.iloc[sample[META_ID]][META_TARGET], axis=1
-            )
-
             print(dataset.data)
             exit()
 
@@ -66,10 +62,11 @@ class Main(Runner):
     #
     #  -------- collate_meta_features -----------
     #
-    def collate_meta_features(self, batch: list) -> torch.Tensor:
+    @staticmethod
+    def collate_meta_features(batch: list) -> torch.Tensor:
         return torch.stack([
             torch.tensor(
-                self.metacritic.iloc[sample[META_ID]][META_TARGET].values[0],
+                sample[META_VALUES].values[0],
                 device=get_device()
             )
             .float()
@@ -102,6 +99,11 @@ class Main(Runner):
             )
             .argmin()
             .item(),
+            axis=1
+        )
+
+        data[META_VALUES] = data.apply(
+            lambda row: self.metacritic.iloc[row[META_ID]][META_TARGET],
             axis=1
         )
 
