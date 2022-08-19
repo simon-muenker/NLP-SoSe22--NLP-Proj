@@ -72,7 +72,7 @@ class Main(Runner):
     def collate_meta_features(batch: list) -> torch.Tensor:
         return torch.stack([
             torch.tensor(
-                sample[META_PRED].values[0],
+                sample[META_PRED].values,
                 device=get_device()
             )
             .float()
