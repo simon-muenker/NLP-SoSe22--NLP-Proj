@@ -30,7 +30,7 @@ class Main(Runner):
             self.match(dataset.data)
 
             dataset.data[META_VALUES] = dataset.data.apply(
-                lambda sample: self.metacritic.iloc[sample[META_ID]][META_TARGET]
+                lambda sample: self.metacritic.iloc[sample[META_ID]][META_TARGET], axis=1
             )
 
             print(dataset.data)
