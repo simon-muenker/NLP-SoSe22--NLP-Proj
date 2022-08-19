@@ -4,7 +4,17 @@
     "encoding": {
       "model": "bert-base-uncased"
     },
-    "features": {},
+    "features": {
+      "ngram_counter": null,
+      "nela_pipeline": {
+        "style": false,
+        "complexity": false,
+        "bias": false,
+        "affect": false,
+        "moral": false,
+        "event": false
+      }
+    },
     "metacritic": {
       "path": "./data/metacritic.reviews.formatted.csv"
     },
