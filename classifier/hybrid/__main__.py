@@ -99,19 +99,6 @@ class Main(Runner):
             axis=1
         )
 
-    #
-    #
-    #  -------- export_match -----------
-    #
-    def export_match(self, data: pd.DataFrame) -> None:
-        test = torch.stack([
-            self.collate_meta_features(group) for _, group in tqdm(
-                data.groupby(np.arange(len(data)) // 32),
-                leave=False, desc=f'Export Matches'
-            )])
-
-        print(test)
-
 
 #
 #
