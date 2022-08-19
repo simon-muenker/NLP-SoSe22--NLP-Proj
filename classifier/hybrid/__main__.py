@@ -28,7 +28,6 @@ class Main(Runner):
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
-            self.export_match(dataset.data)
 
     #  -------- __call__ -----------
     #
