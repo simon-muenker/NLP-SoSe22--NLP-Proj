@@ -99,15 +99,12 @@ class Main(Runner):
             lambda row: print(torch.tensor(self.metacritic.iloc[row[META_ID]][META_TARGET].values[0])), axis=1
         )
 
-        exit()
-
         # copy target values
         data[META_VALUES] = data.apply(
             lambda row: torch.tensor(
-                self.metacritic.iloc[row[META_ID]][META_TARGET].values,
+                self.metacritic.iloc[row[META_ID]][META_TARGET].values[0],
                 device=get_device()
             )
-            .squeeze()
             .float(),
             axis=1
         )
