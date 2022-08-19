@@ -47,11 +47,11 @@ class Main(Runner):
     #  -------- __collation_fn -----------
     #
     def __collation_fn(self, batch: list) -> tuple:
-        print([
+        print(torch.concat([
                 self.collate_encoder(batch),
                 self.collate_features(batch),
                 self.collate_meta_features(batch)
-            ])
+            ], dim=1))
         exit()
 
         return (
@@ -75,7 +75,6 @@ class Main(Runner):
                 sample[META_PRED].values[0],
                 device=get_device()
             )
-            .squeeze()
             .float()
             for sample in batch
         ])
