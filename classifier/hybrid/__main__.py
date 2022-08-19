@@ -1,5 +1,7 @@
+import numpy as np
 import pandas as pd
 import torch
+from tqdm import tqdm
 
 from classifier.features.__main__ import Main as Runner
 from classifier.util import timing
@@ -85,7 +87,7 @@ class Main(Runner):
     def match(self, data: pd.DataFrame) -> None:
         pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float().to(get_device())
 
-        # establish reference with closest (norm) metacritic review
+        # establish reference to closest (norm) metacritic review
         data[META_ID] = data.apply(
             lambda row: torch.norm(
                 pool - row[self.encoder.col_name].to(get_device()).unsqueeze(0),
@@ -95,6 +97,19 @@ class Main(Runner):
             .item(),
             axis=1
         )
+
+    #
+    #
+    #  -------- export_match -----------
+    #
+    def export_match(self, data: pd.DataFrame) -> None:
+        test = torch.stack([
+            self.collate_meta_features(group) for _, group in tqdm(
+                data.groupby(np.arange(len(data)) // 32),
+                leave=False, desc=f'Export Matches'
+            )])
+
+        print(test)
 
 
 #
