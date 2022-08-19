@@ -6,7 +6,10 @@ from classifier.util import timing
 from .._neural.util import get_device
 
 META_ID: str = 'metacritic_id'
-META_COLS: list = ['metascore', 'userscore']
+META_VALUES: str = 'metacritic_values'
+
+META_DATA: str = 'review'
+META_TARGET: list = ['grade']
 
 
 class Main(Runner):
@@ -18,12 +21,15 @@ class Main(Runner):
 
         # load and encode metacritic information
         self.metacritic = pd.read_csv(self.config['model']['metacritic']['path'])
-        self.encoder.df_encode(self.metacritic, col='summary', label=self.config['model']['metacritic']['path'])
+        self.encoder.df_encode(self.metacritic, col=META_DATA, label=self.config['model']['metacritic']['path'])
+
+        print(self.metacritic)
+        exit()
 
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
-            dataset.data[[dataset.target_label, META_ID]].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
+            dataset.data[[dataset.target_label, META_VALUES]].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
 
     #  -------- __call__ -----------
     #
@@ -31,8 +37,8 @@ class Main(Runner):
         super(
             type(self).__bases__[0], self
         ).__call__(
-            # IMDb embedding + features pipeline (variable) + META_COLS
-            int(self.encoder.dim) + len(self.pipeline.col_names) + len(META_COLS),
+            # IMDb embedding + features pipeline (variable) + META_TARGET
+            int(self.encoder.dim) + len(self.pipeline.col_names) + len(META_TARGET),
             self.__collation_fn
         )
 
@@ -55,16 +61,11 @@ class Main(Runner):
     #
     #  -------- collate_meta_features -----------
     #
-    def collate_meta_features(self, batch: list) -> torch.Tensor:
+    @staticmethod
+    def collate_meta_features(batch: list) -> torch.Tensor:
         return torch.stack([
-            (
-                torch.tensor(
-                    self.metacritic.iloc[sample[META_ID]][META_COLS].values,
-                    device=get_device()
-                )
-                .squeeze()
-                .float()
-            ) for sample in batch
+            sample[META_VALUES].values[0]
+            for sample in batch
         ])
 
     #
@@ -85,6 +86,7 @@ class Main(Runner):
     def match(self, data: pd.DataFrame) -> None:
         pool = torch.stack(self.metacritic[self.encoder.col_name].tolist()).float().to(get_device())
 
+        # establish reference with closest (norm) metacritic review
         data[META_ID] = data.apply(
             lambda row: torch.norm(
                 pool - row[self.encoder.col_name].to(get_device()).unsqueeze(0),
@@ -92,6 +94,24 @@ class Main(Runner):
             )
             .argmin()
             .item(),
+            axis=1
+        )
+
+        # copy target values
+        data[META_VALUES] = data.apply(
+            lambda row: print(torch.tensor(self.metacritic.iloc[row[META_ID]][META_TARGET].values)), axis=1
+        )
+
+        exit()
+
+        # copy target values
+        data[META_VALUES] = data.apply(
+            lambda row: torch.tensor(
+                self.metacritic.iloc[row[META_ID]][META_TARGET].values,
+                device=get_device()
+            )
+            .squeeze()
+            .float(),
             axis=1
         )
 

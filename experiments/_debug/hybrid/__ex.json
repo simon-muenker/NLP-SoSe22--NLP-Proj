@@ -19,7 +19,7 @@
       }
     },
     "metacritic": {
-      "path": "./data/metacritic._debug.csv"
+      "path": "./data/metacritic.reviews._debug.csv"
     },
     "neural": {
       "name": "Base+Features+MetaMatcher Concatenation (Hybrid)"

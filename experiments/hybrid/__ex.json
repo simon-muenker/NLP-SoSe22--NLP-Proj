@@ -6,7 +6,7 @@
     },
     "features": {},
     "metacritic": {
-      "path": "./data/metacritic.formatted.csv"
+      "path": "./data/metacritic.reviews.formatted.csv"
     },
     "neural": {
       "name": "Base+Features+MetaMatcher Concatenation (Hybrid)"
