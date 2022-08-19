@@ -70,6 +70,7 @@ class Main(Runner):
                 sample[META_VALUES].values[0],
                 device=get_device()
             )
+            .squeeze()
             .float()
             for sample in batch
         ])
