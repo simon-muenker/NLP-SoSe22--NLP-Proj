@@ -28,7 +28,7 @@ class Main(Runner):
             self.match(dataset.data)
 
             dataset.data[[dataset.target_label, META_PRED, META_ID]].to_csv(
-                f'{self.config["out_path"]}{data_label}.matcher.csv'
+                f'{self.config["out_path"]}meta.{data_label}.csv'
             )
 
     #  -------- __call__ -----------
