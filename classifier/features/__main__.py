@@ -56,7 +56,7 @@ class Main(Runner):
         return torch.stack([
             (
                 torch.tensor(
-                    sample[self.pipeline.col_names].values,
+                    sample[self.pipeline.col_names].apply(float).values,
                     device=get_device()
                 )
                 .squeeze()
