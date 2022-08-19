@@ -96,11 +96,6 @@ class Main(Runner):
 
         # copy target values
         data[META_VALUES] = data.apply(
-            lambda row: print(torch.tensor(self.metacritic.iloc[row[META_ID]][META_TARGET].values[0])), axis=1
-        )
-
-        # copy target values
-        data[META_VALUES] = data.apply(
             lambda row: torch.tensor(
                 self.metacritic.iloc[row[META_ID]][META_TARGET].values[0],
                 device=get_device()
