@@ -29,8 +29,9 @@ class Main(Runner):
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
 
-            print(dataset.data)
-            exit()
+            dataset.data[[dataset.target_label, META_VALUES, META_ID]].to_csv(
+                f'{self.config["out_path"]}{data_label}.matcher.log'
+            )
 
     #  -------- __call__ -----------
     #
