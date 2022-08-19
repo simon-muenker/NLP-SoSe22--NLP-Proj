@@ -23,9 +23,6 @@ class Main(Runner):
         self.metacritic = pd.read_csv(self.config['model']['metacritic']['path'])
         self.encoder.df_encode(self.metacritic, col=META_DATA, label=self.config['model']['metacritic']['path'])
 
-        print(self.metacritic)
-        exit()
-
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
@@ -99,7 +96,7 @@ class Main(Runner):
 
         # copy target values
         data[META_VALUES] = data.apply(
-            lambda row: print(torch.tensor(self.metacritic.iloc[row[META_ID]][META_TARGET].values)), axis=1
+            lambda row: print(torch.tensor(self.metacritic.iloc[row[META_ID]][META_TARGET].values[0])), axis=1
         )
 
         exit()
