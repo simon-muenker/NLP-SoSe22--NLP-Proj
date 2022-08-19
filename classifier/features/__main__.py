@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 import torch
 
 from classifier import Runner
@@ -56,7 +57,7 @@ class Main(Runner):
         return torch.stack([
             (
                 torch.tensor(
-                    sample[self.pipeline.col_names].apply(float).values,
+                    sample[self.pipeline.col_names].astype(np.float64).values,
                     device=get_device()
                 )
                 .squeeze()
