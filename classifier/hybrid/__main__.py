@@ -26,7 +26,6 @@ class Main(Runner):
         # match metacritic into datasets
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
-            dataset.data[[dataset.target_label, META_VALUES]].to_csv(f'{self.config["out_path"]}meta.{data_label}.csv')
 
     #  -------- __call__ -----------
     #
@@ -58,10 +57,13 @@ class Main(Runner):
     #
     #  -------- collate_meta_features -----------
     #
-    @staticmethod
-    def collate_meta_features(batch: list) -> torch.Tensor:
+    def collate_meta_features(self, batch: list) -> torch.Tensor:
         return torch.stack([
-            sample[META_VALUES].values[0]
+            torch.tensor(
+                self.metacritic.iloc[sample[META_ID]][META_TARGET].values[0],
+                device=get_device()
+            )
+            .float()
             for sample in batch
         ])
 
@@ -91,16 +93,6 @@ class Main(Runner):
             )
             .argmin()
             .item(),
-            axis=1
-        )
-
-        # copy target values
-        data[META_VALUES] = data.apply(
-            lambda row: torch.tensor(
-                self.metacritic.iloc[row[META_ID]][META_TARGET].values[0],
-                device=get_device()
-            )
-            .float(),
             axis=1
         )
 
