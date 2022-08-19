@@ -49,6 +49,13 @@ class Main(Runner):
     #  -------- __collation_fn -----------
     #
     def __collation_fn(self, batch: list) -> tuple:
+        print([
+                self.collate_encoder(batch),
+                self.collate_features(batch),
+                self.collate_meta_features(batch)
+            ])
+        exit()
+
         return (
             torch.concat([
                 self.collate_encoder(batch),
