@@ -29,6 +29,13 @@ class Main(Runner):
         for data_label, dataset in self.data.items():
             self.match(dataset.data)
 
+            dataset.data[META_VALUES] = dataset.data.apply(
+                lambda sample: self.metacritic.iloc[sample[META_ID]][META_TARGET]
+            )
+
+            print(dataset.data)
+            exit()
+
     #  -------- __call__ -----------
     #
     def __call__(self, *args) -> None:
