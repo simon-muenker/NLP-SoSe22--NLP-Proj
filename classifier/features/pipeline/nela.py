@@ -58,7 +58,7 @@ class NELAPipe:
                     vector, _ = fn(row)
                     feature_vector.extend(vector)
 
-            return pd.Series(feature_vector, index=self.col_names)
+            return pd.Series(feature_vector, index=self.col_names, dtype='float64')
 
         data[self.col_names] = data[col].parallel_apply(__apply)
 
