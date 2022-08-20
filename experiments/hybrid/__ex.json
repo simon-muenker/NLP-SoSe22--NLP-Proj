@@ -9,7 +9,7 @@
       "nela_pipeline": null
     },
     "metacritic": {
-      "path": "./data/metacritic.reviews.formatted.0.16.csv"
+      "path": "./data/metacritic.reviews.filtered.0.16.csv"
     },
     "neural": {
       "name": "Base+Features+MetaMatcher Concatenation (Hybrid)"
