@@ -38,7 +38,7 @@ class Main(Runner):
             type(self).__bases__[0], self
         ).__call__(
             # IMDb embedding + features pipeline (variable) + META_TARGET
-            int(self.encoder.dim) + len(self.pipeline.col_names) + len(META_TARGET),
+            2 * int(self.encoder.dim),  # + len(self.pipeline.col_names) + len(META_TARGET)
             self.__collation_fn
         )
 
@@ -50,9 +50,9 @@ class Main(Runner):
         return (
             torch.concat([
                 self.collate_encoder(batch),
-                self.collate_features(batch),
-                self.collate_meta_features(batch),
-                # self.collate_meta_encoder(batch)
+                # self.collate_features(batch),
+                self.collate_meta_encoder(batch),
+                # self.collate_meta_features(batch),
             ], dim=1),
             self.collate_target_label(batch)
         )
