@@ -1,11 +1,5 @@
 ### Classifier gitignore template
 
-# Metacritic files
-data/metacritic.*.csv
-
-# Debugging Notebook
-notebooks/__*.ipynb
-
 # IntelliJ project files
 .idea
 *.iml
