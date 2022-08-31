@@ -13,14 +13,9 @@ install:
 
 # --- --- ---
 
-experiment:
+run:
 	@python3 -m $(module) -C $(global_cfg) ./experiment/config.json
 
-
-# --- --- ---
-
-#
-# debug call
 debug:
 	@python3 -m $(module) -C $(global_cfg) ./experiment/_debug/config.json
 

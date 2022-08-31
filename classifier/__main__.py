@@ -3,7 +3,6 @@ import logging
 import random
 
 import torch
-from pandarallel import pandarallel
 
 from classifier import Data
 from classifier.util import dict_merge, load_json, byte_to_mb
@@ -40,8 +39,6 @@ class Main:
 
         Main.__load_logger(f'{self.config["out_path"]}full.log')
         Main.__setup_pytorch(self.config["seed"], self.config["cuda"])
-
-        pandarallel.initialize(progress_bar=False, verbose=int(False))
 
         # --- ---------------------------------
         # --- load data

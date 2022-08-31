@@ -1,5 +1,5 @@
 {
-  "out_path": "./experiments/_debug/",
+  "out_path": "./experiment/_debug/",
   "data": {
     "paths": {
       "train": "./data/imdb._debug.csv",

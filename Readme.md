@@ -16,11 +16,11 @@ pip install -r requirements.txt
 ### Predefined Targets:
 
 ```bash
-# run test/debug (tiny datasets)
+# run test/debug (tiny dataset)
 make debug
 
-# run experiment
-make experiment
+# run on full train with evaluation (not on test set)
+make run
 ```
 
 ### Python module:
