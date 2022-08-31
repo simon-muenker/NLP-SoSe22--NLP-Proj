@@ -1,0 +1,17 @@
+> Loaded logger: ./experiments/_debug/full.log
+> Setup PyTorch: seed(1), cuda(None)
+
+[--- PREPARE DATA -> (['train', 'eval']) ---]
+> f(__load) took: 0.0034 sec
+> Load/Init from ./data/imdb._debug.csv
+  Number of Samples: 40 
+  Memory Usage: 0.0729 MB
+> f(__load) took: 0.0020 sec
+> Load/Init from ./data/imdb._debug.csv
+  Number of Samples: 40 
+  Memory Usage: 0.0729 MB
+
+[--- LOAD COMPONENTS ---]
+> Init Encoder: 'bert-base-uncased'
+  Memory Usage: 417.6494 MB
+> f(__init__) took: 7.3948 sec

@@ -1,0 +1,60 @@
+> Loaded logger: ./experiments/base/full.log
+> Setup PyTorch: seed(1), cuda(5)
+
+[--- PREPARE DATA -> (['train', 'eval']) ---]
+> f(__load) took: 0.2175 sec
+> Load/Init from ./data/imdb.train.csv
+  Number of Samples: 20170 
+  Memory Usage: 27.5464 MB
+> f(__load) took: 0.0256 sec
+> Load/Init from ./data/imdb.eval.csv
+  Number of Samples: 2242 
+  Memory Usage: 3.0493 MB
+
+[--- LOAD COMPONENTS ---]
+> Init Encoder: 'bert-base-uncased'
+  Memory Usage: 417.6494 MB
+> f(__init__) took: 9.3846 sec
+> f(df_encode) took: 256.5941 sec
+> Memory Usage (w/ Embeds): 32.5401 MB
+> f(df_encode) took: 28.7306 sec
+> Memory Usage (w/ Embeds): 3.6277 MB
+> Init BERT-Head (Base)
+  Memory Usage: 0.0059 MB
+  Trainable parameters: 1538
+  Input Dimension: 768
+  Output Dimension: 2
+
+[--- TRAIN -> ./data/imdb.train.csv ---]
+@005: 	loss(train)=0.3512 	loss(eval)=0.3004 	f1(train)=0.8499 	f1(eval)=0.8827 	duration(epoch)=0:00:04.019355
+@010: 	loss(train)=0.3451 	loss(eval)=0.2925 	f1(train)=0.8496 	f1(eval)=0.8831 	duration(epoch)=0:00:04.003621
+@015: 	loss(train)=0.3427 	loss(eval)=0.2811 	f1(train)=0.8486 	f1(eval)=0.8872 	duration(epoch)=0:00:04.001174
+@020: 	loss(train)=0.3379 	loss(eval)=0.2874 	f1(train)=0.8511 	f1(eval)=0.8827 	duration(epoch)=0:00:04.015388
+@025: 	loss(train)=0.3391 	loss(eval)=0.2826 	f1(train)=0.8533 	f1(eval)=0.8800 	duration(epoch)=0:00:03.992941
+@030: 	loss(train)=0.3395 	loss(eval)=0.2909 	f1(train)=0.8496 	f1(eval)=0.8822 	duration(epoch)=0:00:03.990993
+@035: 	loss(train)=0.3385 	loss(eval)=0.2749 	f1(train)=0.8491 	f1(eval)=0.8858 	duration(epoch)=0:00:04.005197
+@040: 	loss(train)=0.3401 	loss(eval)=0.2795 	f1(train)=0.8530 	f1(eval)=0.8867 	duration(epoch)=0:00:03.987367
+@045: 	loss(train)=0.3388 	loss(eval)=0.2966 	f1(train)=0.8507 	f1(eval)=0.8858 	duration(epoch)=0:00:04.007504
+@050: 	loss(train)=0.3415 	loss(eval)=0.2960 	f1(train)=0.8495 	f1(eval)=0.8867 	duration(epoch)=0:00:04.092548
+@055: 	loss(train)=0.3366 	loss(eval)=0.2758 	f1(train)=0.8524 	f1(eval)=0.8854 	duration(epoch)=0:00:03.993045
+@060: 	loss(train)=0.3451 	loss(eval)=0.2909 	f1(train)=0.8493 	f1(eval)=0.8831 	duration(epoch)=0:00:04.013915
+@065: 	loss(train)=0.3365 	loss(eval)=0.2814 	f1(train)=0.8496 	f1(eval)=0.8867 	duration(epoch)=0:00:03.993748
+@070: 	loss(train)=0.3390 	loss(eval)=0.2833 	f1(train)=0.8504 	f1(eval)=0.8836 	duration(epoch)=0:00:03.993990
+@075: 	loss(train)=0.3359 	loss(eval)=0.2739 	f1(train)=0.8526 	f1(eval)=0.8885 	duration(epoch)=0:00:04.016802
+@080: 	loss(train)=0.3384 	loss(eval)=0.2803 	f1(train)=0.8509 	f1(eval)=0.8863 	duration(epoch)=0:00:03.998053
+@085: 	loss(train)=0.3398 	loss(eval)=0.2796 	f1(train)=0.8482 	f1(eval)=0.8814 	duration(epoch)=0:00:03.993709
+@090: 	loss(train)=0.3408 	loss(eval)=0.2814 	f1(train)=0.8489 	f1(eval)=0.8849 	duration(epoch)=0:00:03.999472
+@095: 	loss(train)=0.3417 	loss(eval)=0.2915 	f1(train)=0.8495 	f1(eval)=0.8858 	duration(epoch)=0:00:03.999806
+@100: 	loss(train)=0.3397 	loss(eval)=0.2808 	f1(train)=0.8522 	f1(eval)=0.8796 	duration(epoch)=0:00:03.999978
+> Load best model based on evaluation loss.
+> Init BERT-Head (Base)
+  Memory Usage: 0.0059 MB
+  Trainable parameters: 1538
+  Input Dimension: 768
+  Output Dimension: 2
+@051: 	loss(train)=0.3372 	loss(eval)=0.2786 	f1(train)=0.8498 	f1(eval)=0.8898 	duration(epoch)=0:00:04.130617
+
+[--- EVAL -> ./data/imdb.eval.csv ---]
+AVG           	 tp:     1995	 fp:      247 	 tn:     1995	 fn:      247	 pre=0.8898	 rec=0.8898	 f1=0.8898	 acc=0.8898
+negative      	 tp:      908	 fp:      143 	 tn:     1087	 fn:      104	 pre=0.8639	 rec=0.8972	 f1=0.8803	 acc=0.8898
+positive      	 tp:     1087	 fp:      104 	 tn:      908	 fn:      143	 pre=0.9127	 rec=0.8837	 f1=0.8980	 acc=0.8898

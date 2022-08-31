@@ -2,18 +2,21 @@
   "cuda": 5,
   "out_path": null,
   "data": {
-    "paths": {
-      "train": "./data/imdb.train.csv",
-      "eval": "./data/imdb.eval.csv"
-    },
+    "path": {},
     "polarities": {
       "negative": 0,
       "positive": 1
     },
     "data_label": "review",
-    "target_label": "sentiment",
-    "config": {}
+    "target_label": "sentiment"
   },
-  "model": {},
+  "model": {
+    "encoding": {
+      "model": "bert-base-uncased"
+    },
+    "neural": {
+      "name": "BERT-Head (Base)"
+    }
+  },
   "trainer": {}
 }
