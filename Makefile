@@ -2,7 +2,7 @@
 # Config:
 
 module = classifier
-global_cfg = ./experiments/__global.json
+global_cfg = ./experiment/__global.json
 
 # --- --- ---
 
@@ -14,7 +14,7 @@ install:
 # --- --- ---
 
 experiment:
-	@python3 -m $(module).base -C $(global_cfg) $(base_path)/__ex.json
+	@python3 -m $(module) -C $(global_cfg) ./experiment/config.json
 
 
 # --- --- ---
@@ -22,5 +22,5 @@ experiment:
 #
 # debug call
 debug:
-	@python3 -m $(module) -C $(global_cfg) ./experiments/_debug/config.json
+	@python3 -m $(module) -C $(global_cfg) ./experiment/_debug/config.json
 
