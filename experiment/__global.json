@@ -15,7 +15,8 @@
       "model": "bert-base-uncased"
     },
     "neural": {
-      "name": "BERT-Head (Base)"
+      "name": "BERT-Head (Base)",
+      "hid_size": 256
     }
   },
   "trainer": {}

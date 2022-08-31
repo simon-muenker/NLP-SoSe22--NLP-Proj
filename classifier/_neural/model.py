@@ -16,8 +16,10 @@ class Model(nn.Module):
     @staticmethod
     def default_config() -> dict:
         return {
-            'name': 'Dropout -> Dense(in_size, out_size) -> GELU',
+            'name': ('MLP:Dense(in_size, in_size * hid_ratio)->Dropout->ELU'
+                     '->Dense(in_size * hid_ratio, out_size)->ELU'),
             'in_size': 64,
+            'hid_size': 32,
             'out_size': 2,
             'dropout': 0.4,
         }
@@ -30,12 +32,17 @@ class Model(nn.Module):
         dict_merge(self.config, user_config)
 
         self.net = nn.Sequential(
-            nn.Dropout(p=self.config['dropout']),
             nn.Linear(
                 self.config['in_size'],
+                self.config['hid_size']
+            ),
+            nn.Dropout(p=self.config['dropout']),
+            nn.ELU(),
+            nn.Linear(
+                self.config['hid_size'],
                 self.config['out_size']
             ),
-            nn.GELU()
+            nn.ELU()
         ).to(get_device())
 
         logging.info((
