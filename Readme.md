@@ -71,7 +71,10 @@ python3 -m $classifier -C config.json
 ## Results on eval (preliminary)
 
 ```
-
+[--- EVAL -> ./data/imdb.eval.csv ---]
+AVG           	 tp:     2021	 fp:      221 	 tn:     2021	 fn:      221	 pre=0.9014	 rec=0.9014	 f1=0.9014	 acc=0.9014
+negative      	 tp:      938	 fp:      147 	 tn:     1083	 fn:       74	 pre=0.8645	 rec=0.9269	 f1=0.8946	 acc=0.9014
+positive      	 tp:     1083	 fp:       74 	 tn:      938	 fn:      147	 pre=0.9360	 rec=0.8805	 f1=0.9074	 acc=0.9014
 ```
 
 ## Credits:
