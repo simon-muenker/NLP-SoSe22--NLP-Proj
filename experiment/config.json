@@ -3,7 +3,7 @@
   "data": {
     "paths": {
       "train": "./data/imdb.train.csv",
-      "eval": "./data/imdb.eval.csv"
+      "eval": "./data/imdb.test.csv"
     }
   }
 }

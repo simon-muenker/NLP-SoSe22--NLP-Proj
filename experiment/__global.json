@@ -12,7 +12,7 @@
   },
   "model": {
     "encoding": {
-      "model": "fabriceyhc/bert-base-uncased-imdb"
+      "model": "bert-base-uncased"
     },
     "neural": {
       "name": "BERT-Head (Base)",
