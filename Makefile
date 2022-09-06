@@ -19,3 +19,7 @@ run:
 debug:
 	@python3 -m $(module) -C $(global_cfg) ./experiment/_debug/config.json
 
+# --- --- ---
+
+analysis:
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/02--Manifold-Analysis.ipynb
