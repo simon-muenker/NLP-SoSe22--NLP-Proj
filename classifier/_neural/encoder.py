@@ -97,13 +97,23 @@ class Encoder:
                 data.groupby(np.arange(len(data)) // batch_size),
                 leave=False, desc=f'Encode {label}'
         ):
-            _, batch_embeds, _ = self(list(group[col].values), return_unpad=False)
+            # extract text content from dataframe group
+            content: list = list(group[col].values)
+
+            # add dimension if last element is one dimensional
+            if len(content) == 1:
+                content.append('')
+
+            _, batch_embeds, _ = self(content, return_unpad=False)
 
             if form == 'cls':
                 embeds.extend(torch.unbind(batch_embeds[:, 1].cpu()))
 
             if form == 'mean':
                 embeds.extend(torch.unbind(torch.mean(batch_embeds, dim=1).cpu()))
+
+        if len(data) % batch_size == 1:
+            embeds.pop()
 
         data[self.col_name] = embeds
 
