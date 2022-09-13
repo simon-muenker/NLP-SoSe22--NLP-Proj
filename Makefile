@@ -18,7 +18,7 @@ download:
 
 data:
 	@jupyter nbconvert --to notebook --inplace --execute notebooks/00--Data-Loading.ipynb
-	@jupyter nbconvert --to notebook --inplace --execute notebooks/01--Data-Preperation.ipynb
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/01--Data-Preparation.ipynb
 
 analysis:
 	@jupyter nbconvert --to notebook --inplace --execute notebooks/02--Manifold-Computation.ipynb
