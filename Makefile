@@ -5,8 +5,9 @@ install:
 	@python3 -m pip install -r requirements.txt
 
 download:
-	wget -O /tmp/_aclImdb.tar.gz http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
-	tar -zxvf _aclImdb
+	wget -O data/_aclImdb.tar.gz http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+	tar -zxvf data/_aclImdb.tar.gz
+	rm data/_aclImdb.tar.gz
 
 
 # --- --- ---
