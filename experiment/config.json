@@ -2,8 +2,8 @@
   "out_path": "./experiment/",
   "data": {
     "paths": {
-      "train": "./data/imdb.train.csv",
-      "eval": "./data/imdb.test.csv"
+      "train": "./data/imdb._prepped.train.csv",
+      "eval": "./data/imdb._prepped.test.csv"
     }
   }
 }
