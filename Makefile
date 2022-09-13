@@ -30,4 +30,4 @@ analysis:
 	@jupyter nbconvert --to notebook --inplace --execute notebooks/03--Manifold-Analysis.ipynb
 
 training:
-	@jupyter nbconvert --to notebook --inplace --execute notebooks/04--Classfier-Training.ipynb
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/04--Classifier-Training.ipynb
