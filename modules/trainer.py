@@ -51,9 +51,9 @@ class Trainer:
         self.state: dict = {
             'epoch': [],
             'loss_train': [],
-            'loss_eval': [],
+            'loss_test': [],
             'f1_train': [],
-            'f1_eval': [],
+            'f1_test': [],
             'duration': [],
         }
 
@@ -70,7 +70,7 @@ class Trainer:
         logging.info(f'\n[--- TRAIN -> {self.data["train"].data_path} ---]')
 
         saved_model_epoch: int = 0
-        saved_eval_metric: tuple = ()
+        saved_test_metric: tuple = ()
 
         # --- epoch loop
         try:
@@ -96,9 +96,9 @@ class Trainer:
                 # --- ---------------------------------
                 # --- begin eval
                 self.metric.reset()
-                loss_eval: float = 0.0
+                loss_test: float = 0.0
                 for idx, batch in load_iterator(
-                        self.data['eval'],
+                        self.data['test'],
                         collate_fn=self.collation_fn,
                         batch_size=self.config['batch_size'],
                         shuffle=self.config['shuffle'],
@@ -106,24 +106,24 @@ class Trainer:
                         desc=f'Eval, epoch: {epoch:03}',
                         disable=epoch % self.config['report_rate'] != 0
                 ):
-                    loss_eval = self._eval(batch, idx, loss_eval)
-                f1_eval: float = self.metric.f_score()
+                    loss_test = self._eval(batch, idx, loss_test)
+                f1_test: float = self.metric.f_score()
 
                 # --- ---------------------------------
                 # --- update state
                 self.state['epoch'].append(epoch)
                 self.state['loss_train'].append(loss_train)
-                self.state['loss_eval'].append(loss_eval)
+                self.state['loss_test'].append(loss_test)
                 self.state['f1_train'].append(f1_train)
-                self.state['f1_eval'].append(f1_eval)
+                self.state['f1_test'].append(f1_test)
                 self.state['duration'].append(datetime.now() - time_begin)
 
                 # --- ---------------------------------
                 # --- save if is best model
-                if self.state['f1_eval'][-1] >= max(n for n in self.state['f1_eval'] if n > 0):
+                if self.state['f1_test'][-1] >= max(n for n in self.state['f1_test'] if n > 0):
                     saved_model_epoch = self.state['epoch'][-1]
                     self.model.save(self.out_dir + 'model.bin')
-                    saved_eval_metric = self.metric.save()
+                    saved_test_metric = self.metric.save()
 
                 # --- ---------------------------------
                 # --- log to user
@@ -143,10 +143,10 @@ class Trainer:
 
         # --- ---------------------------------
         # --- eval
-        logging.info(f'\n[--- EVAL -> {self.data["eval"].data_path} ---]')
-        self.metric.load(saved_eval_metric)
+        logging.info(f'\n[--- TEST -> {self.data["test"].data_path} ---]')
+        self.metric.load(saved_test_metric)
         self.metric.show(decoding=self.data['train'].decode_label)
-        self.metric.export(f'{self.out_dir}metric.eval', decoding=self.data['train'].decode_label)
+        self.metric.export(f'{self.out_dir}metric.test', decoding=self.data['train'].decode_label)
 
         return self.state
 
@@ -221,9 +221,9 @@ class Trainer:
         logging.info((
             f'@{epoch:03}: \t'
             f"loss(train)={self.state['loss_train'][epoch - 1]:2.4f} \t"
-            f"loss(eval)={self.state['loss_eval'][epoch - 1]:2.4f} \t"
+            f"loss(test)={self.state['loss_test'][epoch - 1]:2.4f} \t"
             f"f1(train)={self.state['f1_train'][epoch - 1]:2.4f} \t"
-            f"f1(eval)={self.state['f1_eval'][epoch - 1]:2.4f} \t"
+            f"f1(test)={self.state['f1_test'][epoch - 1]:2.4f} \t"
             f"duration(epoch)={self.state['duration'][epoch - 1]}"
         ))
 
@@ -232,7 +232,7 @@ class Trainer:
     def _write_state(self) -> None:
         cols: list = list(self.state.keys())
 
-        with open(self.out_dir + 'metric.epochs.csv', 'w') as output_file:
+        with open(self.out_dir + 'metric.training.csv', 'w') as output_file:
             writer = csv.writer(output_file, delimiter=',')
             writer.writerow(cols)
             writer.writerows(zip(*[self.state[c] for c in cols]))
