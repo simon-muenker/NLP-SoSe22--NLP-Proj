@@ -2,8 +2,8 @@
 # force make targets
 .PHONY: install download data analysis training
 
-#
-# install
+# --- --- ---
+
 install:
 	@python3 -m pip install -r requirements.txt
 
@@ -12,7 +12,6 @@ download:
 	@tar -zxf data/_aclImdb.tar.gz -C data/
 	@rm data/_aclImdb.tar.gz
 	@mv data/aclImdb data/_aclImdb
-
 
 # --- --- ---
 
@@ -26,3 +25,8 @@ analysis:
 
 training:
 	@jupyter nbconvert --to notebook --inplace --execute notebooks/04--Classifier-Training.ipynb
+
+# --- --- ---
+
+setup: install download
+run: data analysis training
