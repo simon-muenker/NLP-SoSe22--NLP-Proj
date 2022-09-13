@@ -1,4 +1,7 @@
 
+# force make targets
+.PHONY: install download data analysis training
+
 #
 # install
 install:
