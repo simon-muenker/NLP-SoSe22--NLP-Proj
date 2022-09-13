@@ -6,9 +6,11 @@ inconvenience.
 ## Install
 
 ```bash
-### to install the requirements (make, pip):
+# to install the requirements (make, pip):
 make install
-pip install -r requirements.txt
+
+# to download the raw IMDb dataset
+make download
 ```
 
 ## Usage
