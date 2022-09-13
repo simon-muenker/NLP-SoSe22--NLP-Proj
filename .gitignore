@@ -9,3 +9,5 @@ __pycache__
 
 data/_aclImdb
 data/imdb._*.csv
+
+*.tex
