@@ -5,7 +5,7 @@ import pandas as pd
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
-from classifier.util import timing, byte_to_mb
+from .util import timing, byte_to_mb
 
 
 @dataclass

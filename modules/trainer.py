@@ -8,9 +8,8 @@ import pandas as pd
 import torch
 from torch import optim
 
-from classifier import Metric, Data
-from classifier.util import dict_merge
-from .util import load_iterator
+from . import Metric, Data
+from .util import dict_merge, load_iterator
 
 
 @dataclass

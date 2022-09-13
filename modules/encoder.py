@@ -8,8 +8,7 @@ import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel, logging
 
-from classifier.util import timing, dict_merge, byte_to_mb
-from .util import get_device, unpad, memory_usage
+from .util import timing, dict_merge, byte_to_mb, get_device, unpad, memory_usage
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 

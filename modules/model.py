@@ -5,8 +5,7 @@ from typing import List, Tuple
 import torch
 import torch.nn as nn
 
-from classifier.util import dict_merge, byte_to_mb
-from .util import get_device, memory_usage
+from .util import dict_merge, byte_to_mb, get_device, memory_usage
 
 
 class Model(nn.Module):
