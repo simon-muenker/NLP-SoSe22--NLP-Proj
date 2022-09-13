@@ -8,6 +8,7 @@ download:
 	@wget -O data/_aclImdb.tar.gz http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
 	@tar -zxf data/_aclImdb.tar.gz -C data/
 	@rm data/_aclImdb.tar.gz
+	@mv -r data/aclImdb data/_aclImdb
 
 
 # --- --- ---
