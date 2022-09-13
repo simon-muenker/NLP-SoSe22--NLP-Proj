@@ -22,4 +22,5 @@ debug:
 # --- --- ---
 
 analysis:
-	@jupyter nbconvert --to notebook --inplace --execute notebooks/02--Manifold-Analysis.ipynb
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/02--Manifold-Computation.ipynb
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/03--Manifold-Analysis.ipynb
