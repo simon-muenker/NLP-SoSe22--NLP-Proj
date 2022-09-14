@@ -1,5 +1,5 @@
-,mean,std,min,max
-base,1.203,0.14,1.02,1.517
-textattack,8.213,0.422,7.983,9.314
-fabriceyhc,23.371,0.067,23.344,23.56
-wakaka,11.8,0.295,11.648,12.581
+model,metrics,mean,std,min,max
+base,distance,1.203,0.14,1.02,1.517
+textattack,distance,8.213,0.422,7.983,9.314
+fabriceyhc,distance,23.371,0.067,23.344,23.56
+wakaka,distance,11.8,0.295,11.648,12.581
