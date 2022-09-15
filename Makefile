@@ -25,6 +25,7 @@ analysis:
 
 training:
 	@jupyter nbconvert --to notebook --inplace --execute notebooks/04--Classifier-Training.ipynb
+	@jupyter nbconvert --to notebook --inplace --execute notebooks/05--Classifier-Analysis.ipynb
 
 # --- --- ---
 
