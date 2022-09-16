@@ -1,9 +1,9 @@
 model,metrics,mean,std,min,max
-base,dispersion_positive,6.044,0.067,5.893,6.086
-base,dispersion_negative,5.748,0.093,5.513,5.8
-textattack,dispersion_positive,7.06,0.247,6.395,7.184
-textattack,dispersion_negative,6.822,0.227,6.211,6.935
-fabriceyhc,dispersion_positive,7.374,0.148,6.962,7.438
-fabriceyhc,dispersion_negative,9.226,0.11,8.92,9.273
-wakaka,dispersion_positive,8.335,0.225,7.731,8.447
-wakaka,dispersion_negative,7.478,0.211,6.907,7.581
+base,intra_distance_negative,5.799,,5.799,5.799
+base,intra_distance_positive,6.085,,6.085,6.085
+textattack,intra_distance_negative,6.935,,6.935,6.935
+textattack,intra_distance_positive,7.184,,7.184,7.184
+fabriceyhc,intra_distance_negative,9.273,,9.273,9.273
+fabriceyhc,intra_distance_positive,7.438,,7.438,7.438
+wakaka,intra_distance_negative,7.581,,7.581,7.581
+wakaka,intra_distance_positive,8.447,,8.447,8.447
