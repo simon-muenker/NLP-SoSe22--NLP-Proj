@@ -10,18 +10,17 @@ from .util import timing, byte_to_mb
 
 @dataclass
 class Data(Dataset):
-    data_path: str
-    polarities: dict
-
+    file_path: str
     data_label: str
     target_label: str
+    target_groups: dict
 
     #  -------- __post_init__ -----------
     #
     def __post_init__(self):
-        self.data: pd.DataFrame = Data.__load(self.data_path)
+        self.data: pd.DataFrame = Data.__load(self.file_path)
         logging.info((
-            f'> Load/Init from {self.data_path}\n'
+            f'> Load/Init from {self.file_path}\n'
             f'  Number of Samples: {len(self)} \n'
             f'  Memory Usage: {byte_to_mb(self.data.memory_usage(deep=True).sum())}'
         ))
@@ -30,35 +29,35 @@ class Data(Dataset):
     #
     @staticmethod
     @timing
-    def __load(path):
-        return pd.read_csv(path)
+    def __load(file_path: str):
+        return pd.read_csv(file_path)
 
     #  -------- save -----------
     #
     @timing
-    def save(self, path: str):
-        logging.info(f'> Save to {path}.csv')
-        self.data.to_csv(f'{path}.csv')
+    def save(self, file_path: str):
+        logging.info(f'> Save to {file_path}.csv')
+        self.data.to_csv(f'{file_path}.csv')
 
-    #  -------- encode_label -----------
+    #  -------- encode_target_label -----------
     #
-    def encode_label(self, label: str) -> int:
-        return self.polarities.get(label)
+    def encode_target_label(self, label: str) -> int:
+        return self.target_groups.get(label)
 
-    #  -------- decode_label -----------
+    #  -------- decode_target_label -----------
     #
-    def decode_label(self, label: int) -> str:
-        return {v: k for k, v in self.polarities.items()}.get(label)
+    def decode_target_label(self, label: int) -> str:
+        return {v: k for k, v in self.target_groups.items()}.get(label)
 
-    #  -------- get_label_keys -----------
+    #  -------- get_target_label_keys -----------
     #
-    def get_label_keys(self) -> set:
-        return set(k for k in self.polarities.keys())
+    def get_target_label_keys(self) -> set:
+        return set(k for k in self.target_groups.keys())
 
-    #  -------- get_label_values -----------
+    #  -------- get_target_label_values -----------
     #
-    def get_label_values(self) -> set:
-        return set(k for k in self.polarities.values())
+    def get_target_label_values(self) -> set:
+        return set(k for k in self.target_groups.values())
 
     #  -------- __getitem__ -----------
     #

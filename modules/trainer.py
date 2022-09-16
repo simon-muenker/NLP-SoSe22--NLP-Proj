@@ -66,7 +66,7 @@ class Trainer:
     #  -------- __call__ (train) -----------
     #
     def __call__(self) -> dict:
-        logging.info(f'\n[--- TRAIN -> {self.data["train"].data_path} ---]')
+        logging.info(f'\n[--- TRAIN -> {self.data["train"].file_path} ---]')
 
         saved_model_epoch: int = 0
         saved_test_metric: tuple = ()
@@ -142,10 +142,10 @@ class Trainer:
 
         # --- ---------------------------------
         # --- eval
-        logging.info(f'\n[--- TEST -> {self.data["test"].data_path} ---]')
+        logging.info(f'\n[--- TEST -> {self.data["test"].file_path} ---]')
         self.metric.load(saved_test_metric)
-        self.metric.show(decoding=self.data['train'].decode_label)
-        self.metric.export(f'{self.out_dir}metric.test', decoding=self.data['train'].decode_label)
+        self.metric.show(decoding=self.data['train'].decode_target_label)
+        self.metric.export(f'{self.out_dir}metric.test', decoding=self.data['train'].decode_target_label)
 
         return self.state
 
@@ -210,7 +210,7 @@ class Trainer:
         _, gold_labels = batch
 
         self.metric.confusion_matrix(
-            self.data['train'].get_label_values(),
+            self.data['train'].get_target_label_values(),
             pd.Series(gold_labels.cpu().numpy()), pd.Series(pred_labels.cpu().numpy())
         )
 

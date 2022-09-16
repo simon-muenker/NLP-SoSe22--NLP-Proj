@@ -1,5 +1,4 @@
 import logging
-from abc import abstractmethod
 from typing import List, Tuple
 
 import torch
@@ -56,7 +55,6 @@ class Model(nn.Module):
 
     #  -------- forward -----------
     #
-    @abstractmethod
     def forward(self, data: Tuple[List[torch.Tensor], List]) -> torch.Tensor:
         return self.net(data)
 

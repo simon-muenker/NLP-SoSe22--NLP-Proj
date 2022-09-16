@@ -1,10 +1,11 @@
 import logging as logger
 import os
-from typing import Tuple, List, Union
+from typing import Tuple, List, Union, Literal
 
 import numpy as np
 import pandas as pd
 import torch
+from torch import Tensor
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel, logging
 
@@ -50,7 +51,7 @@ class Encoder:
             self,
             batch: List[str],
             return_unpad: bool = True
-    ) -> Union[Tuple[List, List[torch.Tensor], list], Tuple[List, torch.Tensor, torch.Tensor]]:
+    ) -> Tuple[Union[list, Tensor], ...]:
         encoding = self.tokenizer(batch, padding=True, truncation=True)
 
         tokens: List[List[str]] = [self.ids_to_tokens(ids) for ids in encoding['input_ids']]
@@ -59,13 +60,7 @@ class Encoder:
         ctes: torch.Tensor = self.contextualize(ids, masks)
 
         if return_unpad:
-            masks = masks.sum(1)
-
-            return (
-                unpad(tokens, masks),
-                unpad(ctes, masks),
-                unpad(ids, masks)
-            )
+            return tuple(unpad(el, masks.sum(1)) for el in [tokens, ctes, ids])
 
         return tokens, ctes, ids
 
@@ -89,8 +84,20 @@ class Encoder:
     #  -------- df_encode -----------
     #
     @timing
-    def df_encode(self, data: pd.DataFrame, col: str, form: str = 'mean', batch_size: int = 32, label: str = '***'):
+    def df_encode(
+            self,
+            data: pd.DataFrame,
+            col: str,
+            form: Literal['cls', 'mean'] = 'mean',
+            batch_size: int = 32,
+            label: str = '***'
+    ):
         embeds: list = []
+
+        extraction: dict = {
+            'cls': lambda x: x[:, 1].cpu(),
+            'sent_mean': lambda x: torch.mean(x, dim=1)
+        }
 
         for _, group in tqdm(
                 data.groupby(np.arange(len(data)) // batch_size),
@@ -103,14 +110,13 @@ class Encoder:
             if len(content) == 1:
                 content.append('')
 
+            # batch forward content
             _, batch_embeds, _ = self(content, return_unpad=False)
 
-            if form == 'cls':
-                embeds.extend(torch.unbind(batch_embeds[:, 1].cpu()))
+            # extract sentence vector
+            embeds.extend(torch.unbind(extraction[form](batch_embeds).cpu()))
 
-            if form == 'mean':
-                embeds.extend(torch.unbind(torch.mean(batch_embeds, dim=1).cpu()))
-
+        # pop if batch was padded
         if len(data) % batch_size == 1:
             embeds.pop()
 
