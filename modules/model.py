@@ -44,6 +44,8 @@ class Model(nn.Module):
             nn.ELU()
         ).to(get_device())
 
+        self.loss_fn = torch.nn.CrossEntropyLoss()
+
         logging.info((
             f'> Init {self.config["name"]}\n'
             f'  Memory Usage: {byte_to_mb(memory_usage(self))}\n'
@@ -62,17 +64,14 @@ class Model(nn.Module):
     #
     #  -------- train_step -----------
     #
-    def train_step(
-            self,
-            loss_fn: torch.nn.Module,
-            batch: Tuple[torch.Tensor, List[torch.Tensor]]):
+    def train_step(self, batch: Tuple[torch.Tensor, List[torch.Tensor]]):
         # predict batch
         embeds, gold_label = batch
         pred_label = self(embeds)
 
         # compute loss, backward
         return (
-            loss_fn(pred_label, gold_label),
+            self.loss_fn(pred_label, gold_label),
             torch.argmax(pred_label, dim=1)
         )
 

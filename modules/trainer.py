@@ -59,7 +59,6 @@ class Trainer:
 
         # setup loss_fn, optimizer, scheduler and early stopping
         self.metric = Metric()
-        self.loss_fn = torch.nn.CrossEntropyLoss()
         self.optimizer = optim.AdamW(self.model.parameters(), **self.config['optimizer'])
 
     #
@@ -160,7 +159,7 @@ class Trainer:
         # zero the parameter gradients
         self.optimizer.zero_grad()
 
-        loss, pred_labels = self.model.train_step(self.loss_fn, batch)
+        loss, pred_labels = self.model.train_step(batch)
         loss.backward()
 
         # scaling the gradients down, places a limit on the size of the parameter updates
@@ -189,7 +188,7 @@ class Trainer:
     def _eval(self, batch: tuple, batch_id: int, loss_eval: float) -> float:
         self.model.eval()
 
-        loss, pred_labels = self.model.train_step(self.loss_fn, batch)
+        loss, pred_labels = self.model.train_step(batch)
 
         # save loss, acc for statistics
         loss_eval += (loss.item() - loss_eval) / (batch_id + 1)
