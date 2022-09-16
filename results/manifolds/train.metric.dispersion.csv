@@ -1,9 +1,9 @@
 model,metrics,mean,std,min,max
-base,dispersion_positive,1627613.104,27256.904,1561675.581,1644534.351
-base,dispersion_negative,1571152.271,37430.363,1476522.285,1592719.381
-textattack,dispersion_positive,1875744.028,76759.077,1672866.519,1915778.263
-textattack,dispersion_negative,1827160.148,76015.529,1627429.92,1867370.677
-fabriceyhc,dispersion_positive,1609605.553,42549.923,1492467.351,1628916.281
-fabriceyhc,dispersion_negative,2040749.68,34859.701,1945724.828,2057076.245
-wakaka,dispersion_positive,2263258.64,65963.258,2088939.738,2297310.361
-wakaka,dispersion_negative,2027049.68,70413.88,1840696.849,2063295.329
+base,dispersion_positive,6.095,0.073,5.918,6.14
+base,dispersion_negative,5.704,0.113,5.411,5.766
+textattack,dispersion_positive,6.995,0.247,6.33,7.118
+textattack,dispersion_negative,6.618,0.235,5.987,6.738
+fabriceyhc,dispersion_positive,5.983,0.133,5.613,6.041
+fabriceyhc,dispersion_negative,7.597,0.103,7.314,7.644
+wakaka,dispersion_positive,8.459,0.206,7.904,8.562
+wakaka,dispersion_negative,7.333,0.214,6.754,7.437
