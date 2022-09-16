@@ -96,7 +96,7 @@ class Encoder:
 
         extraction: dict = {
             'cls': lambda x: x[:, 1].cpu(),
-            'sent_mean': lambda x: torch.mean(x, dim=1)
+            'mean': lambda x: torch.mean(x, dim=1)
         }
 
         for _, group in tqdm(
@@ -114,7 +114,7 @@ class Encoder:
             _, batch_embeds, _ = self(content, return_unpad=False)
 
             # extract sentence vector
-            embeds.extend(torch.unbind(extraction[form](batch_embeds).cpu()))
+            embeds.extend(torch.unbind(extraction.get(form, 'mean')(batch_embeds).cpu()))
 
         # pop if batch was padded
         if len(data) % batch_size == 1:
