@@ -52,27 +52,24 @@ make run
 
 #### Intra-Distance (train/test)
 
-|                                           |  mean |   std |   min |   max |
-|:------------------------------------------|------:|------:|------:|------:|
-| ('base', 'intra_distance_negative')       | 5.708 | 0.102 | 5.447 | 5.766 |
-| ('base', 'intra_distance_positive')       | 6.101 | 0.059 | 5.966 |  6.14 |
-| ('textattack', 'intra_distance_negative') | 6.618 | 0.236 | 5.987 | 6.738 |
-| ('textattack', 'intra_distance_positive') | 6.998 |  0.24 | 6.351 | 7.118 |
-| ('fabriceyhc', 'intra_distance_negative') | 7.596 | 0.103 | 7.314 | 7.644 |
-| ('fabriceyhc', 'intra_distance_positive') |  5.98 | 0.142 | 5.584 | 6.041 |
-| ('wakaka', 'intra_distance_negative')     | 7.335 | 0.209 | 6.768 | 7.437 |
-| ('wakaka', 'intra_distance_positive')     | 8.459 | 0.207 | 7.901 | 8.562 |
-
-|                                           |  mean |   std |   min |   max |
-|:------------------------------------------|------:|------:|------:|------:|
-| ('base', 'intra_distance_negative')       | 5.748 | 0.094 | 5.502 | 5.8   |
-| ('base', 'intra_distance_positive')       | 6.047 |  0.06 | 5.906 | 6.087 |
-| ('textattack', 'intra_distance_negative') | 6.823 | 0.224 | 6.22  | 6.935 |
-| ('textattack', 'intra_distance_positive') |  7.06 | 0.246 | 6.399 | 7.184 |
-| ('fabriceyhc', 'intra_distance_negative') | 9.229 | 0.103 | 8.941 | 9.273 |
-| ('fabriceyhc', 'intra_distance_positive') | 7.376 | 0.141 | 6.985 | 7.438 |
-| ('wakaka', 'intra_distance_negative')     | 7.481 | 0.203 | 6.933 | 7.581 |
-| ('wakaka', 'intra_distance_positive')     | 8.336 | 0.221 | 7.746 | 8.447 |
+|                                     |  mean |   std |   min |   max |
+|:------------------------------------|------:|------:|------:|------:|
+| ('base', 'test', 'negative')        | 5.748 | 0.094 | 5.502 |   5.8 |
+| ('base', 'test', 'positive')        | 6.047 |  0.06 | 5.906 | 6.087 |
+| ('base', 'train', 'negative')       | 5.708 | 0.102 | 5.447 | 5.766 |
+| ('base', 'train', 'positive')       | 6.101 | 0.059 | 5.966 |  6.14 |
+| ('fabriceyhc', 'test', 'negative')  | 9.229 | 0.103 | 8.941 | 9.273 |
+| ('fabriceyhc', 'test', 'positive')  | 7.376 | 0.141 | 6.985 | 7.438 |
+| ('fabriceyhc', 'train', 'negative') | 7.596 | 0.103 | 7.314 | 7.644 |
+| ('fabriceyhc', 'train', 'positive') |  5.98 | 0.142 | 5.584 | 6.041 |
+| ('textattack', 'test', 'negative')  | 6.823 | 0.224 |  6.22 | 6.935 |
+| ('textattack', 'test', 'positive')  |  7.06 | 0.246 | 6.399 | 7.184 |
+| ('textattack', 'train', 'negative') | 6.618 | 0.236 | 5.987 | 6.738 |
+| ('textattack', 'train', 'positive') | 6.998 |  0.24 | 6.351 | 7.118 |
+| ('wakaka', 'test', 'negative')      | 7.481 | 0.203 | 6.933 | 7.581 |
+| ('wakaka', 'test', 'positive')      | 8.336 | 0.221 | 7.746 | 8.447 |
+| ('wakaka', 'train', 'negative')     | 7.335 | 0.209 | 6.768 | 7.437 |
+| ('wakaka', 'train', 'positive')     | 8.459 | 0.207 | 7.901 | 8.562 |
 
 ### Classifier Training (F1/Loss density across epochs)
 

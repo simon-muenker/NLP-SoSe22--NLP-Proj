@@ -1,9 +1,0 @@
-model,metrics,mean,std,min,max
-base,intra_distance_negative,5.708,0.102,5.447,5.766
-base,intra_distance_positive,6.101,0.059,5.966,6.14
-textattack,intra_distance_negative,6.618,0.236,5.987,6.738
-textattack,intra_distance_positive,6.998,0.24,6.351,7.118
-fabriceyhc,intra_distance_negative,7.596,0.103,7.314,7.644
-fabriceyhc,intra_distance_positive,5.98,0.142,5.584,6.041
-wakaka,intra_distance_negative,7.335,0.209,6.768,7.437
-wakaka,intra_distance_positive,8.459,0.207,7.901,8.562
