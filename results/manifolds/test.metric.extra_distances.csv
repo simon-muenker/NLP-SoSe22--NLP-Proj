@@ -1,5 +1,0 @@
-model,metrics,mean,std,min,max
-base,extra_distance,1.293,0.179,1.125,1.603
-textattack,extra_distance,7.554,0.444,7.313,8.711
-fabriceyhc,extra_distance,19.999,0.085,19.964,20.239
-wakaka,extra_distance,11.55,0.293,11.398,12.325

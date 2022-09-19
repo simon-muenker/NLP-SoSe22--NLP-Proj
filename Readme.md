@@ -39,20 +39,16 @@ make run
 
 #### Extra-Distance (train/test)
 
-|                                  |   mean |   std |    min |    max |
-|:---------------------------------|-------:|------:|-------:|-------:|
-| ('base', 'extra_distance')       |   1.36 | 0.206 |  1.193 |  1.775 |
-| ('textattack', 'extra_distance') |  8.053 | 0.424 |   7.82 |  9.156 |
-| ('fabriceyhc', 'extra_distance') |  22.89 | 0.059 | 22.865 | 23.053 |
-| ('wakaka', 'extra_distance')     | 11.629 | 0.286 | 11.483 | 12.393 |
-
-|                                  |   mean |   std |    min |    max |
-|:---------------------------------|-------:|------:|-------:|-------:|
-| ('base', 'extra_distance')       |  1.293 | 0.179 |  1.125 |  1.603 |
-| ('textattack', 'extra_distance') |  7.554 | 0.444 |  7.313 |  8.711 |
-| ('fabriceyhc', 'extra_distance') | 19.999 | 0.085 | 19.964 | 20.239 |
-| ('wakaka', 'extra_distance')     |  11.55 | 0.293 | 11.398 | 12.325 |
-
+|                         |   mean |   std |    min |    max |
+|:------------------------|-------:|------:|-------:|-------:|
+| ('base', 'test')        |  1.293 | 0.179 |  1.125 |  1.603 |
+| ('base', 'train')       |   1.36 | 0.206 |  1.193 |  1.775 |
+| ('fabriceyhc', 'test')  | 19.999 | 0.085 | 19.964 | 20.239 |
+| ('fabriceyhc', 'train') |  22.89 | 0.059 | 22.865 | 23.053 |
+| ('textattack', 'test')  |  7.554 | 0.444 |  7.313 |  8.711 |
+| ('textattack', 'train') |  8.053 | 0.424 |   7.82 |  9.156 |
+| ('wakaka', 'test')      |  11.55 | 0.293 | 11.398 | 12.325 |
+| ('wakaka', 'train')     | 11.629 | 0.286 | 11.483 | 12.393 |
 
 #### Intra-Distance (train/test)
 
@@ -81,13 +77,14 @@ make run
 ### Classifier Training (F1/Loss density across epochs)
 
 #### F1 (train/test)
+
 ![F1 Density on Train](results/training/f1.train.density.png?raw=true "F1 Density on Train")
 ![F1 Density on Test](results/training/f1.test.density.png?raw=true "F1 Density on Test")
 
 #### Loss (train/test)
+
 ![Loss Density on Train](results/training/loss.train.density.png?raw=true "Loss Density on Train")
 ![Loss Density on Test](results/training/loss.test.density.png?raw=true "Loss Density on Test")
-
 
 ## Credits:
 
