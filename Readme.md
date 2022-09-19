@@ -75,13 +75,19 @@ make run
 
 #### F1 (train/test)
 
-![F1 Density on Train](results/training/f1.train.density.png?raw=true "F1 Density on Train")
-![F1 Density on Test](results/training/f1.test.density.png?raw=true "F1 Density on Test")
+|                         |    f1 |
+|:------------------------|------:|
+| ('base', 'train')       |  0.95 |
+| ('base', 'test')        | 0.882 |
+| ('textattack', 'train') | 0.995 |
+| ('textattack', 'test')  |  0.93 |
+| ('fabriceyhc', 'train') | 0.993 |
+| ('fabriceyhc', 'test')  | 0.931 |
+| ('wakaka', 'train')     | 0.956 |
+| ('wakaka', 'test')      | 0.904 |
 
-#### Loss (train/test)
-
-![Loss Density on Train](results/training/loss.train.density.png?raw=true "Loss Density on Train")
-![Loss Density on Test](results/training/loss.test.density.png?raw=true "Loss Density on Test")
+![F1 across epochs](results/training/epochs.png?raw=true "F1 across epochs")
+![F1 density across epochs](results/training/epochs.density.png?raw=true "F1 density across epochs")
 
 ## Credits:
 

@@ -1,0 +1,9 @@
+model,dataset,f1
+base,train,0.95
+base,test,0.882
+textattack,train,0.995
+textattack,test,0.93
+fabriceyhc,train,0.993
+fabriceyhc,test,0.931
+wakaka,train,0.956
+wakaka,test,0.904

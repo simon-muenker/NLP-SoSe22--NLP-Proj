@@ -1,6 +1,0 @@
-model,base,base,base,base,base,base,base,base,textattack,textattack,textattack,textattack,textattack,textattack,textattack,textattack,fabriceyhc,fabriceyhc,fabriceyhc,fabriceyhc,fabriceyhc,fabriceyhc,fabriceyhc,fabriceyhc,wakaka,wakaka,wakaka,wakaka,wakaka,wakaka,wakaka,wakaka
-metric,tp,fp,tn,fn,prec,rec,f1,acc,tp,fp,tn,fn,prec,rec,f1,acc,tp,fp,tn,fn,prec,rec,f1,acc,tp,fp,tn,fn,prec,rec,f1,acc
-label,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-AVG,22116,2685,22116,2685,0.892,0.892,0.892,0.892,23177,1624,23177,1624,0.935,0.935,0.935,0.935,23130,1671,23130,1671,0.933,0.933,0.933,0.933,22442,2359,22442,2359,0.905,0.905,0.905,0.905
-negative,10956,1280,11160,1405,0.895,0.886,0.891,0.892,11598,861,11579,763,0.931,0.938,0.935,0.935,11556,866,11574,805,0.93,0.935,0.933,0.933,11116,1114,11326,1245,0.909,0.899,0.904,0.905
-positive,11160,1405,10956,1280,0.888,0.897,0.893,0.892,11579,763,11598,861,0.938,0.931,0.934,0.935,11574,805,11556,866,0.935,0.93,0.933,0.933,11326,1245,11116,1114,0.901,0.91,0.906,0.905
